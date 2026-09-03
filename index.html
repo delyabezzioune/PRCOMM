@@ -593,16 +593,18 @@ footer { background: var(--ink); color: #8ba3c6; padding: 56px 0 44px; position:
   <div class="page-header">
     <p class="eyebrow" style="margin-bottom:14px;">Configuration de l'agent</p>
     <h1>Nourrir l&#8217;Agent</h1>
-    <p>Pose le contexte du programme, d&#233;finis tes audiences, les canaux utilis&#233;s et les messages cl&#233;s &#8212; l&#8217;agent s&#8217;en servira pour g&#233;n&#233;rer des communications ultra-cibl&#233;es.</p>
+    <p>Pose le contexte du programme, d&#233;finis tes audiences et les messages cl&#233;s &#224; leur transmettre &#8212; l&#8217;agent s&#8217;en servira pour d&#233;cliner chaque message en formats pr&#234;ts &#224; diffuser&nbsp;: email, LinkedIn, script vid&#233;o, discours, intranet&#8230;</p>
   </div>
 
   <div class="setup-card">
     <div class="card-label">01 &#8212; Contexte du programme</div>
-    <textarea class="field-textarea" id="ctx-programme" placeholder="D&#233;cris le programme, son objectif, son ambition... Ex&#160;: SHIFT est un programme de transformation digitale lanc&#233; par la DSI de Pernod Ricard." style="min-height:140px;"></textarea>
+    <p style="font-size:13px;color:#7d97bd;margin:0 0 14px;line-height:1.5;">Décris le programme dans son ensemble&nbsp;: son objectif, sa raison d'être, ses ambitions. Ce contexte sera injecté dans chaque message généré.</p>
+    <textarea class="field-textarea" id="ctx-programme" placeholder="Ex&#160;: SHIFT est un programme de transformation digitale lanc&#233; par la DSI de Pernod Ricard pour moderniser les pratiques et outiller les &#233;quipes d&#8217;ici 2026." style="min-height:140px;"></textarea>
   </div>
 
   <div class="setup-card">
     <div class="card-label">02 &#8212; Audiences cibles</div>
+    <p style="font-size:13px;color:#7d97bd;margin:0 0 14px;line-height:1.5;">Pour chaque audience, précise ce qui compte vraiment pour elle. L'agent adaptera l'angle et le ton de chaque déclinaison en conséquence.</p>
     <div class="col-headers">
       <span>Nom de l&#8217;audience</span><span>Ce qui compte pour eux</span><span></span>
     </div>
@@ -627,7 +629,8 @@ footer { background: var(--ink); color: #8ba3c6; padding: 56px 0 44px; position:
   </div>
 
   <div class="setup-card">
-    <div class="card-label">03 &#8212; Canaux de communication</div>
+    <div class="card-label">03 &#8212; Formats de communication</div>
+    <p style="font-size:13px;color:#7d97bd;margin:0 0 14px;line-height:1.5;">Coche les formats que tu utilises dans tes campagnes. Ils apparaîtront comme options dans le Générateur, avec des recommandations par audience.</p>
     <div class="channel-grid" id="channelGrid">
       <span class="channel-chip selected" data-ch="email">Email</span>
       <span class="channel-chip selected" data-ch="linkedin">LinkedIn</span>
@@ -642,6 +645,7 @@ footer { background: var(--ink); color: #8ba3c6; padding: 56px 0 44px; position:
 
   <div class="setup-card">
     <div class="card-label">04 &#8212; Messages cl&#233;s du programme</div>
+    <p style="font-size:13px;color:#7d97bd;margin:0 0 14px;line-height:1.5;">Les idées maîtresses à faire passer dans toutes les communications&nbsp;: positionnement, bénéfices, vision. L'agent les intégrera dans chaque déclinaison générée.</p>
     <div class="msg-list" id="msgList">
       <div class="msg-row">
         <input class="field-input" type="text" placeholder="Ex&#160;: Ce programme place la technologie au c&#339;ur de notre strat&#233;gie de croissance." />
@@ -657,6 +661,7 @@ footer { background: var(--ink); color: #8ba3c6; padding: 56px 0 44px; position:
 
   <div class="setup-card">
     <div class="card-label">05 &#8212; Tonalit&#233; de communication</div>
+    <p style="font-size:13px;color:#7d97bd;margin:0 0 14px;line-height:1.5;">Choisis le registre global du programme. L'agent calibre le vocabulaire, la structure et l'accroche de chaque message selon cette tonalité.</p>
     <div class="channel-grid" id="toneGrid">
       <span class="channel-chip selected" data-tone="inspirant">Inspirant</span>
       <span class="channel-chip" data-tone="formel">Formel</span>
