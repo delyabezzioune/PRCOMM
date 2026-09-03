@@ -2,3 +2,9 @@
 Thumbs.db
 *.log
 node_modules/
+
+# Fichiers trop lourds pour GitHub (limite 100MB)
+*.mp4
+*.mov
+*.pptx
+*.ppt
