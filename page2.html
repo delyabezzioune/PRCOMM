@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PRCOMM — Générateur</title>
+<title>PRCOMM — Generator</title>
 <style>
 :root {
   --ink:      #050912;
@@ -206,47 +206,47 @@ a{color:inherit;text-decoration:none;}
     <a href="index.html" class="nav-brand">PR<span>COMM</span></a>
     <ul class="nav-links">
       <li><a href="index.html">Setup</a></li>
-      <li><a href="page2.html" class="active">Générateur</a></li>
+      <li><a href="page2.html" class="active">Generator</a></li>
     </ul>
   </div>
 </nav>
 
-<nav class="section-nav" id="sectionNav" aria-label="Navigation sections">
-  <button type="button" id="secPrev" aria-label="Section précédente">&#9650;</button>
+<nav class="section-nav" id="sectionNav" aria-label="Section navigation">
+  <button type="button" id="secPrev" aria-label="Previous section">&#9650;</button>
   <div class="section-nav-count"><b id="secIndex">1</b> / <span id="secTotal">3</span></div>
-  <button type="button" id="secNext" aria-label="Section suivante">&#9660;</button>
+  <button type="button" id="secNext" aria-label="Next section">&#9660;</button>
 </nav>
 
 <div class="page-wrap">
 
   <div class="page-title-block" id="stop0">
     <div class="hero-glow" aria-hidden="true"></div>
-    <p class="eyebrow">Agent de communication</p>
-    <h1>Décliner le Message</h1>
-    <p>Un message, une audience — l'agent génère toutes les déclinaisons prêtes à diffuser.</p>
+    <p class="eyebrow">Communication agent</p>
+    <h1>Generate Content</h1>
+    <p>One message, one audience — the agent generates all formats ready to publish.</p>
   </div>
 
   <!-- CONTEXT BANNER — filled from localStorage -->
   <div class="ctx-banner" id="ctxBanner" style="display:none;">
     <div class="ctx-banner-dot"></div>
     <div class="ctx-banner-text">
-      <div class="ctx-banner-label">Contexte programme actif</div>
+      <div class="ctx-banner-label">Active programme context</div>
       <div class="ctx-banner-prog" id="ctxProg">—</div>
       <div class="ctx-banner-keys" id="ctxKeys"></div>
     </div>
-    <a href="index.html" style="font-family:var(--mono);font-size:10px;color:#54677e;letter-spacing:.06em;text-decoration:underline;text-underline-offset:2px;white-space:nowrap;align-self:center;">Modifier le setup</a>
+    <a href="index.html" style="font-family:var(--mono);font-size:10px;color:#54677e;letter-spacing:.06em;text-decoration:underline;text-underline-offset:2px;white-space:nowrap;align-self:center;">Edit setup</a>
   </div>
 
   <div class="block" id="stop1">
-    <div class="block-label">01 — Message à communiquer</div>
+    <div class="block-label">01 — Message to communicate</div>
     <textarea class="field-textarea" id="inputMessage"
-      placeholder="Ex : Le programme SHIFT entre en phase de déploiement. Toutes les équipes vont être formées aux nouveaux outils d'ici fin T2."
-      aria-label="Le message central à communiquer"></textarea>
+      placeholder="e.g. The SHIFT programme is entering its deployment phase. All teams will be trained on the new tools by end of Q2."
+      aria-label="The core message to communicate"></textarea>
   </div>
 
   <div class="block" id="stop2">
-    <div class="block-label">02 — Audience cible</div>
-    <div class="aud-btns" id="audBtns" role="group" aria-label="Sélectionner une audience"></div>
+    <div class="block-label">02 — Target audience</div>
+    <div class="aud-btns" id="audBtns" role="group" aria-label="Select an audience"></div>
 
     <div class="formats-section" id="formatsSection" style="display:none;">
       <div class="formats-section-label">Formats — <span id="recoHint"></span></div>
@@ -254,9 +254,9 @@ a{color:inherit;text-decoration:none;}
     </div>
   </div>
 
-  <button class="btn-gen" id="btnGen" disabled aria-label="Générer les déclinaisons">
+  <button class="btn-gen" id="btnGen" disabled aria-label="Generate content variations">
     <span class="dot" aria-hidden="true"></span>
-    Générer les déclinaisons
+    Generate content variations
   </button>
 
   <!-- RESULTS -->
@@ -266,11 +266,11 @@ a{color:inherit;text-decoration:none;}
         <div class="results-title" id="resultsTitle"></div>
         <div class="results-subtitle" id="resultsSubtitle"></div>
       </div>
-      <button class="btn-export" id="btnExport">&#8593;&nbsp;Exporter tout</button>
+      <button class="btn-export" id="btnExport">&#8593;&nbsp;Export all</button>
     </div>
     <div class="results-empty" id="emptyState">
       <span class="ico" aria-hidden="true">✦</span>
-      Compose ton message, choisis une audience et génère
+      Write your message, pick an audience and generate
     </div>
     <div class="result-cards" id="resultCards" aria-live="polite"></div>
   </div>
@@ -286,85 +286,85 @@ var FORMATS = {
     label:'Email',
     icon:'✉',
     badge:'cyan',
-    desc:'Message structuré, archivable',
-    length:'M',      /* S / M / L */
-    specs:{ longueur:'200–400 mots', registre:'Formel à neutre', diffusion:'1:1 ou liste' },
-    why:"L'email s'impose pour les communications officielles : il est archivable, attendu et permet une structure argumentée. Idéal pour les décideurs et les communications qui demandent une trace.",
-    diffs:['Objet clair', 'Salutation formelle', 'Corps structuré', 'Signature']
+    desc:'Structured message, archivable',
+    length:'M',
+    specs:{ length:'200–400 words', register:'Formal to neutral', distribution:'1:1 or mailing list' },
+    why:"Email is the go-to channel for official communications: it is archivable, expected, and allows a well-structured argument. Ideal for decision-makers and any communication that needs a paper trail.",
+    diffs:['Clear subject line', 'Formal salutation', 'Structured body', 'Signature']
   },
   linkedin: {
     label:'LinkedIn',
     icon:'💼',
     badge:'blue',
-    desc:'Post public, engagement externe',
+    desc:'Public post, external engagement',
     length:'S',
-    specs:{ longueur:'80–150 mots', registre:'Dynamique, accessible', diffusion:'Réseau étendu' },
-    why:"LinkedIn maximise la visibilité institutionnelle. L'accroche-choc en première ligne, les sauts de paragraphe et les hashtags sont des codes incontournables pour déclencher l'engagement.",
-    diffs:['Accroche percutante', 'Saut de ligne fréquent', 'Hashtags', 'CTA cliquable']
+    specs:{ length:'80–150 words', register:'Dynamic, accessible', distribution:'Extended network' },
+    why:"LinkedIn maximises institutional visibility. A punchy opening line, frequent line breaks, and hashtags are the non-negotiable codes to drive engagement.",
+    diffs:['Punchy hook', 'Frequent line breaks', 'Hashtags', 'Clickable CTA']
   },
   video: {
-    label:'Script vidéo',
+    label:'Video script',
     icon:'🎬',
     badge:'gold',
-    desc:'Script face caméra, message incarné',
+    desc:'On-camera script, personal delivery',
     length:'M',
-    specs:{ longueur:'1–2 min (≈150 mots)', registre:'Oral, direct, sincère', diffusion:'Interne & externe' },
-    why:"La vidéo crée un lien émotionnel que l'écrit ne peut pas égaler. Le script structure les prises de parole pour que chaque plan délivre un message précis — accroche, développement, appel à l'action.",
-    diffs:['Découpé par plan', 'Registre oral', 'Questions rhétoriques', 'Contact visuel simulé']
+    specs:{ length:'1–2 min (≈150 words)', register:'Oral, direct, sincere', distribution:'Internal & external' },
+    why:"Video creates an emotional connection that written content simply cannot match. The script structures each take so every shot delivers a clear message — hook, development, call to action.",
+    diffs:['Shot-by-shot structure', 'Conversational register', 'Rhetorical questions', 'Simulated eye contact']
   },
   intranet: {
     label:'Intranet / Newsletter',
     icon:'📰',
     badge:'teal',
-    desc:'Article structuré, diffusion large',
+    desc:'Structured article, broad distribution',
     length:'L',
-    specs:{ longueur:'300–600 mots', registre:'Informatif, pédagogique', diffusion:'Tous collaborateurs' },
-    why:"L'intranet est le canal de référence pour les communications larges. Le format article permet d'aller en profondeur : contexte, impact concret, prochaines étapes — avec des titres et des listes pour faciliter la lecture.",
-    diffs:['Titre H1', 'Sous-titres', 'Listes à puces', 'Section FAQ possible']
+    specs:{ length:'300–600 words', register:'Informative, educational', distribution:'All employees' },
+    why:"The intranet is the reference channel for wide-reach communications. The article format allows depth: context, concrete impact, next steps — with headings and bullet lists for easy scanning.",
+    diffs:['H1 title', 'Sub-headings', 'Bullet lists', 'Optional FAQ section']
   },
   slack: {
     label:'Slack / Teams',
     icon:'💬',
     badge:'muted',
-    desc:'Message instantané, court et direct',
+    desc:'Instant message, short and direct',
     length:'S',
-    specs:{ longueur:'30–60 mots', registre:'Informel, réactif', diffusion:'Équipe, canal dédié' },
-    why:"Slack/Teams, c'est la spontanéité. Le message doit être scannable en 5 secondes : emoji signal, une phrase clé, un lien ou un CTA. Pas de politesses — on va à l'essentiel.",
-    diffs:['Emojis signaux', 'Très court', 'Lien direct', 'Ton décontracté']
+    specs:{ length:'30–60 words', register:'Informal, reactive', distribution:'Team, dedicated channel' },
+    why:"Slack/Teams is all about immediacy. The message must be scannable in 5 seconds: a signal emoji, one key sentence, a link or a CTA. No pleasantries — straight to the point.",
+    diffs:['Signal emojis', 'Very short', 'Direct link', 'Casual tone']
   },
   presentation: {
-    label:'Présentation',
+    label:'Presentation',
     icon:'📊',
     badge:'blue',
-    desc:'Structure slide-by-slide pour réunion',
+    desc:'Slide-by-slide structure for meetings',
     length:'L',
-    specs:{ longueur:'4–6 slides', registre:'Synthétique, visuel', diffusion:'Réunion, CODIR' },
-    why:"La présentation s'adresse aux décideurs qui attendent de la synthèse visuelle. Chaque slide = une idée. La logique narrative — contexte → enjeux → bénéfices → prochaines étapes — guide la conviction.",
-    diffs:['Structure slide', 'Titres d\'action', 'Bullets synthétiques', 'Slide de conclusion']
+    specs:{ length:'4–6 slides', register:'Concise, visual', distribution:'Meeting, executive committee' },
+    why:"Presentations address decision-makers who expect visual synthesis. Each slide = one idea. The narrative logic — context → stakes → benefits → next steps — guides conviction.",
+    diffs:['Slide structure', 'Action titles', 'Synthetic bullets', 'Closing slide']
   },
   communique: {
-    label:'Communiqué presse',
+    label:'Press release',
     icon:'📡',
     badge:'gold',
-    desc:'Format journalistique, diffusion externe',
+    desc:'Journalistic format, external distribution',
     length:'M',
-    specs:{ longueur:'250–400 mots', registre:'Factuel, journalistique', diffusion:'Médias, partenaires' },
-    why:"Le communiqué répond aux codes de la presse : une accroche factuelle, des chiffres, une citation officielle et des informations de contact. Il doit être réutilisable tel quel par un journaliste.",
-    diffs:['Chapeau factuel', 'Chiffres clés', 'Citation officielle', 'Contact presse']
+    specs:{ length:'250–400 words', register:'Factual, journalistic', distribution:'Media, partners' },
+    why:"A press release follows journalism codes: a factual lead, hard numbers, an official quote, and contact details. It must be usable as-is by a journalist.",
+    diffs:['Factual lead', 'Key figures', 'Official quote', 'Press contact']
   },
   discours: {
-    label:'Discours / Allocution',
+    label:'Speech / Address',
     icon:'🎤',
     badge:'cyan',
-    desc:'Prise de parole orale, moment fort',
+    desc:'Oral delivery, high-impact moment',
     length:'L',
-    specs:{ longueur:'3–5 min (≈450 mots)', registre:'Solennel, inspirant', diffusion:'Événement, all-hands' },
-    why:"Le discours transforme une information en moment mémorable. L'introduction positionne l'enjeu, le développement convainc, la clôture mobilise. Le registre est plus élevé, plus solennel que les autres formats.",
-    diffs:['Introduction solennelle', 'Figures rhétoriques', 'Appel collectif', 'Clôture mémorable']
+    specs:{ length:'3–5 min (≈450 words)', register:'Solemn, inspiring', distribution:'Event, all-hands' },
+    why:"A speech turns information into a memorable moment. The introduction frames the stakes, the body persuades, the close mobilises. The register is elevated and more solemn than other formats.",
+    diffs:['Solemn opening', 'Rhetorical devices', 'Collective call', 'Memorable close']
   }
 };
 
-/* Formats recommandés par profil d'audience */
+/* Recommended formats by audience profile */
 var RECO = {
   'direction'    :['email','presentation','discours'],
   'codir'        :['email','presentation','discours'],
@@ -379,37 +379,37 @@ var RECO = {
   'rh'           :['intranet','email','slack']
 };
 
-/* Angle de communication par profil */
+/* Communication angle by audience profile */
 var ANGLES = {
-  'direction'    :'Impact business & vision long terme',
-  'codir'        :'Décisions à prendre, enjeux stratégiques',
-  'comite'       :'Gouvernance, pilotage, arbitrage',
-  'manager'      :'Répercussions sur les équipes & organisation',
-  'collaborateur':'Bénéfices concrets & changements du quotidien',
-  'partner'      :'Valeur partenariale & opportunités communes',
-  'partenaire'   :'Valeur partenariale & opportunités communes',
-  'presse'       :'Faits, chiffres, nouveauté & citation sourcée',
-  'client'       :'Valeur ajoutée & amélioration de l\'expérience',
-  'equipe'       :'Mobilisation & cohésion opérationnelle',
-  'rh'           :'Impact RH, parcours collaborateur, politique sociale'
+  'direction'    :'Business impact & long-term vision',
+  'codir'        :'Decisions to make, strategic stakes',
+  'comite'       :'Governance, steering, arbitration',
+  'manager'      :'Impact on teams & organisation',
+  'collaborateur':'Concrete benefits & day-to-day changes',
+  'partner'      :'Partnership value & shared opportunities',
+  'partenaire'   :'Partnership value & shared opportunities',
+  'presse'       :'Facts, figures, innovation & sourced quotes',
+  'client'       :'Added value & improved experience',
+  'equipe'       :'Mobilisation & operational cohesion',
+  'rh'           :'HR impact, employee journey, social policy'
 };
 
 var REGISTERS = {
-  'direction'    :'Formel & synthétique',
-  'codir'        :'Formel & décisionnel',
-  'comite'       :'Formel & structuré',
-  'manager'      :'Neutre & opérationnel',
-  'collaborateur':'Direct & humain',
-  'partner'      :'Professionnel & valorisant',
-  'partenaire'   :'Professionnel & valorisant',
-  'presse'       :'Journalistique & factuel',
-  'client'       :'Clair & orienté bénéfice',
-  'equipe'       :'Informel & mobilisateur',
-  'rh'           :'Neutre & pédagogique'
+  'direction'    :'Formal & concise',
+  'codir'        :'Formal & decision-oriented',
+  'comite'       :'Formal & structured',
+  'manager'      :'Neutral & operational',
+  'collaborateur':'Direct & human',
+  'partner'      :'Professional & appreciative',
+  'partenaire'   :'Professional & appreciative',
+  'presse'       :'Journalistic & factual',
+  'client'       :'Clear & benefit-focused',
+  'equipe'       :'Informal & mobilising',
+  'rh'           :'Neutral & educational'
 };
 
 /* ================================================================
-   ÉTAT
+   STATE
    ================================================================ */
 var setup       = null;
 var selAud      = null;
@@ -421,7 +421,7 @@ var lastResults = [];
    ================================================================ */
 (function init(){
 
-  /* particules SHIFT */
+  /* SHIFT particle field */
   (function(){
     var cv=document.getElementById('bgCanvas');if(!cv||!cv.getContext)return;
     var ctx=cv.getContext('2d'),dots=[],mouse={x:-9999,y:-9999},W=0,H=0;
@@ -485,25 +485,25 @@ var lastResults = [];
     upd();window.addEventListener('scroll',upd,{passive:true});window.addEventListener('resize',upd);
   })();
 
-  /* charger le setup */
+  /* load setup */
   try{setup=JSON.parse(localStorage.getItem('prcomm_setup')||window._prcomm_setup||'null');}catch(e){}
 
-  /* bannière contexte */
+  /* context banner */
   if(setup&&setup.programme){
     document.getElementById('ctxProg').textContent=setup.programme;
     var keys=(setup.messages||[]).slice(0,2).filter(Boolean);
-    if(keys.length) document.getElementById('ctxKeys').innerHTML='<b>Messages clés&nbsp;:</b> '+keys.map(esc).join(' · ');
+    if(keys.length) document.getElementById('ctxKeys').innerHTML='<b>Key messages&nbsp;:</b> '+keys.map(esc).join(' · ');
     document.getElementById('ctxBanner').style.display='flex';
   }
 
   /* audiences */
   var auds=(setup&&setup.audiences&&setup.audiences.length)
     ?setup.audiences
-    :[{name:'Comité de direction',what:'ROI, vision stratégique'},
-      {name:'Managers',what:'Impact équipes, opérationnel'},
-      {name:'Collaborateurs',what:'Sens, bénéfices concrets'},
-      {name:'Partenaires',what:'Fiabilité, innovation'},
-      {name:'Presse',what:'Faits, chiffres, citations'}];
+    :[{name:'Executive committee',what:'ROI, strategic vision'},
+      {name:'Middle managers',what:'Team impact, operational'},
+      {name:'Employees',what:'Meaning, concrete benefits'},
+      {name:'Partners',what:'Reliability, innovation'},
+      {name:'Press',what:'Facts, figures, quotes'}];
 
   var cont=document.getElementById('audBtns');
   auds.forEach(function(a){
@@ -526,6 +526,15 @@ function getAudKey(name){
     .replace(/[éèêë]/g,'e').replace(/[àâä]/g,'a').replace(/[îï]/g,'i').replace(/[ôö]/g,'o').replace(/[ùûü]/g,'u')
     .replace(/[^a-z]/g,'');
   for(var k in RECO){if(n.indexOf(k)!==-1)return k;}
+  /* English label aliases */
+  if(n.indexOf('executive')!==-1||n.indexOf('committee')!==-1)return'comite';
+  if(n.indexOf('manager')!==-1)return'manager';
+  if(n.indexOf('employee')!==-1||n.indexOf('staff')!==-1)return'collaborateur';
+  if(n.indexOf('partner')!==-1)return'partner';
+  if(n.indexOf('press')!==-1||n.indexOf('media')!==-1)return'presse';
+  if(n.indexOf('client')!==-1||n.indexOf('customer')!==-1)return'client';
+  if(n.indexOf('team')!==-1)return'equipe';
+  if(n.indexOf('hr')!==-1||n.indexOf('human')!==-1)return'rh';
   return null;
 }
 
@@ -567,7 +576,7 @@ function renderFormats(aud,key){
 
   var recoLabels=reco.filter(function(id){return FORMATS[id];}).map(function(id){return FORMATS[id].label;});
   var hint=document.getElementById('recoHint');
-  if(hint)hint.innerHTML='<b>Suggérés&nbsp;:</b> '+recoLabels.join(', ');
+  if(hint)hint.innerHTML='<b>Suggested&nbsp;:</b> '+recoLabels.join(', ');
 
   document.getElementById('formatsSection').style.display='block';
   checkReady();
@@ -579,11 +588,11 @@ function checkReady(){
 }
 
 /* ================================================================
-   GÉNÉRATION — même message, décliné par format
+   GENERATION — same message, adapted per format
    ================================================================ */
 function generate(){
   if(!selAud||!selFormats.length)return;
-  var message=document.getElementById('inputMessage').value.trim()||'Information programme';
+  var message=document.getElementById('inputMessage').value.trim()||'Programme update';
 
   document.getElementById('emptyState').style.display='none';
   document.getElementById('resultsTitle').textContent='';
@@ -601,146 +610,146 @@ function generate(){
   var delay=600+selFormats.length*100;
   setTimeout(function(){
     rc.innerHTML='';
-    var prog=(setup&&setup.programme)||'notre programme';
+    var prog=(setup&&setup.programme)||'our programme';
     var ctx=buildCtx(message,selAud,prog);
     selFormats.forEach(function(fid,i){
       setTimeout(function(){renderCard(fid,ctx);},i*260);
     });
     setTimeout(function(){
       document.getElementById('resultsTitle').textContent=
-        selFormats.length+' déclinaison'+(selFormats.length>1?'s':'')+' — "'+selAud.name+'"';
+        selFormats.length+' variation'+(selFormats.length>1?'s':'')+' — "'+selAud.name+'"';
       document.getElementById('resultsSubtitle').textContent=
-        'Même message, '+selFormats.length+' format'+(selFormats.length>1?'s différents':'');
+        'Same message, '+selFormats.length+' different format'+(selFormats.length>1?'s':'');
       document.getElementById('btnExport').classList.add('visible');
     },selFormats.length*260+300);
   },delay);
 }
 
 /* ================================================================
-   CONTEXTE — construit à partir du message + audience + setup
+   CONTEXT — built from message + audience + setup
    ================================================================ */
 function buildCtx(msg,aud,prog){
   var msgs  =(setup&&setup.messages&&setup.messages.length)?setup.messages:[];
   var tones =(setup&&setup.tones)||[];
-  var key   =msgs.length?msgs[0]:'Ce programme crée une opportunité réelle de transformation.';
+  var key   =msgs.length?msgs[0]:'This programme is a real opportunity for transformation.';
   var key2  =msgs.length>1?msgs[1]:'';
 
-  /* tonalité */
+  /* tone flags */
   var formel      =tones.indexOf('formel')!==-1;
   var mobilisateur=tones.indexOf('mobilisateur')!==-1;
   var narratif    =tones.indexOf('narratif')!==-1;
   var direct      =tones.indexOf('direct')!==-1;
   var inspirant   =tones.indexOf('inspirant')!==-1;
 
-  /* angle audience */
+  /* audience angle */
   var audKey=getAudKey(aud.name)||'';
   var angle =ANGLES[audKey]||'';
   var regist=REGISTERS[audKey]||'';
 
-  /* formulations selon ton + audience */
+  /* formulations based on tone + audience */
   var intro, corps, accroche_fin, hook, video_corps, video_close, court, accroche;
 
   if(mobilisateur){
-    intro=prog+' franchit une nouvelle étape : '+msg+'. C\'est le moment de se mobiliser.';
-    corps=key+(key2?'\n\n'+key2:'')+'\n\n'+(aud.what?'Votre rôle est central sur le plan de '+aud.what+'.':'Chaque membre de l\'équipe compte.');
-    accroche_fin='Rejoignez le mouvement. Ensemble, nous ferons de ce programme un succès.';
-    hook='Une nouvelle étape s\'ouvre. '+msg;
-    video_corps='Ce que nous construisons avec '+prog+', c\'est une chance unique. '+key;
-    video_close='C\'est votre moment. Mobilisez-vous. Faisons de cela une réussite collective.';
+    intro=prog+' is reaching a new milestone: '+msg+'. Now is the time to mobilise.';
+    corps=key+(key2?'\n\n'+key2:'')+'\n\n'+(aud.what?'Your role is pivotal on '+aud.what+'.':'Every team member counts.');
+    accroche_fin='Join the movement. Together, we will make this programme a success.';
+    hook='A new chapter opens. '+msg;
+    video_corps='What we are building with '+prog+' is a unique opportunity. '+key;
+    video_close='This is your moment. Get involved. Let\'s make this a collective success.';
     accroche='🚀 '+msg;
-    court='🚀 '+msg+' — '+prog+' avance.';
+    court='🚀 '+msg+' — '+prog+' moves forward.';
   } else if(formel){
-    intro='Dans le cadre de '+prog+', nous vous informons d\'une évolution importante : '+msg+'.';
-    corps=key+(key2?'\n\n'+key2:'')+'\n\n'+(aud.what?'Cette démarche s\'inscrit directement dans vos enjeux de '+aud.what+'.':'Nous restons disponibles pour toute question.');
-    accroche_fin='Nous vous remercions de votre attention et de votre engagement.';
+    intro='As part of '+prog+', we would like to inform you of an important development: '+msg+'.';
+    corps=key+(key2?'\n\n'+key2:'')+'\n\n'+(aud.what?'This initiative directly addresses your priorities around '+aud.what+'.':'We remain available for any questions.');
+    accroche_fin='We thank you for your attention and your continued engagement.';
     hook=msg;
-    video_corps='Dans le cadre de '+prog+', une étape importante vient d\'être franchie. '+key;
-    video_close='Merci de votre engagement. Nous comptons sur vous pour accompagner cette transformation.';
+    video_corps='As part of '+prog+', an important milestone has been reached. '+key;
+    video_close='Thank you for your commitment. We count on you to support this transformation.';
     accroche=msg;
     court=msg+' — '+prog+'.';
   } else if(narratif){
-    intro='Il y a quelques mois, nous avons posé une ambition : faire de '+prog+' une réalité. Aujourd\'hui, nous franchissons une étape clé — '+msg+'.';
-    corps=key+(key2?'\n\n'+key2:'')+'\n\n'+(aud.what?'À chaque étape, vos attentes sur '+aud.what+' guident nos décisions.':'Cette histoire est aussi la vôtre.');
-    accroche_fin='Cette histoire, c\'est aussi la vôtre. Nous comptons sur vous pour l\'écrire avec nous.';
-    hook='Cette étape, on l\'a construite ensemble. '+msg;
-    video_corps='Ce programme, c\'est une histoire collective. Et aujourd\'hui, on en écrit un nouveau chapitre. '+key;
-    video_close='L\'histoire continue. Et vous en êtes les auteurs.';
+    intro='Some time ago, we set an ambition: to make '+prog+' a reality. Today, we reach a key milestone — '+msg+'.';
+    corps=key+(key2?'\n\n'+key2:'')+'\n\n'+(aud.what?'At every stage, your expectations around '+aud.what+' guide our decisions.':'This story belongs to you too.');
+    accroche_fin='This story is yours too. We count on you to help write it with us.';
+    hook='This milestone — we built it together. '+msg;
+    video_corps='This programme is a collective story. And today, we write a new chapter. '+key;
+    video_close='The story continues. And you are its authors.';
     accroche='✨ '+msg;
-    court='✨ '+msg+' — une étape clé pour '+prog+'.';
+    court='✨ '+msg+' — a key milestone for '+prog+'.';
   } else if(direct){
     intro=msg;
-    corps=key+(key2?'\n\n'+key2:'')+(aud.what?'\n\nImpact direct sur : '+aud.what+'.':'');
-    accroche_fin='Questions ? Contactez l\'équipe programme.';
+    corps=key+(key2?'\n\n'+key2:'')+(aud.what?'\n\nDirect impact on: '+aud.what+'.':'');
+    accroche_fin='Questions? Reach out to the programme team.';
     hook=msg;
     video_corps=key+(key2?' '+key2:'');
-    video_close='Merci. Pour toute question, votre équipe programme est disponible.';
+    video_close='Thank you. For any questions, your programme team is available.';
     accroche=msg;
     court=msg;
   } else {
-    intro='Dans le cadre de '+prog+', une étape importante est franchie\u00a0: '+msg+'.';
-    corps=key+(key2?'\n\n'+key2:'')+'\n\n'+(aud.what?'Cette démarche répond directement à vos attentes en matière de '+aud.what+'.':'Cette démarche concerne l\'ensemble de nos équipes.');
-    accroche_fin='Nous comptons sur votre engagement pour faire de cette étape un vrai succès collectif.';
+    intro='As part of '+prog+', an important milestone has been reached\u00a0: '+msg+'.';
+    corps=key+(key2?'\n\n'+key2:'')+'\n\n'+(aud.what?'This initiative directly addresses your priorities around '+aud.what+'.':'This initiative concerns all of our teams.');
+    accroche_fin='We count on your commitment to make this milestone a genuine collective success.';
     hook=msg;
-    video_corps='Ce que nous vivons avec '+prog+' est une chance unique. '+key;
-    video_close='Rejoignez-nous. Ensemble, faisons de ce programme un succès dont nous serons tous fiers.';
+    video_corps='What we are experiencing with '+prog+' is a unique opportunity. '+key;
+    video_close='Join us. Together, let\'s make this programme a success we can all be proud of.';
     accroche=(inspirant?'✨ ':'')+msg;
-    court=(inspirant?'✨ ':'')+msg+'\u00a0— un moment clé pour '+prog+'.';
+    court=(inspirant?'✨ ':'')+msg+'\u00a0— a key moment for '+prog+'.';
   }
 
   /* hashtags */
   var progWords=prog.split(' ').filter(function(w){return w.length>2;}).slice(0,2);
   var hashtags='#Transformation #'+progWords.map(function(w){return w.charAt(0).toUpperCase()+w.slice(1);}).join('')+' #Innovation';
 
-  /* points impact */
+  /* impact points */
   var points=[];
-  if(aud.what) points.push('Répond à vos enjeux de '+aud.what);
+  if(aud.what) points.push('Addresses your priorities around '+aud.what);
   if(key2)     points.push(key2);
-  else         points.push('Calendrier et étapes communiqués prochainement');
-  points.push('Votre retour est attendu et précieux');
+  else         points.push('Timeline and next steps will be communicated shortly');
+  points.push('Your feedback is welcome and valued');
 
   return{
     msg:msg, prog:prog, sujet:msg.length>65?msg.substring(0,65)+'…':msg,
     intro,corps,accroche_fin,hook,video_corps,video_close,court,accroche,
-    cta:'En savoir plus et rejoindre la démarche',hashtags,
-    points,conclusion:'Pour toute question, contactez l\'équipe programme. Merci de votre engagement.',
+    cta:'Learn more and get involved',hashtags,
+    points,conclusion:'For any questions, contact the programme team. Thank you for your engagement.',
     citation:key.replace(/\.$/,''),formal:formel,
     audAngle:angle,audRegister:regist
   };
 }
 
 /* ================================================================
-   TEMPLATES PAR FORMAT
+   TEMPLATES BY FORMAT
    ================================================================ */
 var TPL = {
   email: function(c){
-    var sal=c.formal?'Madame, Monsieur,':'Bonjour,';
-    return 'Objet : '+c.sujet+'\n\n'+sal+'\n\n'+c.intro+'\n\n'+c.corps+'\n\n'+c.accroche_fin+'\n\nBien cordialement,\nL\'équipe Communication';
+    var sal=c.formal?'Dear Sir or Madam,':'Hello,';
+    return 'Subject: '+c.sujet+'\n\n'+sal+'\n\n'+c.intro+'\n\n'+c.corps+'\n\n'+c.accroche_fin+'\n\nBest regards,\nThe Communications Team';
   },
   linkedin: function(c){
     return c.accroche+'\n\n'+c.corps.split('\n')[0]+'\n\n'+c.points.map(function(p){return '▸ '+p;}).join('\n')+'\n\n👉 '+c.cta+'\n\n'+c.hashtags;
   },
   video: function(c){
-    return '[OUVERTURE — plan large, 5s]\n"'+c.hook+'"\n\n[PLAN MOYEN — face caméra]\n"'+c.video_corps+'"\n\n[PLAN SERRÉ — regard direct]\n"'+c.points.map(function(p){return p;}).join('. ')+'"\n\n[APPEL À L\'ACTION]\n"'+c.video_close+'"\n\n[OUTRO — logo + signature]';
+    return '[OPENING — wide shot, 5s]\n"'+c.hook+'"\n\n[MID SHOT — facing camera]\n"'+c.video_corps+'"\n\n[CLOSE-UP — direct gaze]\n"'+c.points.map(function(p){return p;}).join('. ')+'"\n\n[CALL TO ACTION]\n"'+c.video_close+'"\n\n[OUTRO — logo + signature]';
   },
   intranet: function(c){
-    return '# '+c.sujet+'\n\n'+c.intro+'\n\n## Ce que ça change pour vous\n'+c.points.map(function(p){return '- '+p;}).join('\n')+'\n\n## Contexte\n'+c.corps+'\n\n'+c.conclusion;
+    return '# '+c.sujet+'\n\n'+c.intro+'\n\n## What this means for you\n'+c.points.map(function(p){return '- '+p;}).join('\n')+'\n\n## Context\n'+c.corps+'\n\n'+c.conclusion;
   },
   slack: function(c){
     return ':loudspeaker: *'+c.sujet+'*\n\n'+c.court+'\n\n'+c.points.slice(0,2).map(function(p){return ':small_blue_diamond: '+p;}).join('\n')+'\n\n:arrow_right: '+c.cta;
   },
   presentation: function(c){
-    return 'SLIDE 1 — TITRE\n'+c.sujet+'\n\nSLIDE 2 — CONTEXTE\n'+c.intro+'\n\nSLIDE 3 — ENJEUX & BÉNÉFICES\n'+c.points.map(function(p,i){return (i+1)+'. '+p;}).join('\n')+'\n\nSLIDE 4 — MESSAGE CLÉ\n« '+c.citation+' »\n\nSLIDE 5 — PROCHAINES ÉTAPES\n'+c.cta;
+    return 'SLIDE 1 — TITLE\n'+c.sujet+'\n\nSLIDE 2 — CONTEXT\n'+c.intro+'\n\nSLIDE 3 — STAKES & BENEFITS\n'+c.points.map(function(p,i){return (i+1)+'. '+p;}).join('\n')+'\n\nSLIDE 4 — KEY MESSAGE\n« '+c.citation+' »\n\nSLIDE 5 — NEXT STEPS\n'+c.cta;
   },
   communique: function(c){
-    return 'COMMUNIQUÉ DE PRESSE\n\n'+c.sujet.toUpperCase()+'\n\n'+c.intro+'\n\n'+c.corps+'\n\n« '+c.citation+' »\n\n'+c.points.map(function(p){return '• '+p;}).join('\n')+'\n\nContact presse : communication@programme.fr';
+    return 'PRESS RELEASE\n\n'+c.sujet.toUpperCase()+'\n\n'+c.intro+'\n\n'+c.corps+'\n\n« '+c.citation+' »\n\n'+c.points.map(function(p){return '• '+p;}).join('\n')+'\n\nPress contact: communications@programme.com';
   },
   discours: function(c){
-    return '[INTRODUCTION]\nMesdames, Messieurs, chers collègues,\n\n'+c.intro+'\n\n[DÉVELOPPEMENT]\n'+c.corps+'\n\n[POINTS CLÉS]\n'+c.points.map(function(p,i){return (i+1)+'. '+p;}).join('\n')+'\n\n[APPEL À L\'ACTION]\n'+c.video_close+'\n\n[CONCLUSION]\nJe vous remercie de votre présence et de votre engagement.';
+    return '[OPENING]\nLadies and gentlemen, dear colleagues,\n\n'+c.intro+'\n\n[BODY]\n'+c.corps+'\n\n[KEY POINTS]\n'+c.points.map(function(p,i){return (i+1)+'. '+p;}).join('\n')+'\n\n[CALL TO ACTION]\n'+c.video_close+'\n\n[CLOSING]\nThank you for being here and for your commitment.';
   }
 };
 
 /* ================================================================
-   RENDU CARTE
+   RENDER CARD
    ================================================================ */
 function renderCard(fid,ctx){
   var f=FORMATS[fid];if(!f)return;
@@ -757,7 +766,7 @@ function renderCard(fid,ctx){
         +'<span class="rcard-name">'+esc(f.label)+'</span>'
       +'</div>'
       +'<div class="rcard-actions">'
-        +'<button class="btn-copy" type="button" onclick="copyCard(this)">Copier</button>'
+        +'<button class="btn-copy" type="button" onclick="copyCard(this)">Copy</button>'
       +'</div>'
     +'</div>'
     +'<div class="rcard-content">'
@@ -776,11 +785,11 @@ function renderCard(fid,ctx){
 }
 
 /* ================================================================
-   COPIER / EXPORTER
+   COPY / EXPORT
    ================================================================ */
 function copyCard(btn){
   var text=btn.closest('.rcard').querySelector('.rcard-text').textContent;
-  function done(){btn.textContent='Copié ✓';btn.classList.add('ok');setTimeout(function(){btn.textContent='Copier';btn.classList.remove('ok');},2000);}
+  function done(){btn.textContent='Copied ✓';btn.classList.add('ok');setTimeout(function(){btn.textContent='Copy';btn.classList.remove('ok');},2000);}
   if(navigator.clipboard&&navigator.clipboard.writeText){
     navigator.clipboard.writeText(text).then(done).catch(function(){fbCopy(text);done();});
   } else {fbCopy(text);done();}
@@ -790,11 +799,11 @@ function fbCopy(text){var ta=document.createElement('textarea');ta.value=text;ta
 function exportAll(){
   if(!lastResults.length)return;
   var msg=document.getElementById('inputMessage').value.trim();
-  var lines=['PRCOMM — Export des déclinaisons','Audience : '+(selAud?selAud.name:''),'Programme : '+((setup&&setup.programme)||'N/A'),'Message central : '+msg,'','='.repeat(62)];
+  var lines=['PRCOMM — Content Export','Audience: '+(selAud?selAud.name:''),'Programme: '+((setup&&setup.programme)||'N/A'),'Core message: '+msg,'','='.repeat(62)];
   lastResults.forEach(function(r){lines.push('','[ '+r.label.toUpperCase()+' ]','-'.repeat(42),r.content,'');});
   var blob=new Blob([lines.join('\n')],{type:'text/plain;charset=utf-8'});
   var url=URL.createObjectURL(blob);
-  var a=document.createElement('a');a.href=url;a.download='prcomm-declinaisons.txt';a.click();
+  var a=document.createElement('a');a.href=url;a.download='prcomm-content-export.txt';a.click();
   URL.revokeObjectURL(url);
 }
 

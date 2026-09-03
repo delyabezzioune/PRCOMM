@@ -562,108 +562,109 @@ footer { background: var(--ink); color: #8ba3c6; padding: 56px 0 44px; position:
 
 <canvas id="bgCanvas" aria-hidden="true"></canvas>
 <div id="phaseGlow" aria-hidden="true"></div>
+<div class="progress-rail" aria-hidden="true"><div class="fill" id="progressFill"></div></div>
 
 <nav class="site-nav">
   <div class="wrap">
     <a href="index.html" class="nav-brand">PR<span>COMM</span></a>
     <ul class="nav-links">
       <li><a href="index.html" class="active">Setup</a></li>
-      <li><a href="page2.html">G&#233;n&#233;rateur</a></li>
+      <li><a href="page2.html">Generator</a></li>
     </ul>
   </div>
 </nav>
 
-<nav class="section-nav" id="sectionNav" aria-label="Navigation sections">
-  <button type="button" id="secPrev" aria-label="Section pr&#233;c&#233;dente">&#9650;</button>
+<nav class="section-nav" id="sectionNav" aria-label="Section navigation">
+  <button type="button" id="secPrev" aria-label="Previous section">&#9650;</button>
   <div class="section-nav-count"><b id="secIndex">1</b><span> / </span><span id="secTotal">1</span></div>
-  <button type="button" id="secNext" aria-label="Section suivante">&#9660;</button>
+  <button type="button" id="secNext" aria-label="Next section">&#9660;</button>
 </nav>
 
 <div class="page-wrap">
 
   <div class="page-header">
-    <p class="eyebrow" style="margin-bottom:14px;">Configuration de l'agent</p>
-    <h1>Nourrir l&#8217;Agent</h1>
-    <p>Contexte, audiences, messages cl&#233;s, tonali&#233;t&#233; &#8212; l&#8217;agent s&#8217;en servira sur la page G&#233;n&#233;rateur.</p>
+    <p class="eyebrow" style="margin-bottom:14px;">Agent configuration</p>
+    <h1>Feed the Agent</h1>
+    <p>Programme context, audiences, key messages, tone &mdash; the agent will use this to generate targeted content on the Generator page.</p>
   </div>
 
   <div class="setup-card">
-    <div class="card-label">01 &#8212; Contexte du programme</div>
-    <textarea class="field-textarea" id="ctx-programme" placeholder="Ex&#160;: SHIFT est un programme de transformation digitale lanc&#233; par la DSI de Pernod Ricard pour moderniser les pratiques et outiller les &#233;quipes d&#8217;ici 2026." style="min-height:120px;"></textarea>
+    <div class="card-label">01 &mdash; Programme context</div>
+    <textarea class="field-textarea" id="ctx-programme" placeholder="e.g. SHIFT is a digital transformation programme launched by Pernod Ricard IT to modernise practices and equip teams by 2026." style="min-height:120px;"></textarea>
   </div>
 
   <div class="setup-card">
-    <div class="card-label">02 &#8212; Audiences cibles</div>
+    <div class="card-label">02 &mdash; Target audiences</div>
     <div class="col-headers">
-      <span>Nom de l&#8217;audience</span><span>Ce qui compte pour eux</span><span></span>
+      <span>Audience name</span><span>What matters to them</span><span></span>
     </div>
     <div class="audience-list" id="audienceList">
       <div class="audience-row">
-        <input class="field-input" type="text" placeholder="Ex&#160;: Comit&#233; de direction" />
-        <input class="field-input" type="text" placeholder="Ex&#160;: ROI, vision strat&#233;gique" />
-        <button class="btn-remove" onclick="removeRow(this)" title="Supprimer">&#x2715;</button>
+        <input class="field-input" type="text" placeholder="e.g. Executive committee" />
+        <input class="field-input" type="text" placeholder="e.g. ROI, strategic vision" />
+        <button class="btn-remove" onclick="removeRow(this)" title="Remove">&#x2715;</button>
       </div>
       <div class="audience-row">
-        <input class="field-input" type="text" placeholder="Ex&#160;: Managers interm&#233;diaires" />
-        <input class="field-input" type="text" placeholder="Ex&#160;: Impact sur leurs &#233;quipes" />
-        <button class="btn-remove" onclick="removeRow(this)" title="Supprimer">&#x2715;</button>
+        <input class="field-input" type="text" placeholder="e.g. Middle managers" />
+        <input class="field-input" type="text" placeholder="e.g. Impact on their teams" />
+        <button class="btn-remove" onclick="removeRow(this)" title="Remove">&#x2715;</button>
       </div>
       <div class="audience-row">
-        <input class="field-input" type="text" placeholder="Ex&#160;: Collaborateurs" />
-        <input class="field-input" type="text" placeholder="Ex&#160;: Sens, b&#233;n&#233;fices concrets" />
-        <button class="btn-remove" onclick="removeRow(this)" title="Supprimer">&#x2715;</button>
+        <input class="field-input" type="text" placeholder="e.g. Employees" />
+        <input class="field-input" type="text" placeholder="e.g. Meaning, concrete benefits" />
+        <button class="btn-remove" onclick="removeRow(this)" title="Remove">&#x2715;</button>
       </div>
     </div>
-    <button class="btn-add" onclick="addAudience()">&#xFF0B; Ajouter une audience</button>
+    <button class="btn-add" onclick="addAudience()">&#xFF0B; Add an audience</button>
   </div>
 
   <div class="setup-card">
-    <div class="card-label">03 &#8212; Formats de communication</div>
+    <div class="card-label">03 &mdash; Communication formats</div>
     <div class="channel-grid" id="channelGrid">
       <span class="channel-chip selected" data-ch="email">Email</span>
       <span class="channel-chip selected" data-ch="linkedin">LinkedIn</span>
-      <span class="channel-chip" data-ch="video">Script vid&#233;o</span>
+      <span class="channel-chip" data-ch="video">Video script</span>
       <span class="channel-chip" data-ch="intranet">Intranet / Newsletter</span>
-      <span class="channel-chip" data-ch="presentation">Pr&#233;sentation</span>
+      <span class="channel-chip" data-ch="presentation">Presentation</span>
       <span class="channel-chip" data-ch="slack">Slack / Teams</span>
-      <span class="channel-chip" data-ch="communique">Communiqu&#233; de presse</span>
-      <span class="channel-chip" data-ch="discours">Discours / Allocution</span>
+      <span class="channel-chip" data-ch="communique">Press release</span>
+      <span class="channel-chip" data-ch="discours">Speech / Address</span>
     </div>
   </div>
 
   <div class="setup-card">
-    <div class="card-label">04 &#8212; Messages cl&#233;s du programme</div>
+    <div class="card-label">04 &mdash; Programme key messages</div>
     <div class="msg-list" id="msgList">
       <div class="msg-row">
-        <input class="field-input" type="text" placeholder="Ex&#160;: Ce programme place la technologie au c&#339;ur de notre strat&#233;gie de croissance." />
-        <button class="btn-remove" onclick="removeRow(this)" title="Supprimer">&#x2715;</button>
+        <input class="field-input" type="text" placeholder="e.g. This programme puts technology at the heart of our growth strategy." />
+        <button class="btn-remove" onclick="removeRow(this)" title="Remove">&#x2715;</button>
       </div>
       <div class="msg-row">
-        <input class="field-input" type="text" placeholder="Ex&#160;: SHIFT, c'est une opportunit&#233; concr&#232;te pour chaque collaborateur." />
-        <button class="btn-remove" onclick="removeRow(this)" title="Supprimer">&#x2715;</button>
+        <input class="field-input" type="text" placeholder="e.g. SHIFT is a concrete opportunity for every employee." />
+        <button class="btn-remove" onclick="removeRow(this)" title="Remove">&#x2715;</button>
       </div>
     </div>
-    <button class="btn-add" onclick="addMessage()">&#xFF0B; Ajouter un message cl&#233;</button>
+    <button class="btn-add" onclick="addMessage()">&#xFF0B; Add a key message</button>
   </div>
 
   <div class="setup-card">
-    <div class="card-label">05 &#8212; Tonalit&#233; de communication</div>
+    <div class="card-label">05 &mdash; Communication tone</div>
     <div class="channel-grid" id="toneGrid">
-      <span class="channel-chip selected" data-tone="inspirant">Inspirant</span>
-      <span class="channel-chip" data-tone="formel">Formel</span>
-      <span class="channel-chip" data-tone="direct">Direct &amp; Factuel</span>
-      <span class="channel-chip" data-tone="narratif">Narratif &amp; Storytelling</span>
-      <span class="channel-chip" data-tone="mobilisateur">Mobilisateur</span>
-      <span class="channel-chip" data-tone="pedagogique">P&#233;dagogique</span>
+      <span class="channel-chip selected" data-tone="inspirant">Inspiring</span>
+      <span class="channel-chip" data-tone="formel">Formal</span>
+      <span class="channel-chip" data-tone="direct">Direct &amp; Factual</span>
+      <span class="channel-chip" data-tone="narratif">Narrative &amp; Storytelling</span>
+      <span class="channel-chip" data-tone="mobilisateur">Mobilising</span>
+      <span class="channel-chip" data-tone="pedagogique">Educational</span>
     </div>
   </div>
 
   <div style="text-align:center;">
     <button class="btn-save" onclick="saveSetup()">
       <span class="dot"></span>
-      Sauvegarder &amp; activer l&#8217;agent
+      Save &amp; activate the agent
     </button>
-    <div class="save-confirm" id="saveConfirm">&#10003; Contexte sauvegard&#233; &#8212; l&#8217;agent est pr&#234;t sur la page G&#233;n&#233;rateur</div>
+    <div class="save-confirm" id="saveConfirm">&#10003; Context saved &mdash; the agent is ready on the Generator page</div>
   </div>
 
 </div>
@@ -676,13 +677,13 @@ function removeRow(btn){btn.closest('.audience-row,.msg-row').remove();}
 
 function addAudience(){
   var row=document.createElement('div');row.className='audience-row';
-  row.innerHTML='<input class="field-input" type="text" placeholder="Nom de l'audience"/><input class="field-input" type="text" placeholder="Ce qui compte pour eux"/><button class="btn-remove" onclick="removeRow(this)">&#x2715;</button>';
+  row.innerHTML='<input class="field-input" type="text" placeholder="Audience name"/><input class="field-input" type="text" placeholder="What matters to them"/><button class="btn-remove" onclick="removeRow(this)">&#x2715;</button>';
   document.getElementById('audienceList').appendChild(row);row.querySelector('input').focus();
 }
 
 function addMessage(){
   var row=document.createElement('div');row.className='msg-row';
-  row.innerHTML='<input class="field-input" type="text" placeholder="Message cl&#233;..."/><button class="btn-remove" onclick="removeRow(this)">&#x2715;</button>';
+  row.innerHTML='<input class="field-input" type="text" placeholder="Key message..."/><button class="btn-remove" onclick="removeRow(this)">&#x2715;</button>';
   document.getElementById('msgList').appendChild(row);row.querySelector('input').focus();
 }
 
@@ -802,6 +803,15 @@ function saveSetup(){
   var rt;window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){resize();if(!reduceMotion)requestAnimationFrame(frame);else frame(performance.now());},150);});
   resize();
   if(!reduceMotion) requestAnimationFrame(frame); else frame(t0);
+})();
+
+(function(){
+  /* === Progress rail === */
+  var fill=document.getElementById('progressFill');
+  if(fill){
+    function updFill(){var s=document.documentElement.scrollTop||document.body.scrollTop;var h=document.documentElement.scrollHeight-window.innerHeight;fill.style.height=(h>0?(s/h*100):0)+'%';}
+    window.addEventListener('scroll',updFill,{passive:true});updFill();
+  }
 })();
 
 (function(){
