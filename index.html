@@ -710,6 +710,48 @@ function saveSetup(){
   setTimeout(function(){el.classList.remove('show');},3500);
 }
 
+/* Restaurer le setup sauvegardé au rechargement */
+(function restoreSetup(){
+  var raw;
+  try{raw=localStorage.getItem('prcomm_setup');}catch(e){}
+  if(!raw)return;
+  var d;try{d=JSON.parse(raw);}catch(e){return;}
+  /* programme */
+  if(d.programme)document.getElementById('ctx-programme').value=d.programme;
+  /* audiences */
+  if(d.audiences&&d.audiences.length){
+    var list=document.getElementById('audienceList');
+    list.innerHTML='';
+    d.audiences.forEach(function(a){
+      var row=document.createElement('div');row.className='audience-row';
+      row.innerHTML='<input class="field-input" type="text"/><input class="field-input" type="text"/><button class="btn-remove" onclick="removeRow(this)">&#x2715;</button>';
+      var ins=row.querySelectorAll('input');ins[0].value=a.name||'';ins[1].value=a.what||'';
+      list.appendChild(row);
+    });
+  }
+  /* canaux */
+  if(d.channels&&d.channels.length){
+    document.querySelectorAll('#channelGrid .channel-chip').forEach(function(c){
+      c.classList.toggle('selected',d.channels.indexOf(c.dataset.ch)!==-1);
+    });
+  }
+  /* messages clés */
+  if(d.messages&&d.messages.length){
+    var ml=document.getElementById('msgList');ml.innerHTML='';
+    d.messages.forEach(function(m){
+      var row=document.createElement('div');row.className='msg-row';
+      row.innerHTML='<input class="field-input" type="text"/><button class="btn-remove" onclick="removeRow(this)">&#x2715;</button>';
+      row.querySelector('input').value=m;ml.appendChild(row);
+    });
+  }
+  /* tones */
+  if(d.tones&&d.tones.length){
+    document.querySelectorAll('#toneGrid .channel-chip').forEach(function(c){
+      c.classList.toggle('selected',d.tones.indexOf(c.dataset.tone)!==-1);
+    });
+  }
+})();
+
 (function(){
   /* === SHIFT particle field === */
   var canvas = document.getElementById('bgCanvas');

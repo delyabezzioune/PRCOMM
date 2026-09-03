@@ -5,26 +5,39 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PRCOMM — Générateur de messages</title>
 <style>
-/* =====================================================
-   DESIGN SYSTEM SHIFT — inline
-   ===================================================== */
 :root {
-  --ink:#050912; --navy:#07223f; --blue:#0f62fe; --cyan:#34e0f0; --teal:#00b7ac;
-  --ink-text:#0a1626; --muted:#54677e; --gold:#d1a954; --gold-soft:rgba(209,169,84,0.16);
-  --mono:ui-monospace,"SF Mono",Consolas,"Liberation Mono",Menlo,monospace;
-  --sans:-apple-system,"Segoe UI","Helvetica Neue",Arial,sans-serif;
-  --serif:Georgia,"Palatino Linotype","Book Antiqua",serif;
-  --ease-lux:cubic-bezier(.16,1,.3,1);
+  --ink:      #050912;
+  --navy:     #07223f;
+  --blue:     #0f62fe;
+  --cyan:     #34e0f0;
+  --teal:     #00b7ac;
+  --gold:     #d1a954;
+  --gold-soft:rgba(209,169,84,0.16);
+  --mono:  ui-monospace,"SF Mono","SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+  --sans:  -apple-system,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+  --serif: Georgia,"Iowan Old Style","Palatino Linotype","Book Antiqua",serif;
+  --ease-lux: cubic-bezier(.16,1,.3,1);
 }
-*{box-sizing:border-box;} html,body{margin:0;padding:0;} html{scroll-behavior:smooth;}
+*{box-sizing:border-box;}html,body{margin:0;padding:0;}html{scroll-behavior:smooth;}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
 body{font-family:var(--sans);background:var(--ink);color:#eaf3ff;-webkit-font-smoothing:antialiased;}
 a{color:inherit;text-decoration:none;}
 
-/* canvas bg */
+/* ---- ambient ---- */
 #bgCanvas{position:fixed;inset:0;z-index:-1;display:block;pointer-events:none;}
-#phaseGlow{position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(circle at 26% 18%,rgba(52,224,240,0.14),transparent 62%);}
+#phaseGlow{position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(circle at 26% 18%,rgba(52,224,240,0.13),transparent 60%);
+  transition:background 1.4s ease;}
 
-/* nav */
+/* ---- progress rail ---- */
+.progress-rail{position:fixed;top:0;left:0;width:3px;height:100vh;z-index:90;
+  background:rgba(255,255,255,0.06);pointer-events:none;}
+.progress-rail .fill{width:100%;height:0%;
+  background:linear-gradient(180deg,var(--cyan),var(--blue));
+  transition:height .08s linear;}
+@media(max-width:640px){.progress-rail{display:none;}}
+
+/* ---- nav ---- */
 .site-nav{position:sticky;top:0;z-index:80;background:#050a14;border-bottom:1px solid rgba(52,224,240,0.35);}
 .site-nav .wrap{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;max-width:min(1560px,92vw);margin:0 auto;}
 .nav-brand{font-family:var(--mono);font-size:12.5px;letter-spacing:.05em;color:#eaf3ff;font-weight:700;}
@@ -34,106 +47,179 @@ a{color:inherit;text-decoration:none;}
 .nav-links a:hover{color:#fff;background:rgba(255,255,255,0.08);}
 .nav-links a.active{color:var(--ink);background:var(--cyan);font-weight:700;}
 
-/* section-nav pill */
-.section-nav{position:fixed;right:22px;top:50%;transform:translateY(-50%);z-index:95;display:flex;flex-direction:column;align-items:center;gap:2px;background:rgba(8,20,38,0.6);border:1px solid rgba(255,255,255,0.14);border-radius:999px;padding:10px 8px;backdrop-filter:blur(10px);box-shadow:0 12px 32px rgba(0,0,0,0.35);}
-.section-nav button{width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,0.16);background:rgba(255,255,255,0.05);color:#eaf3ff;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .18s,border-color .18s,transform .18s;}
+/* ---- section-nav ---- */
+.section-nav{position:fixed;right:22px;top:50%;transform:translateY(-50%);z-index:95;
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  background:rgba(8,20,38,0.6);border:1px solid rgba(255,255,255,0.14);
+  border-radius:999px;padding:10px 8px;backdrop-filter:blur(10px);
+  box-shadow:0 12px 32px rgba(0,0,0,0.35);}
+.section-nav button{width:34px;height:34px;border-radius:50%;
+  border:1px solid rgba(255,255,255,0.16);background:rgba(255,255,255,0.05);
+  color:#eaf3ff;font-size:13px;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;transition:background .18s,border-color .18s,transform .18s;}
 .section-nav button:hover:not(:disabled){background:rgba(52,224,240,0.18);border-color:rgba(52,224,240,0.5);transform:scale(1.08);}
 .section-nav button:disabled{opacity:.25;cursor:default;}
 .section-nav-count{font-family:var(--mono);font-size:11px;color:#9fb8dd;padding:7px 0;}
 .section-nav-count b{color:var(--gold);}
 @media(max-width:520px){.section-nav{display:none;}}
 
-/* page wrap */
+/* ---- hero glow ---- */
+.hero-glow{
+  position:absolute;top:-200px;left:50%;width:1100px;height:700px;margin-left:-550px;
+  background:radial-gradient(ellipse closest-side at 50% 38%,rgba(52,224,240,0.3),rgba(209,169,84,0.18) 42%,transparent 68%);
+  filter:blur(6px);pointer-events:none;z-index:0;
+  animation:heroGlowPulse 6.5s ease-in-out infinite;}
+@keyframes heroGlowPulse{0%,100%{opacity:.55;transform:scale(1);}50%{opacity:.95;transform:scale(1.16);}}
+@media(prefers-reduced-motion:reduce){.hero-glow{animation:none;opacity:.8;}}
+
+/* ---- page layout ---- */
 .page-wrap{max-width:960px;margin:0 auto;padding:52px 40px 100px;position:relative;z-index:2;}
 @media(max-width:640px){.page-wrap{padding:32px 20px 80px;}}
 
-/* page title */
-.page-title-block{margin-bottom:44px;}
-.page-title-block .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);display:flex;align-items:center;gap:10px;margin-bottom:14px;}
-.page-title-block .eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 0 3px rgba(52,224,240,0.18);flex:none;}
-.page-title-block h1{font-family:var(--serif);font-size:clamp(32px,5vw,50px);font-weight:600;letter-spacing:-.01em;line-height:1.1;margin:0 0 10px;background-image:linear-gradient(100deg,var(--cyan) 0%,#fff 22%,var(--gold) 48%,#eaf3ff 100%);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:lsweep 9s linear infinite;}
+/* ---- page title ---- */
+.page-title-block{margin-bottom:44px;position:relative;overflow:hidden;}
+.page-title-block .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--cyan);display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.page-title-block .eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;
+  background:var(--cyan);box-shadow:0 0 0 3px rgba(52,224,240,0.18);flex:none;}
+.page-title-block h1{font-family:var(--serif);font-size:clamp(32px,5vw,52px);font-weight:600;
+  letter-spacing:-.01em;line-height:1.1;margin:0 0 10px;
+  background-image:linear-gradient(100deg,var(--cyan) 0%,#fff 22%,var(--gold) 48%,#eaf3ff 100%);
+  background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:lsweep 9s linear infinite;}
 @keyframes lsweep{0%{background-position:0% 50%;}100%{background-position:-220% 50%;}}
-.page-title-block p{color:#a9c4ea;font-size:16px;line-height:1.6;margin:0;max-width:580px;}
+.page-title-block p{color:#a9c4ea;font-size:16px;line-height:1.6;margin:0;max-width:600px;}
 @media(prefers-reduced-motion:reduce){.page-title-block h1{animation:none;color:#fff;-webkit-text-fill-color:#fff;background-image:none;}}
 
-/* block card */
-.block{background:linear-gradient(155deg,rgba(9,16,30,0.75),rgba(9,16,30,0.5));border:1px solid rgba(255,255,255,0.09);clip-path:polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,0 100%);padding:32px 36px;margin-bottom:20px;transition:border-color .3s;}
+/* ---- blocks ---- */
+.block{background:linear-gradient(155deg,rgba(9,16,30,0.75),rgba(9,16,30,0.5));
+  border:1px solid rgba(255,255,255,0.09);
+  clip-path:polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,0 100%);
+  padding:32px 36px;margin-bottom:20px;transition:border-color .3s;}
 .block:focus-within{border-color:rgba(52,224,240,0.3);}
-.block-label{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);display:flex;align-items:center;gap:10px;margin-bottom:16px;}
-.block-label::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 0 3px rgba(52,224,240,0.18);flex:none;}
+.block-label{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--cyan);display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.block-label::before{content:"";width:6px;height:6px;border-radius:50%;
+  background:var(--cyan);box-shadow:0 0 0 3px rgba(52,224,240,0.18);flex:none;}
 @media(max-width:640px){.block{padding:22px 18px;}}
 
-/* textarea */
-.field-textarea{width:100%;background:rgba(5,9,18,0.75);border:1px solid rgba(255,255,255,0.12);color:#eaf3ff;font-family:var(--sans);font-size:15px;line-height:1.65;padding:14px 18px;border-radius:2px;outline:none;transition:border-color .2s;resize:vertical;min-height:108px;}
+/* ---- textarea ---- */
+.field-textarea{width:100%;background:rgba(5,9,18,0.75);border:1px solid rgba(255,255,255,0.12);
+  color:#eaf3ff;font-family:var(--sans);font-size:15px;line-height:1.65;
+  padding:14px 18px;border-radius:2px;outline:none;transition:border-color .2s;
+  resize:vertical;min-height:108px;}
 .field-textarea:focus{border-color:rgba(52,224,240,0.5);}
 .field-textarea::placeholder{color:#54677e;}
 
-/* audience buttons */
+/* ---- audience buttons ---- */
 .aud-btns{display:flex;flex-wrap:wrap;gap:10px;}
-.aud-btn{font-family:var(--sans);font-size:14px;font-weight:600;padding:10px 22px;border-radius:999px;cursor:pointer;border:1.5px solid rgba(159,184,221,0.35);color:#9fb8dd;background:rgba(159,184,221,0.06);transition:all .2s;}
+.aud-btn{font-family:var(--sans);font-size:14px;font-weight:600;padding:10px 22px;
+  border-radius:999px;cursor:pointer;
+  border:1.5px solid rgba(159,184,221,0.35);color:#9fb8dd;background:rgba(159,184,221,0.06);
+  transition:all .2s;}
 .aud-btn:hover{border-color:rgba(52,224,240,0.5);color:#eaf3ff;background:rgba(52,224,240,0.08);}
 .aud-btn.active{border-color:var(--cyan);color:var(--ink);background:var(--cyan);font-weight:700;}
 
-/* channel recommendation zone */
-.reco-zone{margin-top:20px;overflow:hidden;max-height:0;opacity:0;transition:max-height .45s ease,opacity .35s;}
-.reco-zone.open{max-height:300px;opacity:1;}
-.reco-zone-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#7d97bd;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+/* ---- reco zone ---- */
+.reco-zone{margin-top:20px;overflow:hidden;max-height:0;opacity:0;
+  transition:max-height .45s ease,opacity .35s;}
+.reco-zone.open{max-height:400px;opacity:1;}
+.reco-zone-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:#7d97bd;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
 .reco-zone-label::after{content:"";flex:1;height:1px;background:rgba(255,255,255,0.1);}
 .ch-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
-.ch-chip{font-family:var(--mono);font-size:12px;padding:7px 16px;border-radius:999px;cursor:pointer;user-select:none;border:1.5px solid rgba(159,184,221,0.3);color:#9fb8dd;background:rgba(159,184,221,0.06);transition:all .18s;}
+.ch-chip{font-family:var(--mono);font-size:12px;padding:7px 16px;border-radius:999px;
+  cursor:pointer;user-select:none;
+  border:1.5px solid rgba(159,184,221,0.3);color:#9fb8dd;background:rgba(159,184,221,0.06);
+  transition:all .18s;}
 .ch-chip:hover{border-color:rgba(52,224,240,0.5);color:#eaf3ff;}
 .ch-chip.sel{background:rgba(52,224,240,0.16);border-color:var(--cyan);color:var(--cyan);font-weight:700;}
 .ch-chip.reco{border-color:rgba(209,169,84,0.5);color:#f0d9a2;background:rgba(209,169,84,0.1);}
-.ch-chip.reco.sel{background:rgba(209,169,84,0.2);border-color:var(--gold);color:var(--gold);font-weight:700;}
+.ch-chip.reco.sel{background:rgba(209,169,84,0.22);border-color:var(--gold);color:var(--gold);font-weight:700;}
 .reco-hint{font-family:var(--mono);font-size:11px;color:#7d97bd;}
 .reco-hint b{color:var(--gold);}
 
-/* generate btn */
-.btn-gen{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;padding:18px;margin-top:4px;cursor:pointer;clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,0 100%);border:1px solid rgba(52,224,240,0.4);background:linear-gradient(120deg,rgba(52,224,240,0.14),rgba(15,98,254,0.18));font-family:var(--sans);font-size:16px;font-weight:700;color:#eaf3ff;letter-spacing:.02em;transition:background .25s,transform .2s,box-shadow .25s;box-shadow:0 10px 28px rgba(0,0,0,0.3);}
-.btn-gen:hover:not(:disabled){background:linear-gradient(120deg,rgba(52,224,240,0.24),rgba(15,98,254,0.28));transform:translateY(-2px);box-shadow:0 16px 36px rgba(0,0,0,0.4);}
+/* ---- generate button ---- */
+.btn-gen{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;
+  padding:18px;margin-top:4px;cursor:pointer;
+  clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,0 100%);
+  border:1px solid rgba(52,224,240,0.4);
+  background:linear-gradient(120deg,rgba(52,224,240,0.14),rgba(15,98,254,0.18));
+  font-family:var(--sans);font-size:16px;font-weight:700;color:#eaf3ff;
+  letter-spacing:.02em;transition:background .25s,transform .2s,box-shadow .25s;
+  box-shadow:0 10px 28px rgba(0,0,0,0.3);}
+.btn-gen:hover:not(:disabled){background:linear-gradient(120deg,rgba(52,224,240,0.24),rgba(15,98,254,0.28));
+  transform:translateY(-2px);box-shadow:0 16px 36px rgba(0,0,0,0.4);}
 .btn-gen:disabled{opacity:.38;cursor:not-allowed;transform:none;}
-.btn-gen .dot{width:10px;height:10px;border-radius:50%;background:var(--cyan);flex:none;animation:pulse 2s ease-in-out infinite;}
+.btn-gen .dot{width:10px;height:10px;border-radius:50%;background:var(--cyan);
+  flex:none;animation:pulse 2s ease-in-out infinite;}
 @keyframes pulse{0%,100%{opacity:.5;transform:scale(1);}50%{opacity:1;transform:scale(1.45);}}
 
-/* results */
+/* ---- results ---- */
 .results{margin-top:36px;}
+.results-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;}
+.results-title{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#7d97bd;}
+.btn-export{font-family:var(--mono);font-size:11px;padding:6px 16px;border-radius:2px;
+  border:1px solid rgba(209,169,84,0.4);background:rgba(209,169,84,0.08);
+  color:#f0d9a2;cursor:pointer;letter-spacing:.05em;transition:background .18s,color .18s;display:none;}
+.btn-export.visible{display:inline-flex;align-items:center;gap:6px;}
+.btn-export:hover{background:rgba(209,169,84,0.18);color:var(--gold);}
 .results-empty{text-align:center;padding:64px 20px;font-family:var(--mono);font-size:13px;color:#54677e;letter-spacing:.06em;}
 .results-empty .ico{font-size:34px;display:block;margin-bottom:14px;opacity:.35;}
 .result-cards{display:flex;flex-direction:column;gap:22px;}
 
-/* result card */
-.rcard{background:rgba(6,14,28,0.65);border:1px solid rgba(255,255,255,0.1);clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,0 100%);overflow:hidden;transition:border-color .3s;}
+/* ---- result card ---- */
+.rcard{background:rgba(6,14,28,0.65);border:1px solid rgba(255,255,255,0.1);
+  clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,0 100%);
+  overflow:hidden;transition:border-color .3s;}
 .rcard:hover{border-color:rgba(52,224,240,0.28);}
-.rcard-head{display:flex;align-items:center;justify-content:space-between;padding:14px 22px;border-bottom:1px solid rgba(255,255,255,0.07);background:rgba(5,9,18,0.45);}
+.rcard-head{display:flex;align-items:center;justify-content:space-between;
+  padding:14px 22px;border-bottom:1px solid rgba(255,255,255,0.07);
+  background:rgba(5,9,18,0.45);}
 .rcard-format{display:flex;align-items:center;gap:10px;}
 .rcard-icon{font-size:18px;}
 .rcard-name{font-weight:700;color:#fff;font-size:15px;}
 .rcard-badge{font-family:var(--mono);font-size:10px;padding:3px 10px;border-radius:999px;letter-spacing:.05em;text-transform:uppercase;}
-.rcard-badge.email{border:1px solid rgba(52,224,240,0.4);color:#a4f0f8;background:rgba(52,224,240,0.1);}
-.rcard-badge.linkedin{border:1px solid rgba(15,98,254,0.5);color:#a9c4ff;background:rgba(15,98,254,0.14);}
-.rcard-badge.video{border:1px solid rgba(209,169,84,0.5);color:#f0d9a2;background:rgba(209,169,84,0.12);}
-.rcard-badge.intranet{border:1px solid rgba(0,183,172,0.5);color:#7fe6dd;background:rgba(0,183,172,0.12);}
-.rcard-badge.slack{border:1px solid rgba(159,184,221,0.4);color:#9fb8dd;background:rgba(159,184,221,0.08);}
-.btn-copy{font-family:var(--mono);font-size:11px;padding:5px 14px;border-radius:2px;border:1px solid rgba(255,255,255,0.18);background:rgba(255,255,255,0.05);color:#9fb8dd;cursor:pointer;transition:background .18s,color .18s;}
+.rcard-badge.cyan  {border:1px solid rgba(52,224,240,0.4);  color:#a4f0f8;background:rgba(52,224,240,0.1);}
+.rcard-badge.blue  {border:1px solid rgba(15,98,254,0.5);   color:#a9c4ff;background:rgba(15,98,254,0.14);}
+.rcard-badge.gold  {border:1px solid rgba(209,169,84,0.5);  color:#f0d9a2;background:rgba(209,169,84,0.12);}
+.rcard-badge.teal  {border:1px solid rgba(0,183,172,0.5);   color:#7fe6dd;background:rgba(0,183,172,0.12);}
+.rcard-badge.muted {border:1px solid rgba(159,184,221,0.4); color:#9fb8dd;background:rgba(159,184,221,0.08);}
+.rcard-actions{display:flex;align-items:center;gap:8px;}
+.btn-copy{font-family:var(--mono);font-size:11px;padding:5px 14px;border-radius:2px;
+  border:1px solid rgba(255,255,255,0.18);background:rgba(255,255,255,0.05);
+  color:#9fb8dd;cursor:pointer;transition:background .18s,color .18s;}
 .btn-copy:hover{background:rgba(255,255,255,0.1);color:#fff;}
 .btn-copy.ok{border-color:rgba(0,183,172,0.5);color:var(--teal);}
 .rcard-body{padding:22px 24px;}
 .rcard-text{color:#dbe8fb;font-size:15px;line-height:1.75;white-space:pre-wrap;font-family:var(--sans);}
-.rcard-why{margin-top:16px;padding:13px 18px;border-left:3px solid var(--gold);background:linear-gradient(120deg,rgba(209,169,84,0.08),rgba(255,255,255,0.01));}
+.rcard-why{margin-top:16px;padding:13px 18px;
+  border-left:3px solid var(--gold);
+  background:linear-gradient(120deg,rgba(209,169,84,0.08),rgba(255,255,255,0.01));}
 .why-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;}
 .why-text{font-family:var(--serif);font-style:italic;color:#c9a95a;font-size:14px;line-height:1.6;}
 
-/* skeleton */
-.skel-card{background:rgba(6,14,28,0.6);border:1px solid rgba(255,255,255,0.07);clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,0 100%);padding:24px;display:flex;flex-direction:column;gap:11px;}
-.skel{border-radius:2px;background:linear-gradient(90deg,rgba(255,255,255,0.04) 25%,rgba(255,255,255,0.09) 50%,rgba(255,255,255,0.04) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;}
+/* ---- tone tag ---- */
+.tone-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+.tone-tag{font-family:var(--mono);font-size:10px;padding:3px 10px;border-radius:999px;
+  border:1px solid rgba(52,224,240,0.3);color:#a4f0f8;background:rgba(52,224,240,0.07);}
+
+/* ---- skeleton ---- */
+.skel-card{background:rgba(6,14,28,0.6);border:1px solid rgba(255,255,255,0.07);
+  clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,0 100%);
+  padding:24px;display:flex;flex-direction:column;gap:11px;}
+.skel{border-radius:2px;
+  background:linear-gradient(90deg,rgba(255,255,255,0.04) 25%,rgba(255,255,255,0.09) 50%,rgba(255,255,255,0.04) 75%);
+  background-size:200% 100%;animation:shimmer 1.5s infinite;}
 @keyframes shimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
-.sh{height:14px;} .sw40{width:40%;} .sw90{width:90%;} .sw75{width:75%;} .sw55{width:55%;}
+.sh{height:14px;}.sw40{width:40%;}.sw90{width:90%;}.sw75{width:75%;}.sw55{width:55%;}
 </style>
 </head>
 <body>
 
 <canvas id="bgCanvas" aria-hidden="true"></canvas>
 <div id="phaseGlow" aria-hidden="true"></div>
+<div class="progress-rail" aria-hidden="true"><div class="fill" id="progressFill"></div></div>
 
 <nav class="site-nav">
   <div class="wrap">
@@ -145,95 +231,98 @@ a{color:inherit;text-decoration:none;}
   </div>
 </nav>
 
-<nav class="section-nav" id="sectionNav">
-  <button type="button" id="secPrev">&#9650;</button>
+<nav class="section-nav" id="sectionNav" aria-label="Navigation sections">
+  <button type="button" id="secPrev" aria-label="Section précédente">&#9650;</button>
   <div class="section-nav-count"><b id="secIndex">1</b> / <span id="secTotal">4</span></div>
-  <button type="button" id="secNext">&#9660;</button>
+  <button type="button" id="secNext" aria-label="Section suivante">&#9660;</button>
 </nav>
 
 <div class="page-wrap">
 
-  <!-- Header -->
   <div class="page-title-block" id="stop0">
+    <div class="hero-glow" aria-hidden="true"></div>
     <p class="eyebrow">Agent de communication</p>
     <h1>Générer les Messages</h1>
     <p>Entre ta demande, sélectionne une audience — l'agent recommande les canaux adaptés et génère un message par format, avec justification.</p>
   </div>
 
-  <!-- BLOC 1 — Demande -->
   <div class="block" id="stop1">
     <div class="block-label">01 — Ta demande</div>
     <textarea class="field-textarea" id="inputDemande"
-      placeholder="Décris ce que tu veux communiquer. Ex : Annoncer le lancement de la Phase 2 du programme en valorisant les succès de la Phase 1 et en invitant les équipes à s'engager."></textarea>
+      placeholder="Ex : Annonce du lancement du programme SHIFT à l'ensemble des collaborateurs. Expliquer les enjeux, la vision et les prochaines étapes."
+      aria-label="Décris ta demande de communication"></textarea>
   </div>
 
-  <!-- BLOC 2 — Audience + canaux recommandés -->
   <div class="block" id="stop2">
     <div class="block-label">02 — Audience cible</div>
-    <div class="aud-btns" id="audBtns"></div>
-
-    <div class="reco-zone" id="recoZone">
+    <div class="aud-btns" id="audBtns" role="group" aria-label="Sélectionner une audience"></div>
+    <div class="reco-zone" id="recoZone" aria-live="polite">
       <div class="reco-zone-label" style="margin-top:20px;">Canaux recommandés pour cette audience</div>
       <div class="ch-chips" id="chChips"></div>
       <div class="reco-hint" id="recoHint"></div>
     </div>
   </div>
 
-  <!-- BLOC 3 — Générer -->
-  <button class="btn-gen" id="btnGen" disabled>
-    <span class="dot"></span>
+  <button class="btn-gen" id="btnGen" disabled aria-label="Générer les messages">
+    <span class="dot" aria-hidden="true"></span>
     Générer les messages
   </button>
 
-  <!-- BLOC 4 — Résultats -->
   <div class="results" id="stop3">
-    <div class="results-empty" id="emptyState">
-      <span class="ico">✦</span>
-      Sélectionne une audience et clique sur Générer
+    <div class="results-header">
+      <div class="results-title" id="resultsTitle"></div>
+      <button class="btn-export" id="btnExport" aria-label="Exporter tous les messages">&#8593; Exporter tout</button>
     </div>
-    <div class="result-cards" id="resultCards"></div>
+    <div class="results-empty" id="emptyState">
+      <span class="ico" aria-hidden="true">✦</span>
+      Sélectionne une audience et génère tes messages
+    </div>
+    <div class="result-cards" id="resultCards" aria-live="polite"></div>
   </div>
 
-</div><!-- /page-wrap -->
+</div>
 
 <script>
 /* ================================================================
    CHANNEL METADATA
    ================================================================ */
 var CH = {
-  email:        { label:'Email',                icon:'✉',  badge:'email',    why:"L'email est idéal pour les audiences formelles. Il permet un message structuré, archivable et attendu dans les communications officielles." },
-  linkedin:     { label:'LinkedIn',             icon:'💼', badge:'linkedin', why:"LinkedIn maximise la visibilité externe et institutionnelle. L'accroche courte et les hashtags augmentent l'engagement organique auprès des pairs et partenaires." },
-  video:        { label:'Script vidéo',         icon:'🎬', badge:'video',    why:"La vidéo crée un lien émotionnel fort. Le format face caméra humanise le message et renforce l'authenticité, particulièrement efficace pour mobiliser les équipes." },
-  intranet:     { label:'Intranet / Newsletter', icon:'📰', badge:'intranet', why:"L'intranet touche l'ensemble des collaborateurs avec un message structuré et archivable. Idéal pour les communications larges à l'ensemble du périmètre." },
-  slack:        { label:'Slack / Teams',         icon:'💬', badge:'slack',    why:"Slack/Teams privilégie la réactivité et l'informalité. Le format court et direct est parfait pour un message rapide à une équipe habituée à ce canal." },
-  presentation: { label:'Présentation',          icon:'📊', badge:'email',    why:"La présentation structure le message visuellement pour convaincre en réunion. Elle est adaptée aux décideurs qui attendent des données et des arguments structurés." },
-  communique:   { label:'Communiqué presse',     icon:'📡', badge:'linkedin', why:"Le communiqué adopte les codes journalistiques : clarté, faits, citation. Il cible les médias et partenaires pour une diffusion large et crédible." },
-  discours:     { label:'Discours',              icon:'🎤', badge:'video',    why:"Le discours crée un moment fort et mémorable. Le contact direct et l'émotion renforcent l'impact, idéal pour des moments de rassemblement." }
+  email:        { label:'Email',                icon:'✉',  badge:'cyan',  why:"L'email est idéal pour les audiences formelles. Il permet un message structuré, archivable et attendu dans les communications officielles." },
+  linkedin:     { label:'LinkedIn',             icon:'💼', badge:'blue',  why:"LinkedIn maximise la visibilité externe et institutionnelle. L'accroche courte et les hashtags augmentent l'engagement organique auprès des pairs et partenaires." },
+  video:        { label:'Script vidéo',         icon:'🎬', badge:'gold',  why:"La vidéo crée un lien émotionnel fort. Le format face caméra humanise le message et renforce l'authenticité, particulièrement efficace pour mobiliser les équipes." },
+  intranet:     { label:'Intranet / Newsletter', icon:'📰', badge:'teal',  why:"L'intranet touche l'ensemble des collaborateurs avec un message structuré et archivable. Idéal pour les communications larges à l'ensemble du périmètre." },
+  slack:        { label:'Slack / Teams',         icon:'💬', badge:'muted', why:"Slack/Teams privilégie la réactivité et l'informalité. Le format court et direct est parfait pour un message rapide à une équipe habituée à ce canal." },
+  presentation: { label:'Présentation',          icon:'📊', badge:'blue',  why:"La présentation structure le message visuellement pour convaincre en réunion. Elle est adaptée aux décideurs qui attendent des données et des arguments structurés." },
+  communique:   { label:'Communiqué presse',     icon:'📡', badge:'gold',  why:"Le communiqué adopte les codes journalistiques : clarté, faits, citation. Il cible les médias et partenaires pour une diffusion large et crédible." },
+  discours:     { label:'Discours',              icon:'🎤', badge:'cyan',  why:"Le discours crée un moment fort et mémorable. Le contact direct et l'émotion renforcent l'impact, idéal pour des moments de rassemblement." }
 };
 
-/* Recommandation de canaux par audience */
+/* Canaux recommandés par profil d'audience */
 var RECO = {
-  'direction':      ['email','presentation','discours'],
-  'codir':          ['email','presentation','discours'],
-  'comite':         ['email','presentation','discours'],
-  'manager':        ['email','intranet','slack'],
-  'collaborateur':  ['intranet','video','slack'],
-  'partner':        ['email','linkedin','communique'],
-  'partenaire':     ['email','linkedin','communique'],
-  'presse':         ['communique','linkedin'],
-  'client':         ['linkedin','email','video'],
-  'equipe':         ['slack','intranet','video'],
-  'rh':             ['intranet','email','slack']
+  'direction'    : ['email','presentation','discours'],
+  'codir'        : ['email','presentation','discours'],
+  'comite'       : ['email','presentation','discours'],
+  'manager'      : ['email','intranet','slack'],
+  'collaborateur': ['intranet','video','slack'],
+  'partner'      : ['email','linkedin','communique'],
+  'partenaire'   : ['email','linkedin','communique'],
+  'presse'       : ['communique','linkedin'],
+  'client'       : ['linkedin','email','video'],
+  'equipe'       : ['slack','intranet','video'],
+  'rh'           : ['intranet','email','slack']
 };
 
-/* Templates de message par canal */
+/* ================================================================
+   TEMPLATES PAR CANAL — adaptatifs selon ton et audience
+   ================================================================ */
 var TPL = {
   email: function(c) {
+    var sal = c.formal ? 'Madame, Monsieur,' : 'Bonjour,';
     return 'Objet : ' + c.sujet + '\n\n'
-      + 'Bonjour,\n\n'
+      + sal + '\n\n'
       + c.intro + '\n\n'
       + c.corps + '\n\n'
-      + 'Nous comptons sur votre engagement pour faire de cette étape un vrai succès collectif.\n\n'
+      + c.accroche_fin + '\n\n'
       + 'Bien cordialement,\n'
       + "L'équipe Communication";
   },
@@ -246,7 +335,7 @@ var TPL = {
   video: function(c) {
     return '[OUVERTURE — plan large]\n'
       + '"' + c.hook + '"\n\n'
-      + '[PLAN MOYEN — interlocuteur face caméra]\n'
+      + '[PLAN MOYEN — face caméra]\n'
       + '"' + c.video_corps + '"\n\n'
       + '[PLAN SERRÉ — regard caméra]\n'
       + '"' + c.video_close + '"\n\n'
@@ -270,8 +359,8 @@ var TPL = {
       + 'SLIDE 2 — Contexte\n'
       + c.intro + '\n\n'
       + 'SLIDE 3 — Enjeux & bénéfices\n'
-      + c.points.map(function(p, i){ return (i+1) + '. ' + p; }).join('\n') + '\n\n'
-      + 'SLIDE 4 — Prochaine étape\n'
+      + c.points.map(function(p,i){ return (i+1) + '. ' + p; }).join('\n') + '\n\n'
+      + 'SLIDE 4 — Prochaines étapes\n'
       + c.cta;
   },
   communique: function(c) {
@@ -291,44 +380,49 @@ var TPL = {
       + '[APPEL À L\'ACTION]\n'
       + c.video_close + '\n\n'
       + '[CONCLUSION]\n'
-      + 'Je vous remercie.';
+      + 'Je vous remercie de votre présence et de votre engagement.';
   }
 };
 
 /* ================================================================
-   STATE
+   ÉTAT
    ================================================================ */
-var setup = null;
+var setup  = null;
 var selAud = null;
 var selCh  = [];
+var lastResults = [];  /* pour export */
 
 /* ================================================================
    INIT
    ================================================================ */
 (function init() {
-  /* particles SHIFT */
+
+  /* particules SHIFT */
   (function(){
-    var cv=document.getElementById('bgCanvas');
-    if(!cv||!cv.getContext)return;
-    var ctx=cv.getContext('2d'),dots=[],mouse={x:-9999,y:-9999},W=0,H=0;
+    var cv = document.getElementById('bgCanvas');
+    if (!cv || !cv.getContext) return;
+    var ctx = cv.getContext('2d'), dots=[], mouse={x:-9999,y:-9999}, W=0, H=0;
+    var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+    var t0 = (window.performance && performance.now) ? performance.now() : Date.now();
     function lerp(a,b,t){return a+(b-a)*t;}
     function colorAt(t){
       var cy=[52,224,240],bl=[15,98,254],nv=[7,34,63],r,g,b;
       if(t<0.45){var tt=t/0.45;r=lerp(cy[0],bl[0],tt);g=lerp(cy[1],bl[1],tt);b=lerp(cy[2],bl[2],tt);}
       else{var tt2=Math.min((t-0.45)/0.55,1);r=lerp(bl[0],nv[0],tt2);g=lerp(bl[1],nv[1],tt2);b=lerp(bl[2],nv[2],tt2);}
-      return[Math.round(r),Math.round(g),Math.round(b)];
+      return [Math.round(r),Math.round(g),Math.round(b)];
     }
     function buildGrid(){
-      dots=[];var sp=W<640?42:36,cols=Math.ceil(W/sp)+2,rows=Math.ceil(H/sp)+2;
+      dots=[];
+      var sp=W<640?42:36,cols=Math.ceil(W/sp)+2,rows=Math.ceil(H/sp)+2;
       var lx=W*0.82,ly=H*0.2,mx=Math.hypot(Math.max(lx,W-lx),Math.max(ly,H-ly))||1;
       for(var ry=0;ry<rows;ry++){var ox=(ry%2===0)?0:sp/2;
         for(var rx=0;rx<cols;rx++){var x=rx*sp+ox-sp,y=ry*sp-sp;
           var d=Math.hypot(x-lx,y-ly)/mx,bri=Math.pow(Math.max(0,1-d/1.05),1.7);
-          dots.push({bx:x,by:y,r:1.0+bri*3.0,bright:bri,phase:Math.random()*Math.PI*2,speed:0.22+Math.random()*0.22,amp:1.3+Math.random()*1.6});}}
+          dots.push({bx:x,by:y,r:1.0+bri*3.0,bright:bri,phase:Math.random()*Math.PI*2,speed:0.22+Math.random()*0.22,amp:1.3+Math.random()*1.6});
+        }
+      }
     }
     function resize(){var dpr=Math.min(window.devicePixelRatio||1,2);W=window.innerWidth;H=window.innerHeight;cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+'px';cv.style.height=H+'px';ctx.setTransform(dpr,0,0,dpr,0,0);buildGrid();}
-    var rm=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
-    var t0=(window.performance&&performance.now)?performance.now():Date.now();
     function frame(now){var t=(now-t0)/1000;ctx.clearRect(0,0,W,H);
       for(var i=0;i<dots.length;i++){var d=dots[i],x=d.bx,y=d.by;
         if(!rm){x+=Math.sin(t*d.speed+d.phase)*d.amp;y+=Math.cos(t*d.speed*0.8+d.phase)*d.amp;}
@@ -344,9 +438,22 @@ var selCh  = [];
     resize();if(!rm)requestAnimationFrame(frame);else frame(t0);
   })();
 
+  /* progress rail */
+  (function(){
+    var fill = document.getElementById('progressFill');
+    if (!fill) return;
+    function upd(){
+      var s = document.documentElement.scrollTop || document.body.scrollTop;
+      var h = document.documentElement.scrollHeight - window.innerHeight;
+      fill.style.height = (h > 0 ? (s/h*100) : 0) + '%';
+    }
+    window.addEventListener('scroll', upd, {passive:true});
+    upd();
+  })();
+
   /* section nav */
   (function(){
-    var stops=[document.getElementById('stop0'),document.getElementById('stop1'),document.getElementById('stop2'),document.getElementById('stop3')];
+    var stops = ['stop0','stop1','stop2','stop3'].map(function(id){return document.getElementById(id);});
     var prev=document.getElementById('secPrev'),next=document.getElementById('secNext');
     var idx=document.getElementById('secIndex'),tot=document.getElementById('secTotal');
     if(tot)tot.textContent=stops.length;
@@ -367,42 +474,58 @@ var selCh  = [];
     upd();
   })();
 
-  /* load setup from localStorage */
-  try { setup = JSON.parse(localStorage.getItem('prcomm_setup')); } catch(e) {}
+  /* charger le setup depuis localStorage */
+  try { setup = JSON.parse(localStorage.getItem('prcomm_setup') || window._prcomm_setup || 'null'); } catch(e){}
 
-  /* populate audience buttons */
+  /* construire les boutons audience */
   var auds = (setup && setup.audiences && setup.audiences.length)
     ? setup.audiences
     : [
-        { name: 'Comité de direction', what: 'ROI, vision stratégique' },
-        { name: 'Managers',            what: 'Impact équipes, opérationnel' },
-        { name: 'Collaborateurs',      what: 'Sens, bénéfices concrets' },
-        { name: 'Partenaires',         what: 'Fiabilité, innovation' },
-        { name: 'Presse',              what: 'Faits, chiffres, citations' }
+        { name:'Comité de direction', what:'ROI, vision stratégique' },
+        { name:'Managers',            what:'Impact équipes, opérationnel' },
+        { name:'Collaborateurs',      what:'Sens, bénéfices concrets' },
+        { name:'Partenaires',         what:'Fiabilité, innovation' },
+        { name:'Presse',              what:'Faits, chiffres, citations' }
       ];
 
   var cont = document.getElementById('audBtns');
   auds.forEach(function(a) {
     var btn = document.createElement('button');
+    btn.type = 'button';
     btn.className = 'aud-btn';
     btn.textContent = a.name;
-    btn.addEventListener('click', function() { selectAud(btn, a); });
+    btn.addEventListener('click', function(){ selectAud(btn, a); });
     cont.appendChild(btn);
   });
 
-  /* enable generate on textarea input */
+  /* si setup chargé, montrer les tones */
+  if (setup && setup.tones && setup.tones.length) {
+    var toneRow = document.createElement('div');
+    toneRow.className = 'tone-tags';
+    toneRow.setAttribute('aria-label', 'Tonalités actives');
+    setup.tones.forEach(function(t){
+      var tag = document.createElement('span');
+      tag.className = 'tone-tag';
+      tag.textContent = t;
+      toneRow.appendChild(tag);
+    });
+    document.getElementById('stop0').appendChild(toneRow);
+  }
+
   document.getElementById('inputDemande').addEventListener('input', checkReady);
   document.getElementById('btnGen').addEventListener('click', generate);
+  document.getElementById('btnExport').addEventListener('click', exportAll);
 })();
 
 /* ================================================================
-   AUDIENCE SELECTION
+   SÉLECTION AUDIENCE
    ================================================================ */
 function selectAud(btn, aud) {
   document.querySelectorAll('.aud-btn').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
   selAud = aud;
   selCh  = [];
+  lastResults = [];
   renderReco(aud);
   checkReady();
 }
@@ -411,16 +534,14 @@ function getRecoForAud(name) {
   var n = name.toLowerCase()
     .replace(/[éèêë]/g,'e').replace(/[àâä]/g,'a').replace(/[îï]/g,'i').replace(/[ôö]/g,'o').replace(/[ùûü]/g,'u')
     .replace(/[^a-z]/g,'');
-  for (var k in RECO) {
-    if (n.indexOf(k) !== -1) return RECO[k];
-  }
-  return (setup && setup.channels && setup.channels.length) ? setup.channels.slice(0, 3) : ['email', 'linkedin', 'intranet'];
+  for (var k in RECO) { if (n.indexOf(k) !== -1) return RECO[k]; }
+  return (setup && setup.channels && setup.channels.length) ? setup.channels.slice(0,3) : ['email','linkedin','intranet'];
 }
 
 function renderReco(aud) {
-  var reco    = getRecoForAud(aud.name);
-  var avail   = (setup && setup.channels && setup.channels.length) ? setup.channels : Object.keys(CH);
-  var chips   = document.getElementById('chChips');
+  var reco  = getRecoForAud(aud.name);
+  var avail = (setup && setup.channels && setup.channels.length) ? setup.channels : Object.keys(CH);
+  var chips = document.getElementById('chChips');
   chips.innerHTML = '';
   selCh = [];
 
@@ -431,9 +552,12 @@ function renderReco(aud) {
     el.className = 'ch-chip' + (isR ? ' reco sel' : '');
     el.dataset.ch = ch;
     el.textContent = CH[ch].label;
+    el.setAttribute('role','button');
+    el.setAttribute('aria-pressed', isR ? 'true' : 'false');
     if (isR) selCh.push(ch);
-    el.addEventListener('click', function() {
+    el.addEventListener('click', function(){
       el.classList.toggle('sel');
+      el.setAttribute('aria-pressed', el.classList.contains('sel') ? 'true' : 'false');
       selCh = Array.from(document.querySelectorAll('#chChips .ch-chip.sel')).map(function(c){ return c.dataset.ch; });
       checkReady();
     });
@@ -441,11 +565,11 @@ function renderReco(aud) {
   });
 
   document.getElementById('recoHint').innerHTML =
-    '<b>Recommandés</b> pour "' + aud.name + '" : '
+    '<b>Recommandés</b> pour "' + esc(aud.name) + '" : '
     + reco.filter(function(c){ return CH[c]; }).map(function(c){ return CH[c].label; }).join(', ') + '.';
 
   var zone = document.getElementById('recoZone');
-  zone.offsetHeight; /* force reflow */
+  zone.offsetHeight;
   zone.classList.add('open');
   checkReady();
 }
@@ -455,78 +579,151 @@ function checkReady() {
 }
 
 /* ================================================================
-   GENERATION
+   GÉNÉRATION
    ================================================================ */
 function generate() {
   if (!selAud || !selCh.length) return;
-  var demande = document.getElementById('inputDemande').value.trim()
-    || 'Information importante concernant notre programme';
+  var demande = document.getElementById('inputDemande').value.trim() || 'Information importante concernant notre programme';
 
   document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('resultsTitle').textContent = '';
+  document.getElementById('btnExport').classList.remove('visible');
+  lastResults = [];
+
   var rc = document.getElementById('resultCards');
   rc.innerHTML = '';
 
   /* skeletons */
-  selCh.forEach(function() {
+  selCh.forEach(function(){
     var sk = document.createElement('div');
     sk.className = 'skel-card';
     sk.innerHTML = '<div class="skel sh sw40"></div><div class="skel sh sw90"></div><div class="skel sh sw75"></div><div class="skel sh sw55"></div>';
     rc.appendChild(sk);
   });
 
-  /* simulate generation delay */
-  setTimeout(function() {
+  /* délai simulé */
+  var delay = 700 + selCh.length * 120;
+  setTimeout(function(){
     rc.innerHTML = '';
     var prog = (setup && setup.programme) || 'notre programme de transformation';
     var ctx  = buildCtx(demande, selAud, prog);
-    selCh.forEach(function(ch, i) {
-      setTimeout(function() { renderCard(ch, ctx); }, i * 220);
+    selCh.forEach(function(ch, i){
+      setTimeout(function(){ renderCard(ch, ctx); }, i * 240);
     });
-  }, 850);
+    /* titre résultats */
+    setTimeout(function(){
+      document.getElementById('resultsTitle').textContent =
+        selCh.length + ' message' + (selCh.length > 1 ? 's' : '') + ' générés pour ' + selAud.name;
+      document.getElementById('btnExport').classList.add('visible');
+    }, selCh.length * 240 + 300);
+  }, delay);
 }
 
+/* ================================================================
+   CONSTRUCTION DU CONTEXTE — enrichi selon ton et audience
+   ================================================================ */
 function buildCtx(dem, aud, prog) {
-  var sujet = dem.length > 58 ? dem.substring(0, 58) + '…' : dem;
-  var msgs  = (setup && setup.messages && setup.messages.length) ? setup.messages : [];
-  var key   = msgs.length ? msgs[0] : 'Ce programme crée une opportunité réelle de transformation.';
-  var tones = (setup && setup.tones) || ['inspirant'];
-  var accent = tones.indexOf('inspirant') !== -1 ? '✨ ' : '';
+  var sujet   = dem.length > 62 ? dem.substring(0,62) + '…' : dem;
+  var msgs    = (setup && setup.messages && setup.messages.length) ? setup.messages : [];
+  var tones   = (setup && setup.tones)    || [];
+  var key     = msgs.length ? msgs[0] : 'Ce programme crée une opportunité réelle de transformation.';
+
+  /* variations selon tonalité */
+  var inspirant    = tones.indexOf('inspirant')    !== -1;
+  var formel       = tones.indexOf('formel')       !== -1;
+  var mobilisateur = tones.indexOf('mobilisateur') !== -1;
+  var narratif     = tones.indexOf('narratif')     !== -1;
+  var direct       = tones.indexOf('direct')       !== -1;
+
+  /* accroche d'ouverture selon ton */
+  var accent = '';
+  if      (inspirant)    accent = '✨ ';
+  else if (mobilisateur) accent = '🚀 ';
+
+  /* corps adapté au ton */
+  var corps, intro, accroche_fin, hook, video_corps, video_close;
+
+  if (formel) {
+    intro = 'Dans le cadre de ' + prog + ', nous vous informons d\'une étape importante : ' + dem + '.';
+    corps = key + '\n\nNous demeurons disponibles pour toute question ou précision.';
+    accroche_fin = 'Nous vous remercions de votre attention et comptons sur votre engagement.';
+  } else if (narratif) {
+    intro = 'Tout a commencé avec une ambition simple : faire de ' + prog + ' une réalité. Aujourd\'hui, cette réalité prend forme — ' + dem + '.';
+    corps = key + '\n\nChaque étape franchie renforce notre conviction : ' + (aud.what ? 'vos attentes en matière de ' + aud.what + ' sont au cœur de nos actions.' : 'nous avançons ensemble dans la bonne direction.');
+    accroche_fin = 'Cette histoire, c\'est aussi la vôtre. Nous comptons sur vous pour l\'écrire.';
+  } else if (mobilisateur) {
+    intro = prog + ' avance. Et aujourd\'hui, une nouvelle étape s\'ouvre : ' + dem + '.';
+    corps = key + '\n\nC\'est maintenant que tout se joue. ' + (aud.what ? 'Votre expertise en matière de ' + aud.what + ' est ce dont nous avons besoin.' : 'Chaque action compte.');
+    accroche_fin = 'Rejoignez le mouvement. Ensemble, nous réussirons.';
+  } else if (direct) {
+    intro = dem + '.';
+    corps = key + '\n\n' + (aud.what ? 'Impact direct sur ' + aud.what + '.' : 'Les prochaines étapes seront communiquées rapidement.');
+    accroche_fin = 'Des questions ? Contactez l\'équipe programme.';
+  } else {
+    intro = 'Dans le cadre de ' + prog + ', nous souhaitons vous informer d\'une étape importante\u00a0: ' + dem + '.';
+    corps = key + '\n\nCette démarche ' + (aud.what ? 'répond directement à vos attentes en matière de ' + aud.what + '.' : 'concerne l\'ensemble de nos équipes.');
+    accroche_fin = 'Nous comptons sur votre engagement pour faire de cette étape un vrai succès collectif.';
+  }
+
+  hook        = dem;
+  video_corps = 'Ce que nous vivons avec ' + prog + ' est une chance unique. ' + key;
+  video_close = mobilisateur
+    ? 'C\'est votre moment. Mobilisons-nous. Faisons de ce programme un succès dont nous serons fiers.'
+    : 'Rejoignez-nous. Ensemble, faisons de ce programme un succès dont nous serons tous fiers.';
+
+  /* points d'impact */
+  var points = [];
+  if (aud.what)  points.push('Répond à votre besoin de ' + aud.what);
+  else           points.push('Impacte directement votre quotidien');
+  if (msgs[1])   points.push(msgs[1]);
+  else           points.push('Calendrier et prochaines étapes communiqués prochainement');
+  points.push('Votre retour est attendu et précieux');
+
+  /* hashtags */
+  var progWords = prog.split(' ').filter(function(w){return w.length>2;}).slice(0,2);
+  var hashtags  = '#Transformation #' + progWords.map(function(w){ return w.charAt(0).toUpperCase()+w.slice(1); }).join('') + ' #Innovation';
+
   return {
     sujet:       sujet,
-    intro:       'Dans le cadre de ' + prog + ', nous souhaitons vous informer d\'une étape importante\u00a0: ' + dem + '.',
-    corps:       key + '\n\nCette démarche ' + (aud.what ? 'répond directement à vos attentes en matière de ' + aud.what + '.' : 'concerne l\'ensemble de nos équipes.'),
-    court:       dem + '\u00a0— un moment clé pour ' + prog + '.',
+    intro:       intro,
+    corps:       corps,
+    accroche_fin:accroche_fin,
+    court:       accent + dem + '\u00a0— un moment clé pour ' + prog + '.',
     accroche:    accent + sujet,
     cta:         'En savoir plus et rejoindre la démarche',
-    hashtags:    '#Transformation #' + prog.split(' ').slice(0,2).map(function(w){ return w.charAt(0).toUpperCase()+w.slice(1); }).join('') + ' #Innovation',
-    hook:        dem,
-    video_corps: 'Ce que nous vivons avec ' + prog + ' est une chance unique. ' + key,
-    video_close: 'Rejoignez-nous. Ensemble, faisons de ce programme un succès dont nous serons tous fiers.',
-    points: [
-      aud.what ? 'Répond à votre besoin de ' + aud.what : 'Impacte directement votre quotidien',
-      'Calendrier et prochaines étapes communiqués prochainement',
-      'Votre retour est attendu et précieux'
-    ],
+    hashtags:    hashtags,
+    hook:        hook,
+    video_corps: video_corps,
+    video_close: video_close,
+    points:      points,
     conclusion:  'Pour toute question, contactez l\'équipe programme. Merci de votre engagement.',
-    citation:    key.replace(/\.$/, '')
+    citation:    key.replace(/\.$/, ''),
+    formal:      formel
   };
 }
 
+/* ================================================================
+   RENDU CARTE
+   ================================================================ */
 function renderCard(ch, ctx) {
   var m = CH[ch]; if (!m) return;
   var fn = TPL[ch] || TPL.email;
   var content = fn(ctx);
+
+  lastResults.push({ ch:ch, label:m.label, content:content });
 
   var card = document.createElement('div');
   card.className = 'rcard';
   card.innerHTML =
     '<div class="rcard-head">'
       + '<div class="rcard-format">'
-        + '<span class="rcard-icon">' + m.icon + '</span>'
-        + '<span class="rcard-name">' + m.label + '</span>'
-        + '<span class="rcard-badge ' + m.badge + '">' + ch + '</span>'
+        + '<span class="rcard-icon" aria-hidden="true">' + m.icon + '</span>'
+        + '<span class="rcard-name">' + esc(m.label) + '</span>'
+        + '<span class="rcard-badge ' + m.badge + '">' + esc(ch) + '</span>'
       + '</div>'
-      + '<button class="btn-copy" onclick="copyCard(this)">Copier</button>'
+      + '<div class="rcard-actions">'
+        + '<button class="btn-copy" type="button" onclick="copyCard(this)">Copier</button>'
+      + '</div>'
     + '</div>'
     + '<div class="rcard-body">'
       + '<div class="rcard-text">' + esc(content) + '</div>'
@@ -539,23 +736,58 @@ function renderCard(ch, ctx) {
   card.style.opacity = '0';
   card.style.transform = 'translateY(18px)';
   document.getElementById('resultCards').appendChild(card);
-  requestAnimationFrame(function() {
+  requestAnimationFrame(function(){
     card.style.transition = 'opacity .5s ease, transform .5s ease';
     card.style.opacity = '1';
     card.style.transform = 'translateY(0)';
   });
 }
 
+/* ================================================================
+   COPIER / EXPORTER
+   ================================================================ */
 function copyCard(btn) {
   var text = btn.closest('.rcard').querySelector('.rcard-text').textContent;
-  navigator.clipboard.writeText(text).then(function() {
-    btn.textContent = 'Copié !'; btn.classList.add('ok');
-    setTimeout(function() { btn.textContent = 'Copier'; btn.classList.remove('ok'); }, 2000);
+  navigator.clipboard.writeText(text).then(function(){
+    btn.textContent = 'Copié ✓'; btn.classList.add('ok');
+    setTimeout(function(){ btn.textContent = 'Copier'; btn.classList.remove('ok'); }, 2000);
+  }).catch(function(){
+    /* fallback */
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); } catch(e){}
+    document.body.removeChild(ta);
+    btn.textContent = 'Copié ✓'; btn.classList.add('ok');
+    setTimeout(function(){ btn.textContent = 'Copier'; btn.classList.remove('ok'); }, 2000);
   });
 }
 
+function exportAll() {
+  if (!lastResults.length) return;
+  var lines = [];
+  lines.push('PRCOMM — Export des messages');
+  lines.push('Audience : ' + (selAud ? selAud.name : ''));
+  lines.push('Programme : ' + ((setup && setup.programme) || 'N/A'));
+  lines.push('Demande : ' + (document.getElementById('inputDemande').value.trim() || ''));
+  lines.push('');
+  lines.push('='.repeat(60));
+  lastResults.forEach(function(r){
+    lines.push('');
+    lines.push('[ ' + r.label.toUpperCase() + ' ]');
+    lines.push('-'.repeat(40));
+    lines.push(r.content);
+    lines.push('');
+  });
+  var blob = new Blob([lines.join('\n')], {type:'text/plain;charset=utf-8'});
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a');
+  a.href = url; a.download = 'prcomm-messages.txt'; a.click();
+  URL.revokeObjectURL(url);
+}
+
 function esc(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 </script>
 </body>
