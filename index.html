@@ -44,38 +44,33 @@ img,svg{display:block;max-width:100%;}
 .nav-links a:hover{color:#fff;background:rgba(255,255,255,0.08);}
 .nav-links a.active{color:var(--ink);background:var(--cyan);font-weight:700;}
 
-/* hero glow */
-.hero-glow{position:absolute;top:-200px;left:50%;width:1100px;height:700px;margin-left:-550px;
-  background:radial-gradient(ellipse closest-side at 50% 38%,rgba(52,224,240,0.28),rgba(209,169,84,0.16) 42%,transparent 68%);
-  filter:blur(6px);pointer-events:none;z-index:0;animation:heroGlowPulse 6.5s ease-in-out infinite;}
-@keyframes heroGlowPulse{0%,100%{opacity:.5;transform:scale(1);}50%{opacity:.9;transform:scale(1.14);}}
-@media(prefers-reduced-motion:reduce){.hero-glow{animation:none;opacity:.7;}}
-
 /* page layout */
 .page-wrap{max-width:920px;margin:0 auto;padding:52px 40px 120px;position:relative;z-index:2;}
 @media(max-width:640px){.page-wrap{padding:32px 20px 80px;}}
 
 /* page header */
-.page-header{margin-bottom:48px;position:relative;overflow:hidden;}
+.page-header{margin-bottom:56px;position:relative;}
 .page-header .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--cyan);display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  color:var(--cyan);display:flex;align-items:center;gap:10px;margin-bottom:18px;}
 .page-header .eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 0 3px rgba(52,224,240,0.18);flex:none;}
-.page-header h1{font-family:var(--serif);font-size:clamp(34px,5vw,56px);font-weight:600;
-  letter-spacing:-.01em;line-height:1.1;margin:0 0 10px;
-  background-image:linear-gradient(100deg,var(--cyan) 0%,#fff 22%,var(--gold) 48%,#eaf3ff 100%);
-  background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+.page-header h1{font-family:var(--serif);font-size:clamp(48px,7vw,86px);font-weight:600;
+  letter-spacing:-.01em;line-height:1.0;margin:0 0 14px;
+  background-image:linear-gradient(100deg,var(--cyan) 0%,#fff 16%,var(--gold) 34%,var(--cyan) 58%,#eaf3ff 100%);
+  background-size:220% 100%;background-position:0% 50%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
   animation:lsweep 9s linear infinite;}
 @keyframes lsweep{0%{background-position:0% 50%;}100%{background-position:-220% 50%;}}
 .page-header p{color:#a9c4ea;font-size:16px;line-height:1.6;margin:0;max-width:600px;}
-@media(prefers-reduced-motion:reduce){.page-header h1{animation:none;color:#fff;-webkit-text-fill-color:#fff;background-image:none;}}
+@media(prefers-reduced-motion:reduce){.page-header h1{animation:none;color:var(--cyan);-webkit-text-fill-color:var(--cyan);background-image:none;}}
 
 /* ---- zone dividers ---- */
-.zone-divider{display:flex;align-items:center;gap:16px;margin:32px 0 20px;}
-.zone-divider-line{flex:1;height:1px;background:linear-gradient(90deg,rgba(52,224,240,0.25),transparent);}
-.zone-divider-line.right{background:linear-gradient(270deg,rgba(52,224,240,0.25),transparent);}
-.zone-label{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
-  color:rgba(52,224,240,0.55);white-space:nowrap;padding:4px 14px;
-  border:1px solid rgba(52,224,240,0.2);border-radius:2px;background:rgba(52,224,240,0.04);}
+.zone-divider{margin:40px 0 22px;position:relative;}
+.zone-divider-inner{display:flex;align-items:center;gap:14px;}
+.zone-divider-line{flex:1;height:1px;background:linear-gradient(90deg,rgba(52,224,240,0.4),transparent);}
+.zone-divider-line.right{background:linear-gradient(270deg,rgba(52,224,240,0.4),transparent);}
+.zone-label{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--cyan);white-space:nowrap;font-weight:700;}
+.zone-divider-sub{height:1px;background:linear-gradient(90deg,rgba(52,224,240,0.15),transparent);margin-top:6px;}
 
 /* ---- setup card ---- */
 .setup-card{
@@ -322,7 +317,6 @@ img,svg{display:block;max-width:100%;}
 <div class="page-wrap">
 
   <div class="page-header">
-    <div class="hero-glow" aria-hidden="true"></div>
     <p class="eyebrow">Internal communication agent</p>
     <h1>PRCOMM</h1>
     <p>Set your context, define your audiences — each gets its own tone and channel recommendations. Generate, adjust, and export every variation.</p>
@@ -330,9 +324,12 @@ img,svg{display:block;max-width:100%;}
 
   <!-- ═══════════════ ZONE 1 ═══════════════ -->
   <div class="zone-divider">
-    <div class="zone-divider-line"></div>
-    <span class="zone-label">Context &amp; brief</span>
-    <div class="zone-divider-line right"></div>
+    <div class="zone-divider-inner">
+      <div class="zone-divider-line"></div>
+      <span class="zone-label">01 — Context &amp; brief</span>
+      <div class="zone-divider-line right"></div>
+    </div>
+    <div class="zone-divider-sub"></div>
   </div>
 
   <!-- 01 PROGRAMME CONTEXT -->
@@ -391,9 +388,12 @@ img,svg{display:block;max-width:100%;}
 
   <!-- ═══════════════ ZONE 2 ═══════════════ -->
   <div class="zone-divider">
-    <div class="zone-divider-line"></div>
-    <span class="zone-label">Channels &amp; tone — per audience</span>
-    <div class="zone-divider-line right"></div>
+    <div class="zone-divider-inner">
+      <div class="zone-divider-line"></div>
+      <span class="zone-label">02 — Channels &amp; tone — per audience</span>
+      <div class="zone-divider-line right"></div>
+    </div>
+    <div class="zone-divider-sub"></div>
   </div>
 
   <!-- dynamic per-audience config cards -->
@@ -422,6 +422,15 @@ img,svg{display:block;max-width:100%;}
   </button>
 
   <!-- ═══════════════ ZONE 3 ═══════════════ -->
+  <div class="zone-divider" id="zone3Divider" style="display:none;">
+    <div class="zone-divider-inner">
+      <div class="zone-divider-line"></div>
+      <span class="zone-label">03 — Generated content</span>
+      <div class="zone-divider-line right"></div>
+    </div>
+    <div class="zone-divider-sub"></div>
+  </div>
+
   <div class="results" id="resultsSection">
     <div class="results-header">
       <div>
@@ -1089,6 +1098,7 @@ function generate(){
   document.getElementById('resultsTitle').textContent='';
   document.getElementById('resultsSubtitle').textContent='';
   document.getElementById('btnExport').classList.remove('visible');
+  document.getElementById('zone3Divider').style.display='block';
   lastResults=[];activeAud=null;activeTab=null;
 
   var audBar=document.getElementById('raudBar');
@@ -1204,10 +1214,33 @@ function renderPanel(audName,i){
       +'<div class="rcard-why"><div class="why-label">What makes this the right call</div><div class="why-text">'+esc(r.why)+'</div></div>';
 
     var ta=document.getElementById('rcardTextarea');
-    ta.addEventListener('input',function(){r.content=ta.value;});
+    ta.addEventListener('input',function(){
+      r.content=ta.value;
+      /* live: show unsaved indicator on validate button */
+      var vb=document.getElementById('btnValidate');
+      if(vb&&!vb.classList.contains('saved')){vb.textContent='Save changes';}
+    });
     document.getElementById('btnValidate').addEventListener('click',function(){
-      r.content=ta.value;this.textContent='✓ Validated';this.classList.add('saved');
-      renderPanel(audName,i);
+      r.content=ta.value;
+      /* visual feedback in-place — no full re-render */
+      this.textContent='✓ Saved';this.classList.add('saved');
+      /* show Edited badge in header if not already there */
+      var acts=document.querySelector('.rcard-actions');
+      if(acts&&!acts.querySelector('.edited-badge')){
+        var badge=document.createElement('span');
+        badge.className='edited-badge';
+        badge.style.cssText='font-family:var(--mono);font-size:10px;color:var(--teal);letter-spacing:.05em;';
+        badge.textContent='Edited';
+        acts.insertBefore(badge,acts.firstChild);
+      }
+      /* show reset button if not already there */
+      var editRow=document.querySelector('.rcard-edit-row');
+      if(editRow&&!document.getElementById('btnReset')){
+        var rb=document.createElement('button');
+        rb.id='btnReset';rb.className='btn-reset';rb.textContent='Reset to original';
+        editRow.insertBefore(rb,editRow.children[1]||null);
+        rb.addEventListener('click',function(){r.content=r.originalContent;renderPanel(audName,i);});
+      }
     });
     var resetBtn=document.getElementById('btnReset');
     if(resetBtn){resetBtn.addEventListener('click',function(){r.content=r.originalContent;renderPanel(audName,i);});}
