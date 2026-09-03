@@ -23,18 +23,18 @@ body{font-family:var(--sans);background:var(--ink);color:#eaf3ff;-webkit-font-sm
 a{color:inherit;text-decoration:none;}
 img,svg{display:block;max-width:100%;}
 
-/* ---- canvas / glow ---- */
+/* canvas / glow */
 #bgCanvas{position:fixed;inset:0;z-index:-1;display:block;pointer-events:none;}
 #phaseGlow{position:fixed;inset:0;z-index:-1;pointer-events:none;
   background:radial-gradient(circle at 26% 18%,rgba(52,224,240,0.12),transparent 58%);
   transition:background 1.4s ease;}
 
-/* ---- progress rail ---- */
+/* progress rail */
 .progress-rail{position:fixed;top:0;left:0;width:3px;height:100vh;z-index:90;background:rgba(255,255,255,0.06);pointer-events:none;}
 .progress-rail .fill{width:100%;height:0%;background:linear-gradient(180deg,var(--cyan),var(--blue));transition:height .08s linear;}
 @media(max-width:640px){.progress-rail{display:none;}}
 
-/* ---- nav ---- */
+/* nav */
 .site-nav{position:sticky;top:0;z-index:80;background:#050a14;border-bottom:1px solid rgba(52,224,240,0.35);}
 .site-nav .wrap{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;max-width:min(1560px,92vw);margin:0 auto;}
 .nav-brand{font-family:var(--mono);font-size:12.5px;letter-spacing:.05em;color:#eaf3ff;font-weight:700;}
@@ -44,18 +44,18 @@ img,svg{display:block;max-width:100%;}
 .nav-links a:hover{color:#fff;background:rgba(255,255,255,0.08);}
 .nav-links a.active{color:var(--ink);background:var(--cyan);font-weight:700;}
 
-/* ---- hero glow ---- */
+/* hero glow */
 .hero-glow{position:absolute;top:-200px;left:50%;width:1100px;height:700px;margin-left:-550px;
   background:radial-gradient(ellipse closest-side at 50% 38%,rgba(52,224,240,0.28),rgba(209,169,84,0.16) 42%,transparent 68%);
   filter:blur(6px);pointer-events:none;z-index:0;animation:heroGlowPulse 6.5s ease-in-out infinite;}
 @keyframes heroGlowPulse{0%,100%{opacity:.5;transform:scale(1);}50%{opacity:.9;transform:scale(1.14);}}
 @media(prefers-reduced-motion:reduce){.hero-glow{animation:none;opacity:.7;}}
 
-/* ---- page layout ---- */
-.page-wrap{max-width:900px;margin:0 auto;padding:52px 40px 120px;position:relative;z-index:2;}
+/* page layout */
+.page-wrap{max-width:920px;margin:0 auto;padding:52px 40px 120px;position:relative;z-index:2;}
 @media(max-width:640px){.page-wrap{padding:32px 20px 80px;}}
 
-/* ---- page header ---- */
+/* page header */
 .page-header{margin-bottom:48px;position:relative;overflow:hidden;}
 .page-header .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
   color:var(--cyan);display:flex;align-items:center;gap:10px;margin-bottom:14px;}
@@ -69,18 +69,60 @@ img,svg{display:block;max-width:100%;}
 .page-header p{color:#a9c4ea;font-size:16px;line-height:1.6;margin:0;max-width:600px;}
 @media(prefers-reduced-motion:reduce){.page-header h1{animation:none;color:#fff;-webkit-text-fill-color:#fff;background-image:none;}}
 
+/* ---- zone dividers ---- */
+.zone-divider{display:flex;align-items:center;gap:16px;margin:32px 0 20px;}
+.zone-divider-line{flex:1;height:1px;background:linear-gradient(90deg,rgba(52,224,240,0.25),transparent);}
+.zone-divider-line.right{background:linear-gradient(270deg,rgba(52,224,240,0.25),transparent);}
+.zone-label{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(52,224,240,0.55);white-space:nowrap;padding:4px 14px;
+  border:1px solid rgba(52,224,240,0.2);border-radius:2px;background:rgba(52,224,240,0.04);}
+
 /* ---- setup card ---- */
 .setup-card{
   background:linear-gradient(155deg,rgba(9,16,30,0.75),rgba(9,16,30,0.5));
   border:1px solid rgba(255,255,255,0.09);
   clip-path:polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,0 100%);
-  padding:28px 32px;margin-bottom:18px;transition:border-color .3s;
+  padding:28px 32px;margin-bottom:14px;transition:border-color .3s;
 }
 .setup-card:focus-within{border-color:rgba(52,224,240,0.3);}
 .card-label{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
   color:var(--cyan);display:flex;align-items:center;gap:10px;margin-bottom:16px;}
 .card-label::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 0 3px rgba(52,224,240,0.18);flex:none;}
 @media(max-width:640px){.setup-card{padding:20px 16px;}}
+
+/* ---- per-audience card (Zone 2) ---- */
+.aud-config-card{
+  background:linear-gradient(155deg,rgba(9,16,30,0.82),rgba(6,12,24,0.6));
+  border:1px solid rgba(52,224,240,0.18);
+  clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,0 100%);
+  padding:24px 28px;margin-bottom:14px;transition:border-color .3s;position:relative;
+}
+.aud-config-card:focus-within{border-color:rgba(52,224,240,0.35);}
+.aud-config-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.aud-config-name{font-family:var(--mono);font-size:13px;font-weight:700;color:#eaf3ff;
+  display:flex;align-items:center;gap:10px;}
+.aud-config-name::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--gold);
+  box-shadow:0 0 0 3px rgba(209,169,84,0.2);flex:none;}
+.aud-config-role{font-family:var(--mono);font-size:10px;color:#7d97bd;letter-spacing:.06em;margin-top:1px;}
+.aud-config-remove{width:28px;height:28px;border-radius:50%;background:rgba(255,80,80,0.08);
+  border:1px solid rgba(255,80,80,0.2);color:#ff6b6b;font-size:14px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;flex:none;
+  transition:background .18s,transform .18s;line-height:1;}
+.aud-config-remove:hover{background:rgba(255,80,80,0.2);transform:scale(1.1);}
+.aud-config-section{margin-bottom:18px;}
+.aud-config-section:last-child{margin-bottom:0;}
+.aud-section-label{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:#54677e;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.aud-section-label::after{content:"";flex:1;height:1px;background:rgba(255,255,255,0.05);}
+.aud-reco-hint{font-family:var(--mono);font-size:10px;color:#7d6030;letter-spacing:.04em;
+  margin-bottom:8px;padding:5px 10px;background:rgba(209,169,84,0.06);
+  border:1px solid rgba(209,169,84,0.14);border-radius:2px;}
+.aud-reco-hint b{color:var(--gold);}
+
+/* empty zone2 placeholder */
+.zone2-empty{padding:28px 32px;
+  background:rgba(5,9,18,0.35);border:1.5px dashed rgba(52,224,240,0.15);border-radius:2px;
+  text-align:center;font-family:var(--mono);font-size:12px;color:#374a5e;letter-spacing:.06em;}
 
 /* ---- fields ---- */
 .field-input,.field-textarea{
@@ -93,7 +135,7 @@ img,svg{display:block;max-width:100%;}
 .field-input:focus,.field-textarea:focus{border-color:rgba(52,224,240,0.5);}
 .field-input::placeholder,.field-textarea::placeholder{color:#54677e;}
 
-/* ---- file upload ---- */
+/* file upload */
 .file-upload-area{
   margin-top:14px;border:1.5px dashed rgba(52,224,240,0.25);border-radius:2px;
   padding:18px 20px;display:flex;align-items:center;gap:14px;cursor:pointer;
@@ -108,15 +150,15 @@ img,svg{display:block;max-width:100%;}
 .file-item{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:#9fb8dd;
   background:rgba(52,224,240,0.06);border:1px solid rgba(52,224,240,0.14);padding:5px 10px;border-radius:2px;}
 .file-item svg{width:12px;height:12px;fill:#34e0f0;flex:none;}
-.file-item-remove{margin-left:auto;cursor:pointer;color:#54677e;font-size:14px;line-height:1;background:none;border:none;color:#7d97bd;padding:0 2px;}
+.file-item-remove{margin-left:auto;cursor:pointer;background:none;border:none;color:#7d97bd;padding:0 2px;font-size:14px;line-height:1;}
 .file-item-remove:hover{color:#ff6b6b;}
 
-/* ---- key messages ---- */
+/* key messages */
 .msg-list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
 .msg-row{display:grid;grid-template-columns:1fr 40px;gap:8px;align-items:center;}
 .msg-row .field-input{height:44px;font-size:14px;}
 
-/* ---- audience buttons ---- */
+/* audience buttons */
 .aud-btns{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px;}
 .aud-btn{font-family:var(--sans);font-size:14px;font-weight:600;padding:10px 22px;border-radius:999px;
   cursor:pointer;border:1.5px solid rgba(159,184,221,0.35);color:#9fb8dd;background:rgba(159,184,221,0.06);
@@ -125,7 +167,7 @@ img,svg{display:block;max-width:100%;}
 .aud-btn.active{border-color:var(--cyan);color:var(--cyan);background:rgba(52,224,240,0.14);font-weight:700;}
 .aud-btn.active::after{content:"✓";margin-left:6px;font-size:11px;}
 
-/* add audience inline form */
+/* add audience / format inline form */
 .add-aud-form{display:none;margin-top:14px;padding:16px 18px;background:rgba(5,9,18,0.6);
   border:1px solid rgba(52,224,240,0.18);border-radius:2px;flex-direction:column;gap:10px;}
 .add-aud-form.open{display:flex;}
@@ -143,30 +185,27 @@ img,svg{display:block;max-width:100%;}
 .add-aud-field-label{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
   color:#54677e;margin-bottom:2px;}
 
-/* ---- chips (tone / channels) ---- */
-.chip-grid{display:flex;flex-wrap:wrap;gap:8px;}
-.chip{font-family:var(--mono);font-size:12px;letter-spacing:.04em;
-  padding:7px 16px;border-radius:999px;cursor:pointer;user-select:none;
+/* chips (tone / channels) */
+.chip-grid{display:flex;flex-wrap:wrap;gap:7px;}
+.chip{font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;
+  padding:6px 14px;border-radius:999px;cursor:pointer;user-select:none;
   border:1.5px solid rgba(159,184,221,0.35);color:#9fb8dd;background:rgba(159,184,221,0.06);
   transition:background .18s,border-color .18s,color .18s;}
 .chip:hover{background:rgba(52,224,240,0.1);border-color:rgba(52,224,240,0.5);color:#eaf3ff;}
 .chip.selected{background:rgba(52,224,240,0.18);border-color:var(--cyan);color:var(--cyan);font-weight:700;}
 
-/* formats section (inside audience block) */
-.formats-section{margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,0.07);}
-.formats-section-label{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:#7d97bd;margin-bottom:12px;}
-.formats-section-label b{color:var(--gold);}
-.fmt-grid{display:flex;flex-wrap:wrap;gap:8px;}
-.fmt-chip{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;letter-spacing:.03em;
-  padding:7px 14px;border-radius:999px;cursor:pointer;user-select:none;
+/* format chips */
+.fmt-grid{display:flex;flex-wrap:wrap;gap:7px;}
+.fmt-chip{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11.5px;letter-spacing:.03em;
+  padding:6px 12px;border-radius:999px;cursor:pointer;user-select:none;
   border:1.5px solid rgba(159,184,221,0.3);color:#9fb8dd;background:rgba(159,184,221,0.05);transition:all .18s;}
 .fmt-chip:hover{border-color:rgba(52,224,240,0.45);color:#eaf3ff;}
 .fmt-chip.selected{border-color:var(--cyan);color:var(--ink);background:var(--cyan);font-weight:700;}
 .fmt-chip.recommended{border-color:rgba(209,169,84,0.5);color:#f0d9a2;background:rgba(209,169,84,0.08);}
 .fmt-chip.recommended.selected{border-color:var(--gold);color:var(--ink);background:var(--gold);font-weight:700;}
-.fmt-chip svg{width:13px;height:13px;flex:none;fill:currentColor;}
+.fmt-chip svg{width:12px;height:12px;flex:none;fill:currentColor;}
 
-/* ---- shared btn-add / btn-remove ---- */
+/* shared btn-add / btn-remove */
 .btn-add{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;
   letter-spacing:.06em;text-transform:uppercase;color:var(--cyan);
   border:1px dashed rgba(52,224,240,0.4);background:transparent;
@@ -177,7 +216,7 @@ img,svg{display:block;max-width:100%;}
   display:flex;align-items:center;justify-content:center;flex:none;transition:background .18s,transform .18s;}
 .btn-remove:hover{background:rgba(255,80,80,0.22);transform:scale(1.08);}
 
-/* ---- generate button ---- */
+/* generate button */
 .btn-gen{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;
   padding:18px;margin-top:4px;cursor:pointer;
   clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,0 100%);
@@ -193,7 +232,7 @@ img,svg{display:block;max-width:100%;}
   flex:none;animation:pulse 2s ease-in-out infinite;}
 @keyframes pulse{0%,100%{opacity:.5;transform:scale(1);}50%{opacity:1;transform:scale(1.45);}}
 
-/* ---- results tabs ---- */
+/* results */
 .results{margin-top:36px;}
 .results-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
 .results-title{font-size:15px;color:#fff;font-weight:600;}
@@ -206,11 +245,11 @@ img,svg{display:block;max-width:100%;}
 .results-empty{text-align:center;padding:64px 20px;font-family:var(--mono);font-size:13px;color:#54677e;letter-spacing:.06em;}
 .results-empty .ico{display:block;margin:0 auto 14px;opacity:.25;width:32px;height:32px;}
 .rtab-bar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:0;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:0;}
-.rtab-btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;letter-spacing:.04em;
-  padding:9px 16px 10px;border-radius:2px 2px 0 0;cursor:pointer;user-select:none;
+.rtab-btn{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;
+  padding:9px 14px 10px;border-radius:2px 2px 0 0;cursor:pointer;user-select:none;
   border:1px solid transparent;border-bottom:none;color:#7d97bd;background:transparent;
   transition:color .18s,background .18s,border-color .18s;position:relative;bottom:-1px;}
-.rtab-btn svg{width:13px;height:13px;flex:none;fill:currentColor;}
+.rtab-btn svg{width:12px;height:12px;flex:none;fill:currentColor;}
 .rtab-btn:hover{color:#eaf3ff;background:rgba(255,255,255,0.04);}
 .rtab-btn.active{color:var(--cyan);background:rgba(52,224,240,0.07);
   border-color:rgba(52,224,240,0.28);border-bottom-color:transparent;}
@@ -229,7 +268,6 @@ img,svg{display:block;max-width:100%;}
 .btn-copy:hover{background:rgba(255,255,255,0.1);color:#fff;}
 .btn-copy.ok{border-color:rgba(0,183,172,0.5);color:var(--teal);}
 .rcard-content{padding:22px 24px;}
-.rcard-text{color:#dbe8fb;font-size:15px;line-height:1.78;white-space:pre-wrap;font-family:var(--sans);}
 .rcard-textarea{width:100%;min-height:200px;background:rgba(5,9,18,0.5);border:1px solid rgba(52,224,240,0.25);
   border-radius:2px;color:#dbe8fb;font-size:15px;line-height:1.78;font-family:var(--sans);padding:14px 16px;
   resize:vertical;outline:none;transition:border-color .18s;}
@@ -276,28 +314,35 @@ img,svg{display:block;max-width:100%;}
 
   <div class="page-header">
     <div class="hero-glow" aria-hidden="true"></div>
-    <p class="eyebrow">Communication agent</p>
+    <p class="eyebrow">Internal communication agent</p>
     <h1>PRCOMM</h1>
-    <p>Internal communication agent — set your context, define your audiences, pick your tone, and get every format ready to share with your teams.</p>
+    <p>Set your context, define your audiences — each gets its own tone and channel recommendations. Generate, adjust, and export every variation.</p>
   </div>
 
-  <!-- 01 CONTEXT -->
+  <!-- ═══════════════ ZONE 1 ═══════════════ -->
+  <div class="zone-divider">
+    <div class="zone-divider-line"></div>
+    <span class="zone-label">Context &amp; brief</span>
+    <div class="zone-divider-line right"></div>
+  </div>
+
+  <!-- 01 PROGRAMME CONTEXT -->
   <div class="setup-card">
-    <div class="card-label">01 &mdash; Programme context</div>
+    <div class="card-label">01 — Programme context</div>
     <textarea class="field-textarea" id="ctx-programme"
-      placeholder="Describe the programme or initiative: its goals, current phase, key stakeholders, and any constraints the communication must respect.&#10;&#10;e.g. SHIFT is Pernod Ricard IT's digital transformation programme, currently entering its deployment phase. 12,000 employees across 30 markets will be trained on new tools by end of Q2 2025. The main challenge is change adoption."
-      style="min-height:140px;"></textarea>
+      placeholder="Describe the programme or initiative: its goals, current phase, key stakeholders, and any constraints the communication must respect.&#10;&#10;e.g. SHIFT is Pernod Ricard IT's digital transformation programme, currently entering its deployment phase. 12,000 employees across 30 markets will be trained on new tools by end of Q2 2025."
+      style="min-height:130px;"></textarea>
     <label class="file-upload-area" id="fileUploadArea">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-1 7V3.5L18.5 9H13zm-2 9l-3-3h2v-4h2v4h2l-3 3z"/></svg>
-      <span class="file-upload-label"><b>Attach documents</b> &mdash; briefs, decks, previous comms (PDF, DOCX, TXT)<input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.txt,.pptx"></span>
+      <span class="file-upload-label"><b>Attach documents</b> — briefs, decks, previous comms (PDF, DOCX, TXT)<input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.txt,.pptx"></span>
     </label>
     <div class="file-list" id="fileList"></div>
   </div>
 
-  <!-- 02 AUDIENCE -->
+  <!-- 02 AUDIENCES -->
   <div class="setup-card">
-    <div class="card-label">02 &mdash; Target audience <span style="font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:#54677e;font-weight:400;text-transform:uppercase;">&nbsp;— select one or more</span></div>
-    <div class="aud-btns" id="audBtns" role="group" aria-label="Select audiences (multi-select)"></div>
+    <div class="card-label">02 — Target audiences <span style="font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:#54677e;font-weight:400;text-transform:uppercase;">&nbsp;— select one or more</span></div>
+    <div class="aud-btns" id="audBtns" role="group" aria-label="Select audiences"></div>
     <button class="btn-add" id="btnShowAddAud" onclick="toggleAddAudForm()">&#xFF0B;&nbsp;Add an audience</button>
     <div class="add-aud-form" id="addAudForm">
       <div>
@@ -317,26 +362,11 @@ img,svg{display:block;max-width:100%;}
         <button class="btn-cancel" onclick="toggleAddAudForm()">Cancel</button>
       </div>
     </div>
-    <div class="formats-section" id="formatsSection" style="display:none;">
-      <div class="formats-section-label">Recommended formats &mdash; <span id="recoHint"></span></div>
-      <div class="fmt-grid" id="fmtGrid"></div>
-      <button class="btn-add" id="btnShowAddFmt" onclick="toggleAddFmtForm()" style="margin-top:12px;">&#xFF0B;&nbsp;Add a format</button>
-      <div class="add-aud-form" id="addFmtForm" style="flex-direction:column;gap:10px;">
-        <div>
-          <div class="add-aud-field-label">Format name *</div>
-          <input class="field-input" type="text" id="newFmtName" placeholder="e.g. Internal podcast, Q&amp;A sheet…" />
-        </div>
-        <div class="add-aud-form-row">
-          <button class="btn-confirm" onclick="confirmAddFmt()">Add format</button>
-          <button class="btn-cancel" onclick="toggleAddFmtForm()">Cancel</button>
-        </div>
-      </div>
-    </div>
   </div>
 
   <!-- 03 KEY MESSAGES -->
   <div class="setup-card">
-    <div class="card-label">03 &mdash; Key messages</div>
+    <div class="card-label">03 — Key messages</div>
     <div class="msg-list" id="msgList">
       <div class="msg-row">
         <input class="field-input" type="text" placeholder="e.g. This programme puts technology at the heart of our growth strategy." />
@@ -350,36 +380,39 @@ img,svg{display:block;max-width:100%;}
     <button class="btn-add" onclick="addMessage()">&#xFF0B;&nbsp;Add a key message</button>
   </div>
 
-  <!-- 04 TONE -->
-  <div class="setup-card">
-    <div class="card-label">04 &mdash; Communication tone</div>
-    <div class="chip-grid" id="toneGrid">
-      <span class="chip" data-tone="formal">Formal</span>
-      <span class="chip" data-tone="professional">Professional</span>
-      <span class="chip selected" data-tone="neutral">Neutral</span>
-      <span class="chip" data-tone="friendly">Friendly</span>
-      <span class="chip" data-tone="collaborative">Collaborative</span>
-      <span class="chip" data-tone="assertive">Assertive</span>
-      <span class="chip" data-tone="persuasive">Persuasive</span>
-      <span class="chip" data-tone="inspirational">Inspirational</span>
-      <span class="chip" data-tone="empathetic">Empathetic</span>
-      <span class="chip" data-tone="diplomatic">Diplomatic</span>
-      <span class="chip" data-tone="authoritative">Authoritative</span>
-      <span class="chip" data-tone="concise">Concise</span>
-      <span class="chip" data-tone="executive">Executive</span>
-      <span class="chip" data-tone="educational">Educational</span>
-      <span class="chip" data-tone="urgent">Urgent</span>
-      <span class="chip" data-tone="reassuring">Reassuring</span>
+  <!-- ═══════════════ ZONE 2 ═══════════════ -->
+  <div class="zone-divider">
+    <div class="zone-divider-line"></div>
+    <span class="zone-label">Channels &amp; tone — per audience</span>
+    <div class="zone-divider-line right"></div>
+  </div>
+
+  <!-- dynamic per-audience config cards -->
+  <div id="audConfigArea">
+    <div class="zone2-empty" id="zone2Empty">
+      Select one or more audiences above — each will get its own channel and tone configuration.
     </div>
   </div>
 
-  <!-- 05 GENERATE -->
+  <!-- add-format form (shared, hidden) -->
+  <div class="add-aud-form" id="addFmtForm" style="flex-direction:column;gap:10px;margin-top:0;margin-bottom:14px;">
+    <div>
+      <div class="add-aud-field-label">Format name *</div>
+      <input class="field-input" type="text" id="newFmtName" placeholder="e.g. Internal podcast, Q&amp;A sheet…" />
+    </div>
+    <div class="add-aud-form-row">
+      <button class="btn-confirm" onclick="confirmAddFmt()">Add format</button>
+      <button class="btn-cancel" onclick="toggleAddFmtForm()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════ GENERATE ═══════════════ -->
   <button class="btn-gen" id="btnGen" disabled aria-label="Generate content variations">
     <span class="dot" aria-hidden="true"></span>
     Generate content variations
   </button>
 
-  <!-- 06 RESULTS -->
+  <!-- ═══════════════ ZONE 3 ═══════════════ -->
   <div class="results" id="resultsSection">
     <div class="results-header">
       <div>
@@ -390,7 +423,7 @@ img,svg{display:block;max-width:100%;}
     </div>
     <div class="results-empty" id="emptyState">
       <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-      Fill in your context, pick an audience and generate
+      Fill in context, configure your audiences, then generate
     </div>
     <div id="rtabBar" class="rtab-bar" style="display:none;" role="tablist"></div>
     <div id="rtabPanel" class="rtab-panel" style="display:none;" role="tabpanel"></div>
@@ -399,7 +432,6 @@ img,svg{display:block;max-width:100%;}
 </div><!-- /page-wrap -->
 
 <script>
-
 /* ================================================================
    SVG ICONS
    ================================================================ */
@@ -470,16 +502,24 @@ var REGISTERS = {
   'rh'           :'Neutral & educational'
 };
 
+var ALL_TONES = [
+  'formal','professional','neutral','friendly','collaborative',
+  'assertive','persuasive','inspirational','empathetic','diplomatic',
+  'authoritative','concise','executive','educational','urgent','reassuring'
+];
+
 /* ================================================================
    STATE
+   Per-audience config: audConfigs[audName] = { tones:[], formats:[] }
    ================================================================ */
-var selAuds     = [];   /* array of selected audience objects (multi-select) */
-var selFormats  = [];
-var lastResults = [];
-var activeTab   = null;
-var customAuds  = [];
+var selAuds      = [];   /* ordered array of audience objects */
+var audConfigs   = {};   /* map: audName -> { tones:[], formats:[] } */
+var lastResults  = [];
+var activeTab    = null;
+var customAuds   = [];
+var customFormats= [];
+var addFmtTarget = null; /* which audName is the add-format form targeting */
 
-/* default audiences */
 var DEFAULT_AUDS = [
   {name:'Executive committee', role:'', what:'ROI, strategic vision'},
   {name:'Middle managers',     role:'', what:'Team impact, operational'},
@@ -535,25 +575,19 @@ var DEFAULT_AUDS = [
     window.addEventListener('scroll',upd,{passive:true});upd();
   })();
 
-  /* tone chips — also re-run smartReco if audiences already selected */
-  document.getElementById('toneGrid').addEventListener('click',function(e){
-    var c=e.target.closest('.chip');
-    if(c){c.classList.toggle('selected');if(selAuds.length>0)renderFormats();}
-    checkReady();
-  });
-
   /* file input */
   document.getElementById('fileInput').addEventListener('change',function(e){
-    Array.from(e.target.files).forEach(addFileItem);
-    e.target.value='';
+    Array.from(e.target.files).forEach(addFileItem);e.target.value='';
   });
 
-  /* audience buttons */
   buildAudButtons();
 
-  /* generate */
   document.getElementById('btnGen').addEventListener('click',generate);
   document.getElementById('btnExport').addEventListener('click',exportAll);
+
+  /* re-run smart reco when context / messages change */
+  document.getElementById('ctx-programme').addEventListener('input',function(){refreshAllRecos();checkReady();});
+  document.getElementById('msgList').addEventListener('input',function(){refreshAllRecos();checkReady();});
 
   checkReady();
 })();
@@ -571,11 +605,10 @@ function addFileItem(file){
 }
 
 /* ================================================================
-   AUDIENCE BUTTONS
+   AUDIENCE BUTTONS (Zone 1)
    ================================================================ */
 function buildAudButtons(){
-  var cont=document.getElementById('audBtns');
-  cont.innerHTML='';
+  var cont=document.getElementById('audBtns');cont.innerHTML='';
   var allAuds=DEFAULT_AUDS.concat(customAuds);
   allAuds.forEach(function(a){
     var isActive=selAuds.some(function(s){return s.name===a.name;});
@@ -590,7 +623,7 @@ function buildAudButtons(){
 function toggleAddAudForm(){
   var form=document.getElementById('addAudForm');
   form.classList.toggle('open');
-  if(form.classList.contains('open')) document.getElementById('newAudName').focus();
+  if(form.classList.contains('open'))document.getElementById('newAudName').focus();
 }
 
 function confirmAddAud(){
@@ -605,47 +638,12 @@ function confirmAddAud(){
   document.getElementById('newAudWhat').value='';
   document.getElementById('addAudForm').classList.remove('open');
   buildAudButtons();
-  /* auto-select the new audience */
   var btns=document.querySelectorAll('.aud-btn');
   toggleAud(btns[btns.length-1],newAud);
 }
 
 /* ================================================================
-   ADD FORMAT FORM
-   ================================================================ */
-var customFormats = [];
-
-function toggleAddFmtForm(){
-  var form=document.getElementById('addFmtForm');
-  form.classList.toggle('open');
-  if(form.classList.contains('open')) document.getElementById('newFmtName').focus();
-}
-
-function confirmAddFmt(){
-  var name=document.getElementById('newFmtName').value.trim();
-  if(!name)return;
-  var id='custom_'+name.toLowerCase().replace(/[^a-z0-9]/g,'_');
-  if(!FORMATS[id]){
-    FORMATS[id]=({label:name, desc:'Custom format'});
-    /* generic icon: document */
-    ICONS[id]='<svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>';
-    /* generic template */
-    TPL[id]=function(c){return c.intro+'\n\n'+c.corps+'\n\n'+c.accroche_fin;};
-    customFormats.push(id);
-  }
-  document.getElementById('newFmtName').value='';
-  document.getElementById('addFmtForm').classList.remove('open');
-  /* re-render formats if audience is already selected */
-  if(selAuds.length>0) renderFormats();
-  /* auto-select the new custom format */
-  setTimeout(function(){
-    var chip=document.querySelector('.fmt-chip[data-fid="'+id+'"]');
-    if(chip&&!chip.classList.contains('selected')){chip.classList.add('selected');chip.setAttribute('aria-pressed','true');selFormats=Array.from(document.querySelectorAll('.fmt-chip.selected')).map(function(c){return c.dataset.fid;});checkReady();}
-  },50);
-}
-
-/* ================================================================
-   AUDIENCE TOGGLE + FORMATS
+   AUDIENCE TOGGLE — adds/removes per-audience config card
    ================================================================ */
 function getAudKey(name){
   var n=name.toLowerCase()
@@ -668,36 +666,42 @@ function toggleAud(btn,aud){
   if(idx===-1){
     selAuds.push(aud);
     btn.classList.add('active');
+    /* init per-audience config with smart defaults */
+    var cfg=initAudConfig(aud);
+    audConfigs[aud.name]=cfg;
+    renderAudConfigCard(aud);
   } else {
     selAuds.splice(idx,1);
     btn.classList.remove('active');
+    delete audConfigs[aud.name];
+    var card=document.getElementById('audcard-'+CSS.escape(aud.name));
+    if(card)card.remove();
   }
+  document.getElementById('zone2Empty').style.display=selAuds.length?'none':'block';
   lastResults=[];activeTab=null;
-  if(selAuds.length>0){
-    renderFormats();
-  } else {
-    document.getElementById('formatsSection').style.display='none';
-    selFormats=[];
-  }
   checkReady();
 }
 
-/* smart format recommendation: union of audience RECO + context signals */
-function smartReco(){
-  var prog=document.getElementById('ctx-programme').value.trim().toLowerCase();
-  var msgs=Array.from(document.querySelectorAll('#msgList .field-input')).map(function(i){return i.value.trim().toLowerCase();}).filter(Boolean).join(' ');
-  var tones=Array.from(document.querySelectorAll('#toneGrid .chip.selected')).map(function(c){return c.dataset.tone;});
+/* build initial per-audience state using smart reco */
+function initAudConfig(aud){
+  var reco=smartRecoForAud(aud);
+  /* default tone: neutral */
+  return {tones:['neutral'], formats:reco};
+}
+
+/* ================================================================
+   SMART RECO — per audience
+   ================================================================ */
+function smartRecoForAud(aud){
+  var prog=document.getElementById('ctx-programme').value.trim();
+  var msgs=Array.from(document.querySelectorAll('#msgList .field-input')).map(function(i){return i.value.trim();}).filter(Boolean).join(' ');
   var combined=(prog+' '+msgs).toLowerCase();
+  var tones=(audConfigs[aud.name]||{tones:['neutral']}).tones;
 
-  /* start from union of all selected audiences' RECO */
+  var key=getAudKey(aud.name)||'';
   var recoSet={};
-  selAuds.forEach(function(a){
-    var key=getAudKey(a.name)||'';
-    var r=RECO[key]||['email','newsletter','slack'];
-    r.forEach(function(id){recoSet[id]=true;});
-  });
+  (RECO[key]||['email','newsletter','slack']).forEach(function(id){recoSet[id]=true;});
 
-  /* context signals: add formats based on keywords */
   if(/urgent|asap|immediate|deadline|crisis|alert/i.test(combined)){recoSet['slack']=true;recoSet['email']=true;}
   if(/strateg|vision|roadmap|transform|milestone|launch/i.test(combined)){recoSet['presentation']=true;recoSet['speech']=true;}
   if(/all staff|entire company|everyone|whole organisation|company.wide/i.test(combined)){recoSet['newsletter']=true;recoSet['video']=true;}
@@ -705,7 +709,6 @@ function smartReco(){
   if(/team meeting|townhall|all.hands|event/i.test(combined)){recoSet['speech']=true;recoSet['presentation']=true;}
   if(/update|inform|announcement|news/i.test(combined)){recoSet['email']=true;recoSet['newsletter']=true;}
 
-  /* tone signals */
   if(tones.indexOf('urgent')!==-1){recoSet['slack']=true;recoSet['email']=true;}
   if(tones.indexOf('inspirational')!==-1||tones.indexOf('authoritative')!==-1){recoSet['speech']=true;recoSet['video']=true;}
   if(tones.indexOf('formal')!==-1||tones.indexOf('executive')!==-1){recoSet['email']=true;recoSet['presentation']=true;}
@@ -715,94 +718,229 @@ function smartReco(){
   return Object.keys(recoSet);
 }
 
-function renderFormats(){
-  var reco=smartReco();
-  var avail=Object.keys(FORMATS);
-  var prevSelected=selFormats.slice(); /* preserve user's manual selections across re-renders */
+function refreshAllRecos(){
+  selAuds.forEach(function(aud){
+    var cfg=audConfigs[aud.name];if(!cfg)return;
+    var newReco=smartRecoForAud(aud);
+    /* add newly-recommended formats; don't remove manually-added ones */
+    newReco.forEach(function(id){if(cfg.formats.indexOf(id)===-1)cfg.formats.push(id);});
+    refreshAudConfigCard(aud);
+  });
+}
 
-  var grid=document.getElementById('fmtGrid');grid.innerHTML='';
-  selFormats=[];
+/* ================================================================
+   PER-AUDIENCE CONFIG CARD (Zone 2)
+   ================================================================ */
+function renderAudConfigCard(aud){
+  var area=document.getElementById('audConfigArea');
+  var reco=smartRecoForAud(aud);
+  var cfg=audConfigs[aud.name];
 
-  avail.forEach(function(fid){
-    var f=FORMATS[fid];if(!f)return;
-    var isR=reco.indexOf(fid)!==-1;
-    /* keep selected if previously chosen by user, or if newly recommended */
-    var isSel=isR||(prevSelected.indexOf(fid)!==-1);
-    if(isSel)selFormats.push(fid);
-    var chip=document.createElement('span');
-    chip.className='fmt-chip'+(isR?' recommended':'')+(isSel?' selected':'');
-    chip.dataset.fid=fid;
-    chip.setAttribute('role','button');
-    chip.setAttribute('aria-pressed',isSel?'true':'false');
-    chip.innerHTML=(ICONS[fid]||'')+esc(f.label);
-    chip.addEventListener('click',function(){
-      chip.classList.toggle('selected');
-      chip.setAttribute('aria-pressed',chip.classList.contains('selected')?'true':'false');
-      selFormats=Array.from(document.querySelectorAll('.fmt-chip.selected')).map(function(c){return c.dataset.fid;});
-      checkReady();
-    });
-    grid.appendChild(chip);
+  var card=document.createElement('div');
+  card.className='aud-config-card';
+  card.id='audcard-'+aud.name.replace(/[^a-zA-Z0-9]/g,'-');
+
+  card.innerHTML=buildAudCardHTML(aud,cfg,reco);
+  area.appendChild(card);
+  wireAudCard(card,aud);
+}
+
+function refreshAudConfigCard(aud){
+  var card=document.getElementById('audcard-'+aud.name.replace(/[^a-zA-Z0-9]/g,'-'));
+  if(!card)return;
+  var cfg=audConfigs[aud.name];
+  var reco=smartRecoForAud(aud);
+  card.innerHTML=buildAudCardHTML(aud,cfg,reco);
+  wireAudCard(card,aud);
+}
+
+function buildAudCardHTML(aud,cfg,reco){
+  var safeId=aud.name.replace(/[^a-zA-Z0-9]/g,'-');
+  var recoLabels=reco.filter(function(id){return FORMATS[id];}).map(function(id){return FORMATS[id].label;});
+
+  /* tone chips */
+  var toneHTML='';
+  ALL_TONES.forEach(function(t){
+    var sel=cfg.tones.indexOf(t)!==-1;
+    toneHTML+='<span class="chip'+(sel?' selected':'')+'" data-tone="'+t+'" data-aud="'+esc(aud.name)+'">'+t.charAt(0).toUpperCase()+t.slice(1)+'</span>';
   });
 
-  var recoLabels=reco.filter(function(id){return FORMATS[id];}).map(function(id){return FORMATS[id].label;});
-  var audNames=selAuds.map(function(a){return a.name;}).join(', ');
-  document.getElementById('recoHint').innerHTML='<b>Suggested for '+esc(audNames)+':</b> '+recoLabels.join(', ');
-  document.getElementById('formatsSection').style.display='block';
+  /* format chips */
+  var fmtHTML='';
+  Object.keys(FORMATS).forEach(function(fid){
+    var f=FORMATS[fid];
+    var isR=reco.indexOf(fid)!==-1;
+    var isSel=cfg.formats.indexOf(fid)!==-1;
+    fmtHTML+='<span class="fmt-chip'+(isR?' recommended':'')+(isSel?' selected':'')+'" data-fid="'+fid+'" data-aud="'+esc(aud.name)+'">'
+      +(ICONS[fid]||'')+esc(f.label)+'</span>';
+  });
+
+  return ''
+    +'<div class="aud-config-header">'
+      +'<div>'
+        +'<div class="aud-config-name">'+esc(aud.name)+'</div>'
+        +(aud.role?'<div class="aud-config-role">'+esc(aud.role)+'</div>':'')
+        +(aud.what?'<div class="aud-config-role" style="color:#54677e;">'+esc(aud.what)+'</div>':'')
+      +'</div>'
+      +'<button class="aud-config-remove" title="Remove audience" data-aud-remove="'+esc(aud.name)+'">&#x2715;</button>'
+    +'</div>'
+    /* tone section */
+    +'<div class="aud-config-section">'
+      +'<div class="aud-section-label">Tone</div>'
+      +'<div class="chip-grid" id="tonegrid-'+safeId+'">'+toneHTML+'</div>'
+    +'</div>'
+    /* format section */
+    +'<div class="aud-config-section">'
+      +'<div class="aud-section-label">Channels &amp; formats</div>'
+      +(recoLabels.length?'<div class="aud-reco-hint"><b>Suggested:</b> '+recoLabels.join(', ')+'</div>':'')
+      +'<div class="fmt-grid" id="fmtgrid-'+safeId+'">'+fmtHTML+'</div>'
+      +'<button class="btn-add" style="margin-top:10px;font-size:11px;" data-addfmt-aud="'+esc(aud.name)+'">&#xFF0B;&nbsp;Add a format</button>'
+    +'</div>';
+}
+
+function wireAudCard(card,aud){
+  /* remove button */
+  var removeBtn=card.querySelector('[data-aud-remove]');
+  if(removeBtn){
+    removeBtn.addEventListener('click',function(){
+      /* deselect in pill list too */
+      var pill=Array.from(document.querySelectorAll('.aud-btn')).find(function(b){return b.textContent.replace('✓','').trim()===aud.name;});
+      if(pill)toggleAud(pill,aud);
+    });
+  }
+
+  /* tone chips */
+  card.querySelectorAll('.chip[data-aud]').forEach(function(chip){
+    chip.addEventListener('click',function(){
+      var cfg=audConfigs[aud.name];if(!cfg)return;
+      var tone=chip.dataset.tone;
+      var idx=cfg.tones.indexOf(tone);
+      if(idx===-1)cfg.tones.push(tone);else cfg.tones.splice(idx,1);
+      chip.classList.toggle('selected');
+      /* refresh reco hint */
+      var newReco=smartRecoForAud(aud);
+      var newFmts=newReco.filter(function(id){return cfg.formats.indexOf(id)===-1;});
+      newFmts.forEach(function(id){cfg.formats.push(id);});
+      if(newFmts.length)refreshAudConfigCard(aud);
+      checkReady();
+    });
+  });
+
+  /* format chips */
+  card.querySelectorAll('.fmt-chip[data-aud]').forEach(function(chip){
+    chip.addEventListener('click',function(){
+      var cfg=audConfigs[aud.name];if(!cfg)return;
+      var fid=chip.dataset.fid;
+      var idx=cfg.formats.indexOf(fid);
+      if(idx===-1){cfg.formats.push(fid);chip.classList.add('selected');chip.setAttribute('aria-pressed','true');}
+      else{cfg.formats.splice(idx,1);chip.classList.remove('selected');chip.setAttribute('aria-pressed','false');}
+      checkReady();
+    });
+  });
+
+  /* add-format button */
+  var addFmtBtn=card.querySelector('[data-addfmt-aud]');
+  if(addFmtBtn){
+    addFmtBtn.addEventListener('click',function(){
+      addFmtTarget=aud.name;
+      toggleAddFmtForm();
+      /* move the shared form to just after this card */
+      var fmtForm=document.getElementById('addFmtForm');
+      card.parentNode.insertBefore(fmtForm,card.nextSibling);
+    });
+  }
+}
+
+/* ================================================================
+   ADD FORMAT FORM
+   ================================================================ */
+function toggleAddFmtForm(){
+  var form=document.getElementById('addFmtForm');
+  form.classList.toggle('open');
+  if(form.classList.contains('open'))document.getElementById('newFmtName').focus();
+}
+
+function confirmAddFmt(){
+  var name=document.getElementById('newFmtName').value.trim();
+  if(!name)return;
+  var id='custom_'+name.toLowerCase().replace(/[^a-z0-9]/g,'_');
+  if(!FORMATS[id]){
+    FORMATS[id]={label:name,desc:'Custom format'};
+    ICONS[id]='<svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>';
+    TPL[id]=function(c){return c.intro+'\n\n'+c.corps+'\n\n'+c.accroche_fin;};
+    customFormats.push(id);
+  }
+  document.getElementById('newFmtName').value='';
+  document.getElementById('addFmtForm').classList.remove('open');
+
+  /* add to the target audience config and refresh its card */
+  if(addFmtTarget&&audConfigs[addFmtTarget]){
+    var cfg=audConfigs[addFmtTarget];
+    if(cfg.formats.indexOf(id)===-1)cfg.formats.push(id);
+    var targetAud=selAuds.find(function(a){return a.name===addFmtTarget;});
+    if(targetAud)refreshAudConfigCard(targetAud);
+  } else {
+    /* add to all selected audiences */
+    selAuds.forEach(function(a){
+      var cfg=audConfigs[a.name];
+      if(cfg&&cfg.formats.indexOf(id)===-1){cfg.formats.push(id);refreshAudConfigCard(a);}
+    });
+  }
+  addFmtTarget=null;
   checkReady();
 }
 
+/* ================================================================
+   READY CHECK
+   ================================================================ */
 function checkReady(){
   var hasProg=document.getElementById('ctx-programme').value.trim().length>0;
   var hasMsgs=Array.from(document.querySelectorAll('#msgList .field-input')).some(function(i){return i.value.trim();});
-  document.getElementById('btnGen').disabled=!(hasProg&&hasMsgs&&selAuds.length>0&&selFormats.length>0);
+  var hasAuds=selAuds.length>0;
+  var hasFormats=selAuds.some(function(a){return audConfigs[a.name]&&audConfigs[a.name].formats.length>0;});
+  document.getElementById('btnGen').disabled=!(hasProg&&hasMsgs&&hasAuds&&hasFormats);
 }
-
-document.getElementById('ctx-programme').addEventListener('input',function(){if(selAuds.length>0)renderFormats();else checkReady();});
-document.getElementById('msgList').addEventListener('input',function(){if(selAuds.length>0)renderFormats();else checkReady();});
 
 /* ================================================================
    KEY MESSAGES
    ================================================================ */
-function removeRow(btn){btn.closest('.msg-row').remove();checkReady();}
+function removeRow(btn){btn.closest('.msg-row').remove();refreshAllRecos();checkReady();}
 
 function addMessage(){
   var row=document.createElement('div');row.className='msg-row';
   row.innerHTML='<input class="field-input" type="text" placeholder="Key message..."/><button class="btn-remove" onclick="removeRow(this)" title="Remove">&#x2715;</button>';
   document.getElementById('msgList').appendChild(row);
   row.querySelector('input').focus();
-  row.querySelector('input').addEventListener('input',checkReady);
+  row.querySelector('input').addEventListener('input',function(){refreshAllRecos();checkReady();});
 }
 
 /* ================================================================
-   CONTEXT BUILDER
+   CONTEXT BUILDER — reads per-audience tones from audConfigs
    ================================================================ */
-/* buildCtx now accepts an explicit audience object (for multi-audience generation).
-   Falls back to first selected audience if none passed. */
 function buildCtx(aud){
-  var prog = document.getElementById('ctx-programme').value.trim()||'our programme';
-  var msgs = Array.from(document.querySelectorAll('#msgList .field-input')).map(function(i){return i.value.trim();}).filter(Boolean);
-  var tones= Array.from(document.querySelectorAll('#toneGrid .chip.selected')).map(function(c){return c.dataset.tone;});
-  if(!aud) aud=selAuds[0];
+  var prog=document.getElementById('ctx-programme').value.trim()||'our programme';
+  var msgs=Array.from(document.querySelectorAll('#msgList .field-input')).map(function(i){return i.value.trim();}).filter(Boolean);
+  var cfg=audConfigs[aud.name]||{tones:['neutral'],formats:[]};
+  var tones=cfg.tones;
 
-  var key1 = msgs.length?msgs[0]:'This programme is a real opportunity for transformation.';
-  var key2 = msgs.length>1?msgs[1]:'';
+  var key1=msgs.length?msgs[0]:'This programme is a real opportunity for transformation.';
+  var key2=msgs.length>1?msgs[1]:'';
 
-  var formel        =tones.indexOf('formal')!==-1||tones.indexOf('executive')!==-1||tones.indexOf('authoritative')!==-1;
-  var mobilisateur  =tones.indexOf('inspirational')!==-1||tones.indexOf('persuasive')!==-1||tones.indexOf('assertive')!==-1||tones.indexOf('collaborative')!==-1;
-  var narratif      =tones.indexOf('empathetic')!==-1||tones.indexOf('friendly')!==-1||tones.indexOf('reassuring')!==-1||tones.indexOf('diplomatic')!==-1;
-  var direct        =tones.indexOf('concise')!==-1||tones.indexOf('urgent')!==-1||tones.indexOf('professional')!==-1;
+  var formel      =tones.indexOf('formal')!==-1||tones.indexOf('executive')!==-1||tones.indexOf('authoritative')!==-1;
+  var mobilisateur=tones.indexOf('inspirational')!==-1||tones.indexOf('persuasive')!==-1||tones.indexOf('assertive')!==-1||tones.indexOf('collaborative')!==-1;
+  var narratif    =tones.indexOf('empathetic')!==-1||tones.indexOf('friendly')!==-1||tones.indexOf('reassuring')!==-1||tones.indexOf('diplomatic')!==-1;
+  var direct      =tones.indexOf('concise')!==-1||tones.indexOf('urgent')!==-1||tones.indexOf('professional')!==-1;
 
   var audKey=getAudKey(aud.name)||'';
-  var angle =ANGLES[audKey]||'';
+  var angle=ANGLES[audKey]||'';
   var regist=REGISTERS[audKey]||'';
 
-  /* synthesise the "message to communicate" from key messages */
-  var msg = msgs.slice(0,2).join(' — ');
-  if(!msg) msg='Programme update';
+  var msg=msgs.slice(0,2).join(' — ');
+  if(!msg)msg='Programme update';
   var sujet=msg.length>65?msg.substring(0,65)+'…':msg;
 
   var intro,corps,accroche_fin,hook,video_corps,video_close,court,accroche;
-  var role = aud.role||'';
+  var role=aud.role||'';
 
   if(mobilisateur){
     intro=prog+' is reaching a new milestone: '+sujet+'. Now is the time to mobilise.';
@@ -811,7 +949,7 @@ function buildCtx(aud){
     hook='A new chapter opens. '+sujet;
     video_corps='What we are building with '+prog+' is a unique opportunity. '+key1;
     video_close='This is your moment. Get involved. Let\'s make this a collective success.';
-    accroche=sujet; court=sujet+' — '+prog+' moves forward.';
+    accroche=sujet;court=sujet+' — '+prog+' moves forward.';
   } else if(formel){
     intro='As part of '+prog+', we would like to inform you of an important development: '+sujet+'.';
     corps=key1+(key2?'\n\n'+key2:'')+'\n\n'+(role?'In your capacity as '+role+', this initiative is directly relevant to your scope.':(aud.what?'This initiative directly addresses your priorities around '+aud.what+'.':'We remain available for any questions.'));
@@ -819,7 +957,7 @@ function buildCtx(aud){
     hook=sujet;
     video_corps='As part of '+prog+', an important milestone has been reached. '+key1;
     video_close='Thank you for your commitment. We count on you to support this transformation.';
-    accroche=sujet; court=sujet+' — '+prog+'.';
+    accroche=sujet;court=sujet+' — '+prog+'.';
   } else if(narratif){
     intro='Some time ago, we set an ambition: to make '+prog+' a reality. Today, we reach a key milestone — '+sujet+'.';
     corps=key1+(key2?'\n\n'+key2:'')+'\n\n'+(role?'Your role as '+role+' gives this moment particular weight.':aud.what?'At every stage, your expectations around '+aud.what+' guide our decisions.':'This story belongs to you too.');
@@ -827,42 +965,42 @@ function buildCtx(aud){
     hook='This milestone — we built it together. '+sujet;
     video_corps='This programme is a collective story. And today, we write a new chapter. '+key1;
     video_close='The story continues. And you are its authors.';
-    accroche=sujet; court=sujet+' — a key milestone for '+prog+'.';
+    accroche=sujet;court=sujet+' — a key milestone for '+prog+'.';
   } else if(direct){
     intro=sujet;
     corps=key1+(key2?'\n\n'+key2:'')+(role?'\n\nRelevant to your role as '+role+'.':(aud.what?'\n\nDirect impact on: '+aud.what+'.':''));
     accroche_fin='Questions? Reach out to the programme team.';
-    hook=sujet; video_corps=key1+(key2?' '+key2:'');
+    hook=sujet;video_corps=key1+(key2?' '+key2:'');
     video_close='Thank you. For any questions, your programme team is available.';
-    accroche=sujet; court=sujet;
+    accroche=sujet;court=sujet;
   } else {
     intro='As part of '+prog+', an important milestone has been reached\u00a0: '+sujet+'.';
     corps=key1+(key2?'\n\n'+key2:'')+'\n\n'+(role?'As '+role+', this initiative is directly relevant to your scope.':(aud.what?'This initiative directly addresses your priorities around '+aud.what+'.':'This initiative concerns all of our teams.'));
     accroche_fin='We count on your commitment to make this milestone a genuine collective success.';
-    hook=sujet; video_corps='What we are experiencing with '+prog+' is a unique opportunity. '+key1;
+    hook=sujet;video_corps='What we are experiencing with '+prog+' is a unique opportunity. '+key1;
     video_close='Join us. Together, let\'s make this programme a success we can all be proud of.';
-    accroche=sujet; court=sujet+'\u00a0— a key moment for '+prog+'.';
+    accroche=sujet;court=sujet+'\u00a0— a key moment for '+prog+'.';
   }
 
   var progWords=prog.split(' ').filter(function(w){return w.length>2;}).slice(0,2);
   var hashtags='#Transformation #'+progWords.map(function(w){return w.charAt(0).toUpperCase()+w.slice(1);}).join('')+' #Innovation';
 
   var points=[];
-  if(aud.what) points.push('Addresses priorities around '+aud.what);
-  if(key2)     points.push(key2);
-  else         points.push('Timeline and next steps will be communicated shortly');
+  if(aud.what)points.push('Addresses priorities around '+aud.what);
+  if(key2)points.push(key2);
+  else points.push('Timeline and next steps will be communicated shortly');
   points.push('Your feedback is welcome and valued');
 
   return{
-    msg:sujet, prog:prog, sujet:sujet,
+    msg:sujet,prog:prog,sujet:sujet,
     intro:intro,corps:corps,accroche_fin:accroche_fin,hook:hook,video_corps:video_corps,
     video_close:video_close,court:court,accroche:accroche,
-    cta:'Learn more and get involved', hashtags:hashtags,
-    points:points, conclusion:'For any questions, contact the programme team. Thank you for your engagement.',
-    citation:key1.replace(/\.$/,''), formal:formel,
-    audAngle:angle, audRegister:regist,
-    audName:aud.name, audWhat:aud.what||'', audRole:aud.role||'', key1:key1, key2:key2,
-    tones:tones, audKey:audKey
+    cta:'Learn more and get involved',hashtags:hashtags,
+    points:points,conclusion:'For any questions, contact the programme team. Thank you for your engagement.',
+    citation:key1.replace(/\.$/,''),formal:formel,
+    audAngle:angle,audRegister:regist,
+    audName:aud.name,audWhat:aud.what||'',audRole:aud.role||'',key1:key1,key2:key2,
+    tones:tones,audKey:audKey
   };
 }
 
@@ -875,8 +1013,7 @@ function buildWhy(fid,ctx){
   var msgLow=msg.toLowerCase();
   var hasUrgency=/deploy|launch|deadline|phase|go.live|rollout/i.test(msgLow);
   var hasStrategy=/strateg|vision|transform|roadmap|growth|impact/i.test(msgLow);
-  var hasPeople=/team|people|employee|collaborat|everyone|all staff/i.test(msgLow);
-  var audDesc = aud+(role?' ('+role+')':'')+(what?' focused on '+what:'');
+  var audDesc=aud+(role?' ('+role+')':'')+(what?' focused on '+what:'');
   switch(fid){
     case 'email':
       return 'The message "'+msg+'" needs to land with '+audDesc
@@ -918,39 +1055,24 @@ function buildWhy(fid,ctx){
 /* ================================================================
    TEMPLATES
    ================================================================ */
-var TPL = {
-  email: function(c){
-    var sal=c.formal?'Dear Sir or Madam,':'Hello,';
-    return 'Subject: '+c.sujet+'\n\n'+sal+'\n\n'+c.intro+'\n\n'+c.corps+'\n\n'+c.accroche_fin+'\n\nBest regards,\nThe Communications Team';
-  },
-  linkedin: function(c){
-    return c.accroche+'\n\n'+c.corps.split('\n')[0]+'\n\n'+c.points.map(function(p){return '▸ '+p;}).join('\n')+'\n\n→ '+c.cta+'\n\n'+c.hashtags;
-  },
-  video: function(c){
-    return '[OPENING — wide shot, 5s]\n"'+c.hook+'"\n\n[MID SHOT — facing camera]\n"'+c.video_corps+'"\n\n[CLOSE-UP — direct gaze]\n"'+c.points.join('. ')+'"\n\n[CALL TO ACTION]\n"'+c.video_close+'"\n\n[OUTRO — logo + signature]';
-  },
-  newsletter: function(c){
-    return '# '+c.sujet+'\n\n'+c.intro+'\n\n## What this means for you\n'+c.points.map(function(p){return '- '+p;}).join('\n')+'\n\n## Programme update\n'+c.corps+'\n\n'+c.conclusion;
-  },
-  slack: function(c){
-    return '[announcement] *'+c.sujet+'*\n\n'+c.court+'\n\n'+c.points.slice(0,2).map(function(p){return '→ '+p;}).join('\n')+'\n\n'+c.cta;
-  },
-  presentation: function(c){
-    return 'SLIDE 1 — TITLE\n'+c.sujet+'\n\nSLIDE 2 — CONTEXT\n'+c.intro+'\n\nSLIDE 3 — STAKES & BENEFITS\n'+c.points.map(function(p,i){return (i+1)+'. '+p;}).join('\n')+'\n\nSLIDE 4 — KEY MESSAGE\n« '+c.citation+' »\n\nSLIDE 5 — NEXT STEPS\n'+c.cta;
-  },
-  pressrelease: function(c){
-    return 'PRESS RELEASE\n\n'+c.sujet.toUpperCase()+'\n\n'+c.intro+'\n\n'+c.corps+'\n\n« '+c.citation+' »\n\n'+c.points.map(function(p){return '• '+p;}).join('\n')+'\n\nPress contact: communications@programme.com';
-  },
-  speech: function(c){
-    return '[OPENING]\nLadies and gentlemen, dear colleagues,\n\n'+c.intro+'\n\n[BODY]\n'+c.corps+'\n\n[KEY POINTS]\n'+c.points.map(function(p,i){return (i+1)+'. '+p;}).join('\n')+'\n\n[CALL TO ACTION]\n'+c.video_close+'\n\n[CLOSING]\nThank you for being here and for your commitment.';
-  }
+var TPL={
+  email:function(c){var sal=c.formal?'Dear Sir or Madam,':'Hello,';return 'Subject: '+c.sujet+'\n\n'+sal+'\n\n'+c.intro+'\n\n'+c.corps+'\n\n'+c.accroche_fin+'\n\nBest regards,\nThe Communications Team';},
+  linkedin:function(c){return c.accroche+'\n\n'+c.corps.split('\n')[0]+'\n\n'+c.points.map(function(p){return '▸ '+p;}).join('\n')+'\n\n→ '+c.cta+'\n\n'+c.hashtags;},
+  video:function(c){return '[OPENING — wide shot, 5s]\n"'+c.hook+'"\n\n[MID SHOT — facing camera]\n"'+c.video_corps+'"\n\n[CLOSE-UP — direct gaze]\n"'+c.points.join('. ')+'"\n\n[CALL TO ACTION]\n"'+c.video_close+'"\n\n[OUTRO — logo + signature]';},
+  newsletter:function(c){return '# '+c.sujet+'\n\n'+c.intro+'\n\n## What this means for you\n'+c.points.map(function(p){return '- '+p;}).join('\n')+'\n\n## Programme update\n'+c.corps+'\n\n'+c.conclusion;},
+  slack:function(c){return '[announcement] *'+c.sujet+'*\n\n'+c.court+'\n\n'+c.points.slice(0,2).map(function(p){return '→ '+p;}).join('\n')+'\n\n'+c.cta;},
+  presentation:function(c){return 'SLIDE 1 — TITLE\n'+c.sujet+'\n\nSLIDE 2 — CONTEXT\n'+c.intro+'\n\nSLIDE 3 — STAKES & BENEFITS\n'+c.points.map(function(p,i){return (i+1)+'. '+p;}).join('\n')+'\n\nSLIDE 4 — KEY MESSAGE\n« '+c.citation+' »\n\nSLIDE 5 — NEXT STEPS\n'+c.cta;},
+  pressrelease:function(c){return 'PRESS RELEASE\n\n'+c.sujet.toUpperCase()+'\n\n'+c.intro+'\n\n'+c.corps+'\n\n« '+c.citation+' »\n\n'+c.points.map(function(p){return '• '+p;}).join('\n')+'\n\nPress contact: communications@programme.com';},
+  speech:function(c){return '[OPENING]\nLadies and gentlemen, dear colleagues,\n\n'+c.intro+'\n\n[BODY]\n'+c.corps+'\n\n[KEY POINTS]\n'+c.points.map(function(p,i){return (i+1)+'. '+p;}).join('\n')+'\n\n[CALL TO ACTION]\n'+c.video_close+'\n\n[CLOSING]\nThank you for being here and for your commitment.';}
 };
 
 /* ================================================================
-   GENERATION
+   GENERATION — per audience × its own formats
    ================================================================ */
 function generate(){
-  if(!selAuds.length||!selFormats.length)return;
+  if(!selAuds.length)return;
+  var totalFormats=selAuds.reduce(function(n,a){return n+(audConfigs[a.name]?audConfigs[a.name].formats.length:0);},0);
+  if(!totalFormats)return;
 
   document.getElementById('emptyState').style.display='none';
   document.getElementById('resultsTitle').textContent='';
@@ -967,10 +1089,11 @@ function generate(){
   setTimeout(function(){document.getElementById('resultsSection').scrollIntoView({behavior:'smooth',block:'start'});},100);
 
   setTimeout(function(){
-    /* Generate one tab per format × audience combination */
+    /* Each audience uses its own tones + formats */
     selAuds.forEach(function(aud){
+      var cfg=audConfigs[aud.name];if(!cfg||!cfg.formats.length)return;
       var ctx=buildCtx(aud);
-      selFormats.forEach(function(fid){
+      cfg.formats.forEach(function(fid){
         var f=FORMATS[fid];if(!f)return;
         var content=TPL[fid]?TPL[fid](ctx):TPL.email(ctx);
         var label=(selAuds.length>1?aud.name+' — ':'')+f.label;
@@ -980,7 +1103,8 @@ function generate(){
 
     var audNames=selAuds.map(function(a){return a.name;}).join(', ');
     document.getElementById('resultsTitle').textContent=lastResults.length+' variation'+(lastResults.length>1?'s':'')+' — '+audNames;
-    document.getElementById('resultsSubtitle').textContent=selAuds.length+' audience'+(selAuds.length>1?'s':'')+' × '+selFormats.length+' format'+(selFormats.length>1?'s':'');
+    var totalFmts=selAuds.reduce(function(n,a){return n+(audConfigs[a.name]?audConfigs[a.name].formats.length:0);},0);
+    document.getElementById('resultsSubtitle').textContent=selAuds.length+' audience'+(selAuds.length>1?'s':'')+', '+totalFmts+' format'+(totalFmts>1?'s':'');
     document.getElementById('btnExport').classList.add('visible');
 
     tabBar.innerHTML='';
@@ -989,9 +1113,8 @@ function generate(){
       btn.type='button';btn.className='rtab-btn'+(i===0?' active':'');
       btn.setAttribute('role','tab');btn.setAttribute('aria-selected',i===0?'true':'false');
       btn.dataset.idx=i;
-      /* tab label: show audience badge if multi-audience */
       var tabLabel=selAuds.length>1
-        ?'<span style="opacity:.6;font-size:10px;margin-right:4px;">'+esc(r.audName)+'</span>'+(ICONS[r.fid]||'')+esc(FORMATS[r.fid]?FORMATS[r.fid].label:r.fid)
+        ?'<span style="opacity:.6;font-size:10px;margin-right:3px;">'+esc(r.audName)+'</span>'+(ICONS[r.fid]||'')+esc(FORMATS[r.fid]?FORMATS[r.fid].label:r.fid)
         :(ICONS[r.fid]||'')+esc(FORMATS[r.fid]?FORMATS[r.fid].label:r.fid);
       btn.innerHTML=tabLabel;
       btn.addEventListener('click',function(){switchTab(i);});
@@ -1036,25 +1159,14 @@ function renderPanel(i){
       +'<div class="rcard-why"><div class="why-label">What makes this the right call</div><div class="why-text">'+esc(r.why)+'</div></div>';
 
     var ta=document.getElementById('rcardTextarea');
-    /* sync edits live into lastResults */
     ta.addEventListener('input',function(){r.content=ta.value;});
-
     document.getElementById('btnValidate').addEventListener('click',function(){
       r.content=ta.value;
-      var btn=this;
-      btn.textContent='✓ Validated';btn.classList.add('saved');
-      /* re-render to show Edited badge + Reset button */
+      this.textContent='✓ Validated';this.classList.add('saved');
       renderPanel(i);
     });
-
     var resetBtn=document.getElementById('btnReset');
-    if(resetBtn){
-      resetBtn.addEventListener('click',function(){
-        r.content=r.originalContent;
-        renderPanel(i);
-      });
-    }
-
+    if(resetBtn){resetBtn.addEventListener('click',function(){r.content=r.originalContent;renderPanel(i);});}
     document.getElementById('btnCopyActive').addEventListener('click',function(){copyText(r.content,this);});
     panel.style.display='block';panel.style.transition='opacity .28s ease';panel.style.opacity='1';
   },60);
