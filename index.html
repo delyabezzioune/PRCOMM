@@ -347,37 +347,24 @@ img,svg{display:block;max-width:100%;}
   <div class="zone-divider">
     <div class="zone-divider-inner">
       <div class="zone-divider-line"></div>
-      <span class="zone-label">01 — Contexte de la demande</span>
+      <span class="zone-label">01 — Context</span>
       <div class="zone-divider-line right"></div>
     </div>
     <div class="zone-divider-sub"></div>
   </div>
 
-  <!-- 01 CONTEXTE DE LA DEMANDE -->
+  <!-- 01 KEY CONTEXT ELEMENTS -->
   <div class="setup-card">
-    <div class="card-label">01 — Contexte de la demande</div>
+    <div class="card-label">01 — Key context elements</div>
     <textarea class="field-textarea" id="ctx-programme"
-      placeholder="Décrivez le programme ou l'initiative : ses objectifs, sa phase actuelle, les parties prenantes clés, et les contraintes que la communication doit respecter.&#10;&#10;Ex. : SHIFT est le programme de transformation digitale de Pernod Ricard IT, actuellement en phase de déploiement. 12 000 collaborateurs dans 30 marchés seront formés sur les nouveaux outils d'ici fin T2 2025."
+      placeholder="Describe the programme or initiative: its goals, current phase, key stakeholders, and any constraints the communication must respect.&#10;&#10;e.g. SHIFT is Pernod Ricard IT's digital transformation programme, currently entering its deployment phase. 12,000 employees across 30 markets will be trained on new tools by end of Q2 2025."
       style="min-height:130px;"></textarea>
     <!-- prompt-style attach bar -->
     <div class="attach-bar" id="attachBar">
-      <button class="attach-btn" type="button" id="attachMenuBtn" title="Joindre des fichiers" onclick="toggleAttachMenu(event)">
+      <button class="attach-btn" type="button" id="attachMenuBtn" title="Upload files" onclick="triggerFileInput('fileInput')">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M16.5 6.75v10.17a4.5 4.5 0 0 1-9 0V5.25a3 3 0 0 1 6 0v9.33a1.5 1.5 0 0 1-3 0V6.75h-1.5v7.83a3 3 0 0 0 6 0V5.25a4.5 4.5 0 0 0-9 0v11.67a6 6 0 0 0 12 0V6.75Z"/></svg>
       </button>
-      <div class="attach-menu" id="attachMenu">
-        <div class="attach-menu-item" onclick="triggerFileInput('fileInput')">
-          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
-          Charger des images et fichiers
-        </div>
-        <div class="attach-menu-sep"></div>
-        <div class="attach-menu-item" onclick="triggerFileInput('fileInputCloud')">
-          <svg viewBox="0 0 24 24"><path d="M19.35 10.04A7.49 7.49 0 0 0 12 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 0 0 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
-          Joindre des fichiers cloud
-        </div>
-      </div>
       <input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.txt,.pptx,.png,.jpg,.jpeg,.gif,.webp" style="display:none;">
-      <input type="file" id="fileInputCloud" multiple accept=".pdf,.doc,.docx,.txt,.pptx" style="display:none;">
-      <span class="attach-hint">Joignez des briefs, présentations ou communications existantes</span>
     </div>
     <div class="file-pills" id="fileList"></div>
   </div>
@@ -655,21 +642,9 @@ var DEFAULT_AUDS = [
     window.addEventListener('scroll',upd,{passive:true});upd();
   })();
 
-  /* file inputs */
+  /* file input */
   document.getElementById('fileInput').addEventListener('change',function(e){
     Array.from(e.target.files).forEach(addFileItem);e.target.value='';
-  });
-  document.getElementById('fileInputCloud').addEventListener('change',function(e){
-    Array.from(e.target.files).forEach(addFileItem);e.target.value='';
-  });
-
-  /* close attach menu on outside click */
-  document.addEventListener('click',function(e){
-    var menu=document.getElementById('attachMenu');
-    var btn=document.getElementById('attachMenuBtn');
-    if(menu&&menu.classList.contains('open')&&!menu.contains(e.target)&&e.target!==btn){
-      menu.classList.remove('open');
-    }
   });
 
   buildAudButtons();
@@ -685,16 +660,9 @@ var DEFAULT_AUDS = [
 })();
 
 /* ================================================================
-   ATTACH MENU
+   ATTACH
    ================================================================ */
-function toggleAttachMenu(e){
-  e.stopPropagation();
-  var menu=document.getElementById('attachMenu');
-  menu.classList.toggle('open');
-}
-
 function triggerFileInput(id){
-  document.getElementById('attachMenu').classList.remove('open');
   document.getElementById(id).click();
 }
 
