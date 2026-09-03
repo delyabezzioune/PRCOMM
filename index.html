@@ -130,23 +130,33 @@ img,svg{display:block;max-width:100%;}
 .field-input:focus,.field-textarea:focus{border-color:rgba(52,224,240,0.5);}
 .field-input::placeholder,.field-textarea::placeholder{color:#54677e;}
 
-/* file upload */
-.file-upload-area{
-  margin-top:14px;border:1.5px dashed rgba(52,224,240,0.25);border-radius:2px;
-  padding:18px 20px;display:flex;align-items:center;gap:14px;cursor:pointer;
-  background:rgba(52,224,240,0.03);transition:border-color .2s,background .2s;
-}
-.file-upload-area:hover{border-color:rgba(52,224,240,0.5);background:rgba(52,224,240,0.06);}
-.file-upload-area svg{width:20px;height:20px;fill:#34e0f0;flex:none;opacity:.7;}
-.file-upload-label{font-family:var(--mono);font-size:12px;color:#7d97bd;letter-spacing:.04em;}
-.file-upload-label b{color:#9fb8dd;}
-.file-upload-label input[type=file]{display:none;}
-.file-list{margin-top:10px;display:flex;flex-direction:column;gap:6px;}
-.file-item{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:#9fb8dd;
-  background:rgba(52,224,240,0.06);border:1px solid rgba(52,224,240,0.14);padding:5px 10px;border-radius:2px;}
-.file-item svg{width:12px;height:12px;fill:#34e0f0;flex:none;}
-.file-item-remove{margin-left:auto;cursor:pointer;background:none;border:none;color:#7d97bd;padding:0 2px;font-size:14px;line-height:1;}
-.file-item-remove:hover{color:#ff6b6b;}
+/* prompt-bar file attach */
+.attach-bar{display:flex;align-items:center;gap:10px;margin-top:12px;position:relative;}
+.attach-btn{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.14);color:#9fb8dd;font-size:20px;font-weight:300;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;
+  transition:background .18s,border-color .18s,color .18s;flex:none;}
+.attach-btn:hover{background:rgba(52,224,240,0.12);border-color:rgba(52,224,240,0.5);color:var(--cyan);}
+.attach-menu{display:none;position:absolute;bottom:calc(100% + 8px);left:0;
+  background:#0c1525;border:1px solid rgba(255,255,255,0.12);border-radius:10px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.5);min-width:260px;overflow:hidden;z-index:50;}
+.attach-menu.open{display:block;}
+.attach-menu-item{display:flex;align-items:center;gap:12px;padding:13px 18px;
+  font-family:var(--sans);font-size:14px;color:#c7d8f0;cursor:pointer;
+  transition:background .14s;}
+.attach-menu-item:hover{background:rgba(255,255,255,0.07);}
+.attach-menu-item svg{width:18px;height:18px;fill:#9fb8dd;flex:none;}
+.attach-menu-sep{height:1px;background:rgba(255,255,255,0.08);margin:2px 0;}
+.attach-hint{font-family:var(--mono);font-size:11px;color:#54677e;letter-spacing:.04em;}
+.file-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+.file-pill{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;
+  color:#9fb8dd;background:rgba(52,224,240,0.07);border:1px solid rgba(52,224,240,0.18);
+  padding:4px 10px 4px 9px;border-radius:999px;max-width:220px;}
+.file-pill svg{width:11px;height:11px;fill:#34e0f0;flex:none;}
+.file-pill span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.file-pill-remove{background:none;border:none;color:#54677e;cursor:pointer;
+  font-size:13px;line-height:1;padding:0 0 0 4px;transition:color .15s;flex:none;}
+.file-pill-remove:hover{color:#ff6b6b;}
 
 /* key messages */
 .msg-list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
@@ -161,6 +171,13 @@ img,svg{display:block;max-width:100%;}
 .aud-btn:hover{border-color:rgba(52,224,240,0.5);color:#eaf3ff;background:rgba(52,224,240,0.08);}
 .aud-btn.active{border-color:var(--cyan);color:var(--cyan);background:rgba(52,224,240,0.14);font-weight:700;}
 .aud-btn.active::after{content:"✓";margin-left:6px;font-size:11px;}
+/* custom audience pill with delete */
+.aud-btn-wrap{display:inline-flex;align-items:center;gap:0;}
+.aud-btn-del{width:22px;height:22px;border-radius:50%;background:rgba(255,80,80,0.1);
+  border:1px solid rgba(255,80,80,0.25);color:#ff6b6b;font-size:11px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;margin-left:4px;
+  transition:background .15s;flex:none;line-height:1;}
+.aud-btn-del:hover{background:rgba(255,80,80,0.28);}
 
 /* add audience / format inline form */
 .add-aud-form{display:none;margin-top:14px;padding:16px 18px;background:rgba(5,9,18,0.6);
@@ -199,6 +216,10 @@ img,svg{display:block;max-width:100%;}
 .fmt-chip.recommended{border-color:rgba(209,169,84,0.5);color:#f0d9a2;background:rgba(209,169,84,0.08);}
 .fmt-chip.recommended.selected{border-color:var(--gold);color:var(--ink);background:var(--gold);font-weight:700;}
 .fmt-chip svg{width:12px;height:12px;flex:none;fill:currentColor;}
+.fmt-chip-del{background:rgba(255,80,80,0.1);border:none;color:#ff6b6b;font-size:11px;
+  cursor:pointer;padding:0 3px 0 5px;line-height:1;border-radius:50%;
+  transition:background .15s;flex:none;}
+.fmt-chip-del:hover{background:rgba(255,80,80,0.3);}
 
 /* shared btn-add / btn-remove */
 .btn-add{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;
@@ -326,23 +347,39 @@ img,svg{display:block;max-width:100%;}
   <div class="zone-divider">
     <div class="zone-divider-inner">
       <div class="zone-divider-line"></div>
-      <span class="zone-label">01 — Context &amp; brief</span>
+      <span class="zone-label">01 — Contexte de la demande</span>
       <div class="zone-divider-line right"></div>
     </div>
     <div class="zone-divider-sub"></div>
   </div>
 
-  <!-- 01 PROGRAMME CONTEXT -->
+  <!-- 01 CONTEXTE DE LA DEMANDE -->
   <div class="setup-card">
-    <div class="card-label">01 — Programme context</div>
+    <div class="card-label">01 — Contexte de la demande</div>
     <textarea class="field-textarea" id="ctx-programme"
-      placeholder="Describe the programme or initiative: its goals, current phase, key stakeholders, and any constraints the communication must respect.&#10;&#10;e.g. SHIFT is Pernod Ricard IT's digital transformation programme, currently entering its deployment phase. 12,000 employees across 30 markets will be trained on new tools by end of Q2 2025."
+      placeholder="Décrivez le programme ou l'initiative : ses objectifs, sa phase actuelle, les parties prenantes clés, et les contraintes que la communication doit respecter.&#10;&#10;Ex. : SHIFT est le programme de transformation digitale de Pernod Ricard IT, actuellement en phase de déploiement. 12 000 collaborateurs dans 30 marchés seront formés sur les nouveaux outils d'ici fin T2 2025."
       style="min-height:130px;"></textarea>
-    <label class="file-upload-area" id="fileUploadArea">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-1 7V3.5L18.5 9H13zm-2 9l-3-3h2v-4h2v4h2l-3 3z"/></svg>
-      <span class="file-upload-label"><b>Attach documents</b> — briefs, decks, previous comms (PDF, DOCX, TXT)<input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.txt,.pptx"></span>
-    </label>
-    <div class="file-list" id="fileList"></div>
+    <!-- prompt-style attach bar -->
+    <div class="attach-bar" id="attachBar">
+      <button class="attach-btn" type="button" id="attachMenuBtn" title="Joindre des fichiers" onclick="toggleAttachMenu(event)">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M16.5 6.75v10.17a4.5 4.5 0 0 1-9 0V5.25a3 3 0 0 1 6 0v9.33a1.5 1.5 0 0 1-3 0V6.75h-1.5v7.83a3 3 0 0 0 6 0V5.25a4.5 4.5 0 0 0-9 0v11.67a6 6 0 0 0 12 0V6.75Z"/></svg>
+      </button>
+      <div class="attach-menu" id="attachMenu">
+        <div class="attach-menu-item" onclick="triggerFileInput('fileInput')">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+          Charger des images et fichiers
+        </div>
+        <div class="attach-menu-sep"></div>
+        <div class="attach-menu-item" onclick="triggerFileInput('fileInputCloud')">
+          <svg viewBox="0 0 24 24"><path d="M19.35 10.04A7.49 7.49 0 0 0 12 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 0 0 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
+          Joindre des fichiers cloud
+        </div>
+      </div>
+      <input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.txt,.pptx,.png,.jpg,.jpeg,.gif,.webp" style="display:none;">
+      <input type="file" id="fileInputCloud" multiple accept=".pdf,.doc,.docx,.txt,.pptx" style="display:none;">
+      <span class="attach-hint">Joignez des briefs, présentations ou communications existantes</span>
+    </div>
+    <div class="file-pills" id="fileList"></div>
   </div>
 
   <!-- 02 AUDIENCES -->
@@ -595,9 +632,21 @@ var DEFAULT_AUDS = [
     window.addEventListener('scroll',upd,{passive:true});upd();
   })();
 
-  /* file input */
+  /* file inputs */
   document.getElementById('fileInput').addEventListener('change',function(e){
     Array.from(e.target.files).forEach(addFileItem);e.target.value='';
+  });
+  document.getElementById('fileInputCloud').addEventListener('change',function(e){
+    Array.from(e.target.files).forEach(addFileItem);e.target.value='';
+  });
+
+  /* close attach menu on outside click */
+  document.addEventListener('click',function(e){
+    var menu=document.getElementById('attachMenu');
+    var btn=document.getElementById('attachMenuBtn');
+    if(menu&&menu.classList.contains('open')&&!menu.contains(e.target)&&e.target!==btn){
+      menu.classList.remove('open');
+    }
   });
 
   buildAudButtons();
@@ -613,15 +662,30 @@ var DEFAULT_AUDS = [
 })();
 
 /* ================================================================
-   FILE LIST
+   ATTACH MENU
+   ================================================================ */
+function toggleAttachMenu(e){
+  e.stopPropagation();
+  var menu=document.getElementById('attachMenu');
+  menu.classList.toggle('open');
+}
+
+function triggerFileInput(id){
+  document.getElementById('attachMenu').classList.remove('open');
+  document.getElementById(id).click();
+}
+
+/* ================================================================
+   FILE PILLS
    ================================================================ */
 function addFileItem(file){
   var list=document.getElementById('fileList');
-  var item=document.createElement('div');item.className='file-item';
-  item.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>'
-    +'<span>'+esc(file.name)+'</span>'
-    +'<button class="file-item-remove" title="Remove" onclick="this.closest(\'.file-item\').remove()">&#x2715;</button>';
-  list.appendChild(item);
+  var pill=document.createElement('div');pill.className='file-pill';
+  var ext=file.name.split('.').pop().toUpperCase();
+  pill.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 7V3.5L18.5 9H13zm0 5h-2v-2h2v2zm0 4h-2v-2h2v2z"/></svg>'
+    +'<span title="'+esc(file.name)+'">'+esc(file.name)+'</span>'
+    +'<button class="file-pill-remove" title="Retirer" onclick="this.closest(\'.file-pill\').remove()">&#x2715;</button>';
+  list.appendChild(pill);
 }
 
 /* ================================================================
@@ -630,14 +694,43 @@ function addFileItem(file){
 function buildAudButtons(){
   var cont=document.getElementById('audBtns');cont.innerHTML='';
   var allAuds=DEFAULT_AUDS.concat(customAuds);
-  allAuds.forEach(function(a){
+  allAuds.forEach(function(a,idx){
     var isActive=selAuds.some(function(s){return s.name===a.name;});
+    var isCustom=idx>=DEFAULT_AUDS.length;
     var btn=document.createElement('button');
     btn.type='button';btn.className='aud-btn'+(isActive?' active':'');
     btn.textContent=a.name;
     btn.addEventListener('click',function(){toggleAud(btn,a);});
-    cont.appendChild(btn);
+    if(isCustom){
+      var wrap=document.createElement('span');
+      wrap.className='aud-btn-wrap';
+      wrap.appendChild(btn);
+      var del=document.createElement('button');
+      del.type='button';del.className='aud-btn-del';del.title='Supprimer';
+      del.textContent='×';
+      del.addEventListener('click',function(e){e.stopPropagation();deleteCustomAud(a.name);});
+      wrap.appendChild(del);
+      cont.appendChild(wrap);
+    } else {
+      cont.appendChild(btn);
+    }
   });
+}
+
+function deleteCustomAud(name){
+  /* deselect first if selected */
+  var idx=selAuds.findIndex(function(s){return s.name===name;});
+  if(idx!==-1){
+    var card=document.getElementById('audcard-'+name.replace(/[^a-zA-Z0-9]/g,'-'));
+    if(card)card.remove();
+    selAuds.splice(idx,1);
+    delete audConfigs[name];
+    document.getElementById('zone2Empty').style.display=selAuds.length?'none':'block';
+    lastResults=[];activeTab=null;
+    checkReady();
+  }
+  customAuds=customAuds.filter(function(a){return a.name!==name;});
+  buildAudButtons();
 }
 
 function toggleAddAudForm(){
@@ -791,8 +884,11 @@ function buildAudCardHTML(aud,cfg,reco){
     var f=FORMATS[fid];
     var isR=reco.indexOf(fid)!==-1;
     var isSel=cfg.formats.indexOf(fid)!==-1;
-    fmtHTML+='<span class="fmt-chip'+(isR?' recommended':'')+(isSel?' selected':'')+'" data-fid="'+fid+'" data-aud="'+esc(aud.name)+'">'
-      +(ICONS[fid]||'')+esc(f.label)+'</span>';
+    var isCustomFmt=customFormats.indexOf(fid)!==-1;
+    fmtHTML+='<span class="fmt-chip'+(isR?' recommended':'')+(isSel?' selected':'')+'" data-fid="'+fid+'" data-aud="'+esc(aud.name)+'" style="position:relative;">'
+      +(ICONS[fid]||'')+esc(f.label)
+      +(isCustomFmt?'<button class="fmt-chip-del" type="button" title="Supprimer" data-delfmt="'+fid+'" data-delaud="'+esc(aud.name)+'">×</button>':'')
+      +'</span>';
   });
 
   return ''
@@ -848,13 +944,25 @@ function wireAudCard(card,aud){
 
   /* format chips */
   card.querySelectorAll('.fmt-chip[data-aud]').forEach(function(chip){
-    chip.addEventListener('click',function(){
+    chip.addEventListener('click',function(e){
+      /* ignore clicks on the delete sub-button */
+      if(e.target.classList.contains('fmt-chip-del'))return;
       var cfg=audConfigs[aud.name];if(!cfg)return;
       var fid=chip.dataset.fid;
       var idx=cfg.formats.indexOf(fid);
       if(idx===-1){cfg.formats.push(fid);chip.classList.add('selected');chip.setAttribute('aria-pressed','true');}
       else{cfg.formats.splice(idx,1);chip.classList.remove('selected');chip.setAttribute('aria-pressed','false');}
       checkReady();
+    });
+  });
+
+  /* custom format delete buttons */
+  card.querySelectorAll('.fmt-chip-del').forEach(function(delBtn){
+    delBtn.addEventListener('click',function(e){
+      e.stopPropagation();
+      var fid=delBtn.dataset.delfmt;
+      var audName=delBtn.dataset.delaud;
+      deleteCustomFmt(fid,audName);
     });
   });
 
@@ -869,6 +977,23 @@ function wireAudCard(card,aud){
       card.parentNode.insertBefore(fmtForm,card.nextSibling);
     });
   }
+}
+
+/* ================================================================
+   DELETE CUSTOM FORMAT
+   ================================================================ */
+function deleteCustomFmt(fid,fromAudName){
+  /* remove from FORMATS / ICONS / TPL */
+  delete FORMATS[fid];delete ICONS[fid];delete TPL[fid];
+  customFormats=customFormats.filter(function(id){return id!==fid;});
+  /* remove from all audience configs and refresh cards */
+  selAuds.forEach(function(a){
+    var cfg=audConfigs[a.name];if(!cfg)return;
+    var idx=cfg.formats.indexOf(fid);
+    if(idx!==-1)cfg.formats.splice(idx,1);
+    refreshAudConfigCard(a);
+  });
+  checkReady();
 }
 
 /* ================================================================
