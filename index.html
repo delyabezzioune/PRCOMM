@@ -122,7 +122,8 @@ img,svg{display:block;max-width:100%;}
   cursor:pointer;border:1.5px solid rgba(159,184,221,0.35);color:#9fb8dd;background:rgba(159,184,221,0.06);
   transition:all .2s;}
 .aud-btn:hover{border-color:rgba(52,224,240,0.5);color:#eaf3ff;background:rgba(52,224,240,0.08);}
-.aud-btn.active{border-color:var(--cyan);color:var(--ink);background:var(--cyan);font-weight:700;}
+.aud-btn.active{border-color:var(--cyan);color:var(--cyan);background:rgba(52,224,240,0.14);font-weight:700;}
+.aud-btn.active::after{content:"✓";margin-left:6px;font-size:11px;}
 
 /* add audience inline form */
 .add-aud-form{display:none;margin-top:14px;padding:16px 18px;background:rgba(5,9,18,0.6);
@@ -229,6 +230,20 @@ img,svg{display:block;max-width:100%;}
 .btn-copy.ok{border-color:rgba(0,183,172,0.5);color:var(--teal);}
 .rcard-content{padding:22px 24px;}
 .rcard-text{color:#dbe8fb;font-size:15px;line-height:1.78;white-space:pre-wrap;font-family:var(--sans);}
+.rcard-textarea{width:100%;min-height:200px;background:rgba(5,9,18,0.5);border:1px solid rgba(52,224,240,0.25);
+  border-radius:2px;color:#dbe8fb;font-size:15px;line-height:1.78;font-family:var(--sans);padding:14px 16px;
+  resize:vertical;outline:none;transition:border-color .18s;}
+.rcard-textarea:focus{border-color:rgba(52,224,240,0.5);}
+.rcard-edit-row{display:flex;gap:8px;align-items:center;padding:10px 24px;border-top:1px solid rgba(255,255,255,0.07);background:rgba(5,9,18,0.3);}
+.btn-validate{font-family:var(--mono);font-size:11px;padding:6px 16px;border-radius:2px;
+  border:1px solid rgba(52,224,240,0.5);background:rgba(52,224,240,0.12);color:var(--cyan);
+  cursor:pointer;letter-spacing:.05em;transition:background .18s;}
+.btn-validate:hover{background:rgba(52,224,240,0.22);}
+.btn-validate.saved{border-color:rgba(0,183,172,0.5);color:var(--teal);background:rgba(0,183,172,0.1);}
+.btn-reset{font-family:var(--mono);font-size:11px;padding:6px 12px;border-radius:2px;
+  border:1px solid rgba(255,255,255,0.12);background:transparent;color:#7d97bd;cursor:pointer;transition:color .18s;}
+.btn-reset:hover{color:#eaf3ff;}
+.edit-hint{font-family:var(--mono);font-size:10px;color:#374a5e;letter-spacing:.04em;margin-left:auto;}
 .rcard-why{padding:12px 24px;border-top:1px solid rgba(209,169,84,0.12);background:rgba(209,169,84,0.04);}
 .why-label{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:#7d6030;margin-bottom:4px;}
 .why-text{font-family:var(--serif);font-style:italic;color:#b89040;font-size:13px;line-height:1.55;}
@@ -281,8 +296,8 @@ img,svg{display:block;max-width:100%;}
 
   <!-- 02 AUDIENCE -->
   <div class="setup-card">
-    <div class="card-label">02 &mdash; Target audience</div>
-    <div class="aud-btns" id="audBtns" role="group" aria-label="Select an audience"></div>
+    <div class="card-label">02 &mdash; Target audience <span style="font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:#54677e;font-weight:400;text-transform:uppercase;">&nbsp;— select one or more</span></div>
+    <div class="aud-btns" id="audBtns" role="group" aria-label="Select audiences (multi-select)"></div>
     <button class="btn-add" id="btnShowAddAud" onclick="toggleAddAudForm()">&#xFF0B;&nbsp;Add an audience</button>
     <div class="add-aud-form" id="addAudForm">
       <div>
@@ -458,7 +473,7 @@ var REGISTERS = {
 /* ================================================================
    STATE
    ================================================================ */
-var selAud      = null;
+var selAuds     = [];   /* array of selected audience objects (multi-select) */
 var selFormats  = [];
 var lastResults = [];
 var activeTab   = null;
@@ -520,9 +535,11 @@ var DEFAULT_AUDS = [
     window.addEventListener('scroll',upd,{passive:true});upd();
   })();
 
-  /* tone chips */
+  /* tone chips — also re-run smartReco if audiences already selected */
   document.getElementById('toneGrid').addEventListener('click',function(e){
-    var c=e.target.closest('.chip');if(c)c.classList.toggle('selected');
+    var c=e.target.closest('.chip');
+    if(c){c.classList.toggle('selected');if(selAuds.length>0)renderFormats();}
+    checkReady();
   });
 
   /* file input */
@@ -561,10 +578,11 @@ function buildAudButtons(){
   cont.innerHTML='';
   var allAuds=DEFAULT_AUDS.concat(customAuds);
   allAuds.forEach(function(a){
+    var isActive=selAuds.some(function(s){return s.name===a.name;});
     var btn=document.createElement('button');
-    btn.type='button';btn.className='aud-btn'+(selAud&&selAud.name===a.name?' active':'');
+    btn.type='button';btn.className='aud-btn'+(isActive?' active':'');
     btn.textContent=a.name;
-    btn.addEventListener('click',function(){selectAud(btn,a);});
+    btn.addEventListener('click',function(){toggleAud(btn,a);});
     cont.appendChild(btn);
   });
 }
@@ -580,17 +598,16 @@ function confirmAddAud(){
   var role=document.getElementById('newAudRole').value.trim();
   var what=document.getElementById('newAudWhat').value.trim();
   if(!name)return;
-  customAuds.push({name:name,role:role,what:what});
+  var newAud={name:name,role:role,what:what};
+  customAuds.push(newAud);
   document.getElementById('newAudName').value='';
   document.getElementById('newAudRole').value='';
   document.getElementById('newAudWhat').value='';
   document.getElementById('addAudForm').classList.remove('open');
   buildAudButtons();
-  /* auto-select the new one */
-  var allAuds=DEFAULT_AUDS.concat(customAuds);
-  var newAud=allAuds[allAuds.length-1];
+  /* auto-select the new audience */
   var btns=document.querySelectorAll('.aud-btn');
-  selectAud(btns[btns.length-1],newAud);
+  toggleAud(btns[btns.length-1],newAud);
 }
 
 /* ================================================================
@@ -619,7 +636,7 @@ function confirmAddFmt(){
   document.getElementById('newFmtName').value='';
   document.getElementById('addFmtForm').classList.remove('open');
   /* re-render formats if audience is already selected */
-  if(selAud) renderFormats(selAud, getAudKey(selAud.name));
+  if(selAuds.length>0) renderFormats();
   /* auto-select the new custom format */
   setTimeout(function(){
     var chip=document.querySelector('.fmt-chip[data-fid="'+id+'"]');
@@ -628,7 +645,7 @@ function confirmAddFmt(){
 }
 
 /* ================================================================
-   AUDIENCE SELECTION + FORMATS
+   AUDIENCE TOGGLE + FORMATS
    ================================================================ */
 function getAudKey(name){
   var n=name.toLowerCase()
@@ -646,17 +663,62 @@ function getAudKey(name){
   return null;
 }
 
-function selectAud(btn,aud){
-  document.querySelectorAll('.aud-btn').forEach(function(b){b.classList.remove('active');});
-  btn.classList.add('active');
-  selAud=aud; selFormats=[]; lastResults=[]; activeTab=null;
-  renderFormats(aud,getAudKey(aud.name));
+function toggleAud(btn,aud){
+  var idx=selAuds.findIndex(function(s){return s.name===aud.name;});
+  if(idx===-1){
+    selAuds.push(aud);
+    btn.classList.add('active');
+  } else {
+    selAuds.splice(idx,1);
+    btn.classList.remove('active');
+  }
+  lastResults=[];activeTab=null;
+  if(selAuds.length>0){
+    renderFormats();
+  } else {
+    document.getElementById('formatsSection').style.display='none';
+    selFormats=[];
+  }
   checkReady();
 }
 
-function renderFormats(aud,key){
-  var reco=RECO[key]||['email','newsletter','slack'];
+/* smart format recommendation: union of audience RECO + context signals */
+function smartReco(){
+  var prog=document.getElementById('ctx-programme').value.trim().toLowerCase();
+  var msgs=Array.from(document.querySelectorAll('#msgList .field-input')).map(function(i){return i.value.trim().toLowerCase();}).filter(Boolean).join(' ');
+  var tones=Array.from(document.querySelectorAll('#toneGrid .chip.selected')).map(function(c){return c.dataset.tone;});
+  var combined=(prog+' '+msgs).toLowerCase();
+
+  /* start from union of all selected audiences' RECO */
+  var recoSet={};
+  selAuds.forEach(function(a){
+    var key=getAudKey(a.name)||'';
+    var r=RECO[key]||['email','newsletter','slack'];
+    r.forEach(function(id){recoSet[id]=true;});
+  });
+
+  /* context signals: add formats based on keywords */
+  if(/urgent|asap|immediate|deadline|crisis|alert/i.test(combined)){recoSet['slack']=true;recoSet['email']=true;}
+  if(/strateg|vision|roadmap|transform|milestone|launch/i.test(combined)){recoSet['presentation']=true;recoSet['speech']=true;}
+  if(/all staff|entire company|everyone|whole organisation|company.wide/i.test(combined)){recoSet['newsletter']=true;recoSet['video']=true;}
+  if(/media|press|journalist|external|public/i.test(combined)){recoSet['pressrelease']=true;recoSet['linkedin']=true;}
+  if(/team meeting|townhall|all.hands|event/i.test(combined)){recoSet['speech']=true;recoSet['presentation']=true;}
+  if(/update|inform|announcement|news/i.test(combined)){recoSet['email']=true;recoSet['newsletter']=true;}
+
+  /* tone signals */
+  if(tones.indexOf('urgent')!==-1){recoSet['slack']=true;recoSet['email']=true;}
+  if(tones.indexOf('inspirational')!==-1||tones.indexOf('authoritative')!==-1){recoSet['speech']=true;recoSet['video']=true;}
+  if(tones.indexOf('formal')!==-1||tones.indexOf('executive')!==-1){recoSet['email']=true;recoSet['presentation']=true;}
+  if(tones.indexOf('educational')!==-1){recoSet['newsletter']=true;recoSet['presentation']=true;}
+  if(tones.indexOf('friendly')!==-1||tones.indexOf('collaborative')!==-1){recoSet['slack']=true;recoSet['video']=true;}
+
+  return Object.keys(recoSet);
+}
+
+function renderFormats(){
+  var reco=smartReco();
   var avail=Object.keys(FORMATS);
+  var prevSelected=selFormats.slice(); /* preserve user's manual selections across re-renders */
 
   var grid=document.getElementById('fmtGrid');grid.innerHTML='';
   selFormats=[];
@@ -664,12 +726,14 @@ function renderFormats(aud,key){
   avail.forEach(function(fid){
     var f=FORMATS[fid];if(!f)return;
     var isR=reco.indexOf(fid)!==-1;
-    if(isR)selFormats.push(fid);
+    /* keep selected if previously chosen by user, or if newly recommended */
+    var isSel=isR||(prevSelected.indexOf(fid)!==-1);
+    if(isSel)selFormats.push(fid);
     var chip=document.createElement('span');
-    chip.className='fmt-chip'+(isR?' recommended selected':'');
+    chip.className='fmt-chip'+(isR?' recommended':'')+(isSel?' selected':'');
     chip.dataset.fid=fid;
     chip.setAttribute('role','button');
-    chip.setAttribute('aria-pressed',isR?'true':'false');
+    chip.setAttribute('aria-pressed',isSel?'true':'false');
     chip.innerHTML=(ICONS[fid]||'')+esc(f.label);
     chip.addEventListener('click',function(){
       chip.classList.toggle('selected');
@@ -681,7 +745,8 @@ function renderFormats(aud,key){
   });
 
   var recoLabels=reco.filter(function(id){return FORMATS[id];}).map(function(id){return FORMATS[id].label;});
-  document.getElementById('recoHint').innerHTML='<b>Suggested:</b> '+recoLabels.join(', ');
+  var audNames=selAuds.map(function(a){return a.name;}).join(', ');
+  document.getElementById('recoHint').innerHTML='<b>Suggested for '+esc(audNames)+':</b> '+recoLabels.join(', ');
   document.getElementById('formatsSection').style.display='block';
   checkReady();
 }
@@ -689,11 +754,11 @@ function renderFormats(aud,key){
 function checkReady(){
   var hasProg=document.getElementById('ctx-programme').value.trim().length>0;
   var hasMsgs=Array.from(document.querySelectorAll('#msgList .field-input')).some(function(i){return i.value.trim();});
-  document.getElementById('btnGen').disabled=!(hasProg&&hasMsgs&&selAud&&selFormats.length>0);
+  document.getElementById('btnGen').disabled=!(hasProg&&hasMsgs&&selAuds.length>0&&selFormats.length>0);
 }
 
-document.getElementById('ctx-programme').addEventListener('input',checkReady);
-document.getElementById('msgList').addEventListener('input',checkReady);
+document.getElementById('ctx-programme').addEventListener('input',function(){if(selAuds.length>0)renderFormats();else checkReady();});
+document.getElementById('msgList').addEventListener('input',function(){if(selAuds.length>0)renderFormats();else checkReady();});
 
 /* ================================================================
    KEY MESSAGES
@@ -711,11 +776,13 @@ function addMessage(){
 /* ================================================================
    CONTEXT BUILDER
    ================================================================ */
-function buildCtx(){
+/* buildCtx now accepts an explicit audience object (for multi-audience generation).
+   Falls back to first selected audience if none passed. */
+function buildCtx(aud){
   var prog = document.getElementById('ctx-programme').value.trim()||'our programme';
   var msgs = Array.from(document.querySelectorAll('#msgList .field-input')).map(function(i){return i.value.trim();}).filter(Boolean);
   var tones= Array.from(document.querySelectorAll('#toneGrid .chip.selected')).map(function(c){return c.dataset.tone;});
-  var aud  = selAud;
+  if(!aud) aud=selAuds[0];
 
   var key1 = msgs.length?msgs[0]:'This programme is a real opportunity for transformation.';
   var key2 = msgs.length>1?msgs[1]:'';
@@ -724,7 +791,6 @@ function buildCtx(){
   var mobilisateur  =tones.indexOf('inspirational')!==-1||tones.indexOf('persuasive')!==-1||tones.indexOf('assertive')!==-1||tones.indexOf('collaborative')!==-1;
   var narratif      =tones.indexOf('empathetic')!==-1||tones.indexOf('friendly')!==-1||tones.indexOf('reassuring')!==-1||tones.indexOf('diplomatic')!==-1;
   var direct        =tones.indexOf('concise')!==-1||tones.indexOf('urgent')!==-1||tones.indexOf('professional')!==-1;
-  var inspirant     =tones.indexOf('inspirational')!==-1;
 
   var audKey=getAudKey(aud.name)||'';
   var angle =ANGLES[audKey]||'';
@@ -782,16 +848,17 @@ function buildCtx(){
   var hashtags='#Transformation #'+progWords.map(function(w){return w.charAt(0).toUpperCase()+w.slice(1);}).join('')+' #Innovation';
 
   var points=[];
-  if(aud.what) points.push('Addresses your priorities around '+aud.what);
+  if(aud.what) points.push('Addresses priorities around '+aud.what);
   if(key2)     points.push(key2);
   else         points.push('Timeline and next steps will be communicated shortly');
   points.push('Your feedback is welcome and valued');
 
   return{
     msg:sujet, prog:prog, sujet:sujet,
-    intro,corps,accroche_fin,hook,video_corps,video_close,court,accroche,
-    cta:'Learn more and get involved', hashtags,
-    points, conclusion:'For any questions, contact the programme team. Thank you for your engagement.',
+    intro:intro,corps:corps,accroche_fin:accroche_fin,hook:hook,video_corps:video_corps,
+    video_close:video_close,court:court,accroche:accroche,
+    cta:'Learn more and get involved', hashtags:hashtags,
+    points:points, conclusion:'For any questions, contact the programme team. Thank you for your engagement.',
     citation:key1.replace(/\.$/,''), formal:formel,
     audAngle:angle, audRegister:regist,
     audName:aud.name, audWhat:aud.what||'', audRole:aud.role||'', key1:key1, key2:key2,
@@ -883,8 +950,7 @@ var TPL = {
    GENERATION
    ================================================================ */
 function generate(){
-  if(!selAud||!selFormats.length)return;
-  var ctx=buildCtx();
+  if(!selAuds.length||!selFormats.length)return;
 
   document.getElementById('emptyState').style.display='none';
   document.getElementById('resultsTitle').textContent='';
@@ -895,20 +961,26 @@ function generate(){
   var tabBar=document.getElementById('rtabBar');
   var panel=document.getElementById('rtabPanel');
   tabBar.style.display='none';tabBar.innerHTML='';
-  panel.style.display='block';panel.innerHTML='';
+  panel.style.display='block';
   panel.innerHTML='<div class="skel-card"><div class="skel sh sw40"></div><div class="skel sh sw90"></div><div class="skel sh sw75"></div><div class="skel sh sw55"></div></div>';
 
-  /* scroll to results */
   setTimeout(function(){document.getElementById('resultsSection').scrollIntoView({behavior:'smooth',block:'start'});},100);
 
   setTimeout(function(){
-    selFormats.forEach(function(fid){
-      var f=FORMATS[fid];if(!f)return;
-      lastResults.push({fid:fid,label:f.label,content:TPL[fid]?TPL[fid](ctx):(TPL.email(ctx)),why:buildWhy(fid,ctx)});
+    /* Generate one tab per format × audience combination */
+    selAuds.forEach(function(aud){
+      var ctx=buildCtx(aud);
+      selFormats.forEach(function(fid){
+        var f=FORMATS[fid];if(!f)return;
+        var content=TPL[fid]?TPL[fid](ctx):TPL.email(ctx);
+        var label=(selAuds.length>1?aud.name+' — ':'')+f.label;
+        lastResults.push({fid:fid,label:label,originalContent:content,content:content,why:buildWhy(fid,ctx),audName:aud.name});
+      });
     });
 
-    document.getElementById('resultsTitle').textContent=lastResults.length+' variation'+(lastResults.length>1?'s':'')+' — "'+selAud.name+'"';
-    document.getElementById('resultsSubtitle').textContent='Same message, '+lastResults.length+' different format'+(lastResults.length>1?'s':'');
+    var audNames=selAuds.map(function(a){return a.name;}).join(', ');
+    document.getElementById('resultsTitle').textContent=lastResults.length+' variation'+(lastResults.length>1?'s':'')+' — '+audNames;
+    document.getElementById('resultsSubtitle').textContent=selAuds.length+' audience'+(selAuds.length>1?'s':'')+' × '+selFormats.length+' format'+(selFormats.length>1?'s':'');
     document.getElementById('btnExport').classList.add('visible');
 
     tabBar.innerHTML='';
@@ -917,7 +989,11 @@ function generate(){
       btn.type='button';btn.className='rtab-btn'+(i===0?' active':'');
       btn.setAttribute('role','tab');btn.setAttribute('aria-selected',i===0?'true':'false');
       btn.dataset.idx=i;
-      btn.innerHTML=(ICONS[r.fid]||'')+esc(r.label);
+      /* tab label: show audience badge if multi-audience */
+      var tabLabel=selAuds.length>1
+        ?'<span style="opacity:.6;font-size:10px;margin-right:4px;">'+esc(r.audName)+'</span>'+(ICONS[r.fid]||'')+esc(FORMATS[r.fid]?FORMATS[r.fid].label:r.fid)
+        :(ICONS[r.fid]||'')+esc(FORMATS[r.fid]?FORMATS[r.fid].label:r.fid);
+      btn.innerHTML=tabLabel;
       btn.addEventListener('click',function(){switchTab(i);});
       tabBar.appendChild(btn);
     });
@@ -940,13 +1016,45 @@ function renderPanel(i){
   var panel=document.getElementById('rtabPanel');
   panel.style.opacity='0';
   setTimeout(function(){
+    var fmtLabel=FORMATS[r.fid]?FORMATS[r.fid].label:r.fid;
+    var headLabel=(selAuds.length>1?'<span style="color:#7d97bd;font-weight:400;font-size:12px;">'+esc(r.audName)+' — </span>':'')+esc(fmtLabel);
+    var isEdited=r.content!==r.originalContent;
     panel.innerHTML=
       '<div class="rcard-head">'
-        +'<div class="rcard-left"><span class="rcard-icon">'+(ICONS[r.fid]||'')+'</span><span class="rcard-name">'+esc(r.label)+'</span></div>'
-        +'<div class="rcard-actions"><button class="btn-copy" type="button" id="btnCopyActive">Copy</button></div>'
+        +'<div class="rcard-left"><span class="rcard-icon">'+(ICONS[r.fid]||'')+'</span><span class="rcard-name">'+headLabel+'</span></div>'
+        +'<div class="rcard-actions">'
+          +(isEdited?'<span style="font-family:var(--mono);font-size:10px;color:var(--teal);letter-spacing:.05em;">Edited</span>':'')
+          +'<button class="btn-copy" type="button" id="btnCopyActive">Copy</button>'
+        +'</div>'
       +'</div>'
-      +'<div class="rcard-content"><div class="rcard-text">'+esc(r.content)+'</div></div>'
+      +'<div class="rcard-content"><textarea class="rcard-textarea" id="rcardTextarea" spellcheck="true">'+esc(r.content)+'</textarea></div>'
+      +'<div class="rcard-edit-row">'
+        +'<button class="btn-validate'+(isEdited?' saved':'')+'" id="btnValidate">'+(isEdited?'✓ Validated':'Validate')+'</button>'
+        +(isEdited?'<button class="btn-reset" id="btnReset">Reset to original</button>':'')
+        +'<span class="edit-hint">Edit directly above, then validate to save</span>'
+      +'</div>'
       +'<div class="rcard-why"><div class="why-label">What makes this the right call</div><div class="why-text">'+esc(r.why)+'</div></div>';
+
+    var ta=document.getElementById('rcardTextarea');
+    /* sync edits live into lastResults */
+    ta.addEventListener('input',function(){r.content=ta.value;});
+
+    document.getElementById('btnValidate').addEventListener('click',function(){
+      r.content=ta.value;
+      var btn=this;
+      btn.textContent='✓ Validated';btn.classList.add('saved');
+      /* re-render to show Edited badge + Reset button */
+      renderPanel(i);
+    });
+
+    var resetBtn=document.getElementById('btnReset');
+    if(resetBtn){
+      resetBtn.addEventListener('click',function(){
+        r.content=r.originalContent;
+        renderPanel(i);
+      });
+    }
+
     document.getElementById('btnCopyActive').addEventListener('click',function(){copyText(r.content,this);});
     panel.style.display='block';panel.style.transition='opacity .28s ease';panel.style.opacity='1';
   },60);
@@ -965,8 +1073,12 @@ function fbCopy(text){var ta=document.createElement('textarea');ta.value=text;ta
 function exportAll(){
   if(!lastResults.length)return;
   var prog=document.getElementById('ctx-programme').value.trim();
-  var lines=['PRCOMM — Content Export','Programme: '+prog,'Audience: '+(selAud?selAud.name:''),'','='.repeat(62)];
-  lastResults.forEach(function(r){lines.push('','[ '+r.label.toUpperCase()+' ]','-'.repeat(42),r.content,'');});
+  var audNames=selAuds.map(function(a){return a.name;}).join(', ');
+  var lines=['PRCOMM — Internal Communication Export','Programme: '+prog,'Audience(s): '+audNames,'','='.repeat(62)];
+  lastResults.forEach(function(r){
+    var edited=r.content!==r.originalContent?' [EDITED]':'';
+    lines.push('','[ '+r.label.toUpperCase()+edited+' ]','-'.repeat(42),r.content,'');
+  });
   var blob=new Blob([lines.join('\n')],{type:'text/plain;charset=utf-8'});
   var url=URL.createObjectURL(blob);
   var a=document.createElement('a');a.href=url;a.download='prcomm-export.txt';a.click();
