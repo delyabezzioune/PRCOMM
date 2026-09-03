@@ -1318,18 +1318,12 @@ function renderPanel(audName,i){
   setTimeout(function(){
     var isEdited=r.content!==r.originalContent;
     panel.innerHTML=
-      '<div class="rcard-head">'
-        +'<div class="rcard-left"><span class="rcard-icon">'+(ICONS[r.fid]||'')+'</span><span class="rcard-name">'+esc(r.label)+'</span></div>'
-        +'<div class="rcard-actions">'
-          +(isEdited?'<span style="font-family:var(--mono);font-size:10px;color:var(--teal);letter-spacing:.05em;">Edited</span>':'')
-          +'<button class="btn-copy" type="button" id="btnCopyActive">Copy</button>'
-        +'</div>'
-      +'</div>'
-      +'<div class="rcard-content"><textarea class="rcard-textarea" id="rcardTextarea" spellcheck="true">'+esc(r.content)+'</textarea></div>'
+      '<div class="rcard-content"><textarea class="rcard-textarea" id="rcardTextarea" spellcheck="true">'+esc(r.content)+'</textarea></div>'
       +'<div class="rcard-edit-row">'
         +'<button class="btn-validate'+(isEdited?' saved':'')+'" id="btnValidate">'+(isEdited?'✓ Validated':'Validate')+'</button>'
         +(isEdited?'<button class="btn-reset" id="btnReset">Reset to original</button>':'')
-        +'<span class="edit-hint">Edit directly above, then validate to save</span>'
+        +(isEdited?'<span class="edited-badge" style="font-family:var(--mono);font-size:10px;color:var(--teal);letter-spacing:.05em;">Edited</span>':'')
+        +'<button class="btn-copy" type="button" id="btnCopyActive" style="margin-left:auto;">Copy</button>'
       +'</div>'
       ;
 
@@ -1344,17 +1338,16 @@ function renderPanel(audName,i){
       r.content=ta.value;
       /* visual feedback in-place — no full re-render */
       this.textContent='✓ Saved';this.classList.add('saved');
-      /* show Edited badge in header if not already there */
-      var acts=document.querySelector('.rcard-actions');
-      if(acts&&!acts.querySelector('.edited-badge')){
+      /* show Edited badge in edit row if not already there */
+      var editRow=document.querySelector('.rcard-edit-row');
+      if(editRow&&!editRow.querySelector('.edited-badge')){
         var badge=document.createElement('span');
         badge.className='edited-badge';
         badge.style.cssText='font-family:var(--mono);font-size:10px;color:var(--teal);letter-spacing:.05em;';
         badge.textContent='Edited';
-        acts.insertBefore(badge,acts.firstChild);
+        editRow.insertBefore(badge,editRow.children[2]||null);
       }
       /* show reset button if not already there */
-      var editRow=document.querySelector('.rcard-edit-row');
       if(editRow&&!document.getElementById('btnReset')){
         var rb=document.createElement('button');
         rb.id='btnReset';rb.className='btn-reset';rb.textContent='Reset to original';
