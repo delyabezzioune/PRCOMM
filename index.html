@@ -1331,7 +1331,7 @@ function renderPanel(audName,i){
         +(isEdited?'<button class="btn-reset" id="btnReset">Reset to original</button>':'')
         +'<span class="edit-hint">Edit directly above, then validate to save</span>'
       +'</div>'
-      +'<div class="rcard-why"><div class="why-label">What makes this the right call</div><div class="why-text">'+esc(r.why)+'</div></div>';
+      ;
 
     var ta=document.getElementById('rcardTextarea');
     ta.addEventListener('input',function(){
