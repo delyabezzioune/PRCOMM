@@ -120,9 +120,9 @@ a{color:inherit;text-decoration:none;}
   color:#7d97bd;margin-bottom:12px;}
 .formats-section-label b{color:var(--gold);}
 
-/* format chips — simple toggleable */
+/* format chips — SVG icon + toggleable */
 .fmt-grid{display:flex;flex-wrap:wrap;gap:8px;}
-.fmt-chip{display:inline-flex;align-items:center;gap:7px;
+.fmt-chip{display:inline-flex;align-items:center;gap:8px;
   font-family:var(--mono);font-size:12px;letter-spacing:.03em;
   padding:7px 14px;border-radius:999px;cursor:pointer;user-select:none;
   border:1.5px solid rgba(159,184,221,0.3);color:#9fb8dd;background:rgba(159,184,221,0.05);
@@ -131,7 +131,7 @@ a{color:inherit;text-decoration:none;}
 .fmt-chip.selected{border-color:var(--cyan);color:var(--ink);background:var(--cyan);font-weight:700;}
 .fmt-chip.recommended{border-color:rgba(209,169,84,0.5);color:#f0d9a2;background:rgba(209,169,84,0.08);}
 .fmt-chip.recommended.selected{border-color:var(--gold);color:var(--ink);background:var(--gold);font-weight:700;}
-.fmt-chip-icon{font-size:13px;}
+.fmt-chip svg{width:13px;height:13px;flex:none;fill:currentColor;}
 
 /* generate button */
 .btn-gen{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;
@@ -149,9 +149,9 @@ a{color:inherit;text-decoration:none;}
   flex:none;animation:pulse 2s ease-in-out infinite;}
 @keyframes pulse{0%,100%{opacity:.5;transform:scale(1);}50%{opacity:1;transform:scale(1.45);}}
 
-/* results */
+/* ---- RESULTS TABS ---- */
 .results{margin-top:36px;}
-.results-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;}
+.results-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
 .results-title{font-size:15px;color:#fff;font-weight:600;}
 .results-subtitle{font-family:var(--mono);font-size:11px;color:#7d97bd;margin-top:1px;}
 .btn-export{font-family:var(--mono);font-size:11px;padding:6px 16px;border-radius:2px;
@@ -160,17 +160,33 @@ a{color:inherit;text-decoration:none;}
 .btn-export.visible{display:inline-flex;align-items:center;gap:6px;}
 .btn-export:hover{background:rgba(209,169,84,0.18);color:var(--gold);}
 .results-empty{text-align:center;padding:64px 20px;font-family:var(--mono);font-size:13px;color:#54677e;letter-spacing:.06em;}
-.results-empty .ico{font-size:34px;display:block;margin-bottom:14px;opacity:.3;}
-.result-cards{display:flex;flex-direction:column;gap:28px;}
+.results-empty .ico{display:block;margin:0 auto 14px;opacity:.25;width:32px;height:32px;}
 
-/* result card */
-.rcard{background:rgba(6,14,28,0.7);border:1px solid rgba(255,255,255,0.1);
-  clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,0 100%);overflow:hidden;transition:border-color .3s;}
-.rcard:hover{border-color:rgba(52,224,240,0.22);}
+/* Tab bar — one button per format */
+.rtab-bar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:0;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:0;}
+.rtab-btn{display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:12px;letter-spacing:.04em;
+  padding:9px 16px 10px;border-radius:2px 2px 0 0;cursor:pointer;user-select:none;
+  border:1px solid transparent;border-bottom:none;
+  color:#7d97bd;background:transparent;
+  transition:color .18s,background .18s,border-color .18s;
+  position:relative;bottom:-1px;}
+.rtab-btn svg{width:13px;height:13px;flex:none;fill:currentColor;}
+.rtab-btn:hover{color:#eaf3ff;background:rgba(255,255,255,0.04);}
+.rtab-btn.active{color:var(--cyan);background:rgba(52,224,240,0.07);
+  border-color:rgba(52,224,240,0.28);border-bottom-color:transparent;}
+.rtab-btn.active svg{opacity:1;}
+
+/* Single panel — shows content of selected tab */
+.rtab-panel{background:rgba(6,14,28,0.7);border:1px solid rgba(255,255,255,0.1);
+  border-top-left-radius:0;
+  clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,0 100%);
+  overflow:hidden;}
 .rcard-head{display:flex;align-items:center;justify-content:space-between;
   padding:13px 20px;border-bottom:1px solid rgba(255,255,255,0.07);background:rgba(5,9,18,0.5);}
 .rcard-left{display:flex;align-items:center;gap:9px;}
-.rcard-icon{font-size:17px;}
+.rcard-icon{display:flex;align-items:center;opacity:.85;}
+.rcard-icon svg{width:16px;height:16px;fill:#9fb8dd;}
 .rcard-name{font-weight:700;color:#fff;font-size:14px;}
 .rcard-actions{display:flex;gap:8px;align-items:center;}
 .btn-copy{font-family:var(--mono);font-size:11px;padding:5px 14px;border-radius:2px;
@@ -178,11 +194,11 @@ a{color:inherit;text-decoration:none;}
   color:#9fb8dd;cursor:pointer;transition:background .18s,color .18s;}
 .btn-copy:hover{background:rgba(255,255,255,0.1);color:#fff;}
 .btn-copy.ok{border-color:rgba(0,183,172,0.5);color:var(--teal);}
-.rcard-content{padding:20px 22px;}
+.rcard-content{padding:22px 24px;}
 .rcard-text{color:#dbe8fb;font-size:15px;line-height:1.78;white-space:pre-wrap;font-family:var(--sans);}
-.rcard-why{padding:10px 22px;border-top:1px solid rgba(209,169,84,0.12);
-  background:rgba(209,169,84,0.04);}
-.why-text{font-family:var(--serif);font-style:italic;color:#b89040;font-size:12.5px;line-height:1.5;}
+.rcard-why{padding:12px 24px;border-top:1px solid rgba(209,169,84,0.12);background:rgba(209,169,84,0.04);}
+.why-label{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:#7d6030;margin-bottom:4px;}
+.why-text{font-family:var(--serif);font-style:italic;color:#b89040;font-size:13px;line-height:1.55;}
 
 /* skeleton */
 .skel-card{background:rgba(6,14,28,0.6);border:1px solid rgba(255,255,255,0.07);
@@ -226,7 +242,7 @@ a{color:inherit;text-decoration:none;}
     <p>One message, one audience — the agent generates all formats ready to publish.</p>
   </div>
 
-  <!-- CONTEXT BANNER — filled from localStorage -->
+  <!-- CONTEXT BANNER -->
   <div class="ctx-banner" id="ctxBanner" style="display:none;">
     <div class="ctx-banner-dot"></div>
     <div class="ctx-banner-text">
@@ -259,7 +275,7 @@ a{color:inherit;text-decoration:none;}
     Generate content variations
   </button>
 
-  <!-- RESULTS -->
+  <!-- RESULTS — tab bar + single panel -->
   <div class="results" id="stop3">
     <div class="results-header">
       <div>
@@ -269,99 +285,44 @@ a{color:inherit;text-decoration:none;}
       <button class="btn-export" id="btnExport">&#8593;&nbsp;Export all</button>
     </div>
     <div class="results-empty" id="emptyState">
-      <span class="ico" aria-hidden="true">✦</span>
+      <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
       Write your message, pick an audience and generate
     </div>
-    <div class="result-cards" id="resultCards" aria-live="polite"></div>
+    <!-- Tab buttons injected here by JS -->
+    <div id="rtabBar" class="rtab-bar" style="display:none;" role="tablist"></div>
+    <!-- Single content panel -->
+    <div id="rtabPanel" class="rtab-panel" style="display:none;" role="tabpanel"></div>
   </div>
 
 </div><!-- /page-wrap -->
 
 <script>
 /* ================================================================
+   SVG ICONS — inline, no emojis
+   ================================================================ */
+var ICONS = {
+  email:        '<svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>',
+  linkedin:     '<svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H6.5v-7H9v7zM7.7 8.7c-.8 0-1.4-.6-1.4-1.4s.6-1.4 1.4-1.4 1.4.6 1.4 1.4-.6 1.4-1.4 1.4zM18 17h-2.4v-3.6c0-.9-.7-1.6-1.6-1.6s-1.6.7-1.6 1.6V17H10v-7h2.3v1c.5-.8 1.4-1.3 2.4-1.3 1.8 0 3.3 1.5 3.3 3.3V17z"/></svg>',
+  video:        '<svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>',
+  intranet:     '<svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>',
+  slack:        '<svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>',
+  presentation: '<svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>',
+  communique:   '<svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-1 14H5c-.55 0-1-.45-1-1V7l8 5 8-5v10c0 .55-.45 1-1 1z"/></svg>',
+  discours:     '<svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 3.19-9 7.12 0 2.4 1.42 4.54 3.64 5.9L6 19l3.44-1.72C10.27 17.43 11.12 17.5 12 17.5c4.97 0 9-3.19 9-7.12C21 6.19 16.97 3 12 3zm1 10H8V11h5v2zm3-3H8V8h8v2z"/></svg>'
+};
+
+/* ================================================================
    FORMAT METADATA
    ================================================================ */
 var FORMATS = {
-  email: {
-    label:'Email',
-    icon:'✉',
-    badge:'cyan',
-    desc:'Structured message, archivable',
-    length:'M',
-    specs:{ length:'200–400 words', register:'Formal to neutral', distribution:'1:1 or mailing list' },
-    why:"Email is the go-to channel for official communications: it is archivable, expected, and allows a well-structured argument. Ideal for decision-makers and any communication that needs a paper trail.",
-    diffs:['Clear subject line', 'Formal salutation', 'Structured body', 'Signature']
-  },
-  linkedin: {
-    label:'LinkedIn',
-    icon:'💼',
-    badge:'blue',
-    desc:'Public post, external engagement',
-    length:'S',
-    specs:{ length:'80–150 words', register:'Dynamic, accessible', distribution:'Extended network' },
-    why:"LinkedIn maximises institutional visibility. A punchy opening line, frequent line breaks, and hashtags are the non-negotiable codes to drive engagement.",
-    diffs:['Punchy hook', 'Frequent line breaks', 'Hashtags', 'Clickable CTA']
-  },
-  video: {
-    label:'Video script',
-    icon:'🎬',
-    badge:'gold',
-    desc:'On-camera script, personal delivery',
-    length:'M',
-    specs:{ length:'1–2 min (≈150 words)', register:'Oral, direct, sincere', distribution:'Internal & external' },
-    why:"Video creates an emotional connection that written content simply cannot match. The script structures each take so every shot delivers a clear message — hook, development, call to action.",
-    diffs:['Shot-by-shot structure', 'Conversational register', 'Rhetorical questions', 'Simulated eye contact']
-  },
-  intranet: {
-    label:'Intranet / Newsletter',
-    icon:'📰',
-    badge:'teal',
-    desc:'Structured article, broad distribution',
-    length:'L',
-    specs:{ length:'300–600 words', register:'Informative, educational', distribution:'All employees' },
-    why:"The intranet is the reference channel for wide-reach communications. The article format allows depth: context, concrete impact, next steps — with headings and bullet lists for easy scanning.",
-    diffs:['H1 title', 'Sub-headings', 'Bullet lists', 'Optional FAQ section']
-  },
-  slack: {
-    label:'Slack / Teams',
-    icon:'💬',
-    badge:'muted',
-    desc:'Instant message, short and direct',
-    length:'S',
-    specs:{ length:'30–60 words', register:'Informal, reactive', distribution:'Team, dedicated channel' },
-    why:"Slack/Teams is all about immediacy. The message must be scannable in 5 seconds: a signal emoji, one key sentence, a link or a CTA. No pleasantries — straight to the point.",
-    diffs:['Signal emojis', 'Very short', 'Direct link', 'Casual tone']
-  },
-  presentation: {
-    label:'Presentation',
-    icon:'📊',
-    badge:'blue',
-    desc:'Slide-by-slide structure for meetings',
-    length:'L',
-    specs:{ length:'4–6 slides', register:'Concise, visual', distribution:'Meeting, executive committee' },
-    why:"Presentations address decision-makers who expect visual synthesis. Each slide = one idea. The narrative logic — context → stakes → benefits → next steps — guides conviction.",
-    diffs:['Slide structure', 'Action titles', 'Synthetic bullets', 'Closing slide']
-  },
-  communique: {
-    label:'Press release',
-    icon:'📡',
-    badge:'gold',
-    desc:'Journalistic format, external distribution',
-    length:'M',
-    specs:{ length:'250–400 words', register:'Factual, journalistic', distribution:'Media, partners' },
-    why:"A press release follows journalism codes: a factual lead, hard numbers, an official quote, and contact details. It must be usable as-is by a journalist.",
-    diffs:['Factual lead', 'Key figures', 'Official quote', 'Press contact']
-  },
-  discours: {
-    label:'Speech / Address',
-    icon:'🎤',
-    badge:'cyan',
-    desc:'Oral delivery, high-impact moment',
-    length:'L',
-    specs:{ length:'3–5 min (≈450 words)', register:'Solemn, inspiring', distribution:'Event, all-hands' },
-    why:"A speech turns information into a memorable moment. The introduction frames the stakes, the body persuades, the close mobilises. The register is elevated and more solemn than other formats.",
-    diffs:['Solemn opening', 'Rhetorical devices', 'Collective call', 'Memorable close']
-  }
+  email:        { label:'Email',               desc:'Structured, archivable' },
+  linkedin:     { label:'LinkedIn',            desc:'Public post, network reach' },
+  video:        { label:'Video script',        desc:'On-camera, personal delivery' },
+  intranet:     { label:'Intranet / Newsletter', desc:'Article, broad distribution' },
+  slack:        { label:'Slack / Teams',       desc:'Instant, short & direct' },
+  presentation: { label:'Presentation',        desc:'Slides for meetings' },
+  communique:   { label:'Press release',       desc:'Journalistic, external' },
+  discours:     { label:'Speech / Address',    desc:'Oral, high-impact moment' }
 };
 
 /* Recommended formats by audience profile */
@@ -379,7 +340,6 @@ var RECO = {
   'rh'           :['intranet','email','slack']
 };
 
-/* Communication angle by audience profile */
 var ANGLES = {
   'direction'    :'Business impact & long-term vision',
   'codir'        :'Decisions to make, strategic stakes',
@@ -414,7 +374,8 @@ var REGISTERS = {
 var setup       = null;
 var selAud      = null;
 var selFormats  = [];
-var lastResults = [];
+var lastResults = [];   /* [{fid, label, content, why}] */
+var activeTab   = null;
 
 /* ================================================================
    INIT
@@ -526,7 +487,6 @@ function getAudKey(name){
     .replace(/[éèêë]/g,'e').replace(/[àâä]/g,'a').replace(/[îï]/g,'i').replace(/[ôö]/g,'o').replace(/[ùûü]/g,'u')
     .replace(/[^a-z]/g,'');
   for(var k in RECO){if(n.indexOf(k)!==-1)return k;}
-  /* English label aliases */
   if(n.indexOf('executive')!==-1||n.indexOf('committee')!==-1)return'comite';
   if(n.indexOf('manager')!==-1)return'manager';
   if(n.indexOf('employee')!==-1||n.indexOf('staff')!==-1)return'collaborateur';
@@ -541,7 +501,7 @@ function getAudKey(name){
 function selectAud(btn,aud){
   document.querySelectorAll('.aud-btn').forEach(function(b){b.classList.remove('active');});
   btn.classList.add('active');
-  selAud=aud; selFormats=[]; lastResults=[];
+  selAud=aud; selFormats=[]; lastResults=[]; activeTab=null;
   renderFormats(aud,getAudKey(aud.name));
   checkReady();
 }
@@ -563,7 +523,7 @@ function renderFormats(aud,key){
     chip.dataset.fid=fid;
     chip.setAttribute('role','button');
     chip.setAttribute('aria-pressed',isR?'true':'false');
-    chip.innerHTML='<span class="fmt-chip-icon" aria-hidden="true">'+f.icon+'</span>'+esc(f.label);
+    chip.innerHTML=(ICONS[fid]||'')+esc(f.label);
 
     chip.addEventListener('click',function(){
       chip.classList.toggle('selected');
@@ -588,44 +548,6 @@ function checkReady(){
 }
 
 /* ================================================================
-   GENERATION — same message, adapted per format
-   ================================================================ */
-function generate(){
-  if(!selAud||!selFormats.length)return;
-  var message=document.getElementById('inputMessage').value.trim()||'Programme update';
-
-  document.getElementById('emptyState').style.display='none';
-  document.getElementById('resultsTitle').textContent='';
-  document.getElementById('resultsSubtitle').textContent='';
-  document.getElementById('btnExport').classList.remove('visible');
-  lastResults=[];
-
-  var rc=document.getElementById('resultCards');rc.innerHTML='';
-  selFormats.forEach(function(){
-    var sk=document.createElement('div');sk.className='skel-card';
-    sk.innerHTML='<div class="skel sh sw40"></div><div class="skel sh sw90"></div><div class="skel sh sw75"></div><div class="skel sh sw55"></div>';
-    rc.appendChild(sk);
-  });
-
-  var delay=600+selFormats.length*100;
-  setTimeout(function(){
-    rc.innerHTML='';
-    var prog=(setup&&setup.programme)||'our programme';
-    var ctx=buildCtx(message,selAud,prog);
-    selFormats.forEach(function(fid,i){
-      setTimeout(function(){renderCard(fid,ctx);},i*260);
-    });
-    setTimeout(function(){
-      document.getElementById('resultsTitle').textContent=
-        selFormats.length+' variation'+(selFormats.length>1?'s':'')+' — "'+selAud.name+'"';
-      document.getElementById('resultsSubtitle').textContent=
-        'Same message, '+selFormats.length+' different format'+(selFormats.length>1?'s':'');
-      document.getElementById('btnExport').classList.add('visible');
-    },selFormats.length*260+300);
-  },delay);
-}
-
-/* ================================================================
    CONTEXT — built from message + audience + setup
    ================================================================ */
 function buildCtx(msg,aud,prog){
@@ -634,19 +556,16 @@ function buildCtx(msg,aud,prog){
   var key   =msgs.length?msgs[0]:'This programme is a real opportunity for transformation.';
   var key2  =msgs.length>1?msgs[1]:'';
 
-  /* tone flags */
   var formel      =tones.indexOf('formel')!==-1;
   var mobilisateur=tones.indexOf('mobilisateur')!==-1;
   var narratif    =tones.indexOf('narratif')!==-1;
   var direct      =tones.indexOf('direct')!==-1;
   var inspirant   =tones.indexOf('inspirant')!==-1;
 
-  /* audience angle */
   var audKey=getAudKey(aud.name)||'';
   var angle =ANGLES[audKey]||'';
   var regist=REGISTERS[audKey]||'';
 
-  /* formulations based on tone + audience */
   var intro, corps, accroche_fin, hook, video_corps, video_close, court, accroche;
 
   if(mobilisateur){
@@ -656,8 +575,8 @@ function buildCtx(msg,aud,prog){
     hook='A new chapter opens. '+msg;
     video_corps='What we are building with '+prog+' is a unique opportunity. '+key;
     video_close='This is your moment. Get involved. Let\'s make this a collective success.';
-    accroche='🚀 '+msg;
-    court='🚀 '+msg+' — '+prog+' moves forward.';
+    accroche=msg;
+    court=msg+' — '+prog+' moves forward.';
   } else if(formel){
     intro='As part of '+prog+', we would like to inform you of an important development: '+msg+'.';
     corps=key+(key2?'\n\n'+key2:'')+'\n\n'+(aud.what?'This initiative directly addresses your priorities around '+aud.what+'.':'We remain available for any questions.');
@@ -674,8 +593,8 @@ function buildCtx(msg,aud,prog){
     hook='This milestone — we built it together. '+msg;
     video_corps='This programme is a collective story. And today, we write a new chapter. '+key;
     video_close='The story continues. And you are its authors.';
-    accroche='✨ '+msg;
-    court='✨ '+msg+' — a key milestone for '+prog+'.';
+    accroche=msg;
+    court=msg+' — a key milestone for '+prog+'.';
   } else if(direct){
     intro=msg;
     corps=key+(key2?'\n\n'+key2:'')+(aud.what?'\n\nDirect impact on: '+aud.what+'.':'');
@@ -692,15 +611,13 @@ function buildCtx(msg,aud,prog){
     hook=msg;
     video_corps='What we are experiencing with '+prog+' is a unique opportunity. '+key;
     video_close='Join us. Together, let\'s make this programme a success we can all be proud of.';
-    accroche=(inspirant?'✨ ':'')+msg;
-    court=(inspirant?'✨ ':'')+msg+'\u00a0— a key moment for '+prog+'.';
+    accroche=(inspirant?'[inspiring] ':'')+msg;
+    court=msg+'\u00a0— a key moment for '+prog+'.';
   }
 
-  /* hashtags */
   var progWords=prog.split(' ').filter(function(w){return w.length>2;}).slice(0,2);
   var hashtags='#Transformation #'+progWords.map(function(w){return w.charAt(0).toUpperCase()+w.slice(1);}).join('')+' #Innovation';
 
-  /* impact points */
   var points=[];
   if(aud.what) points.push('Addresses your priorities around '+aud.what);
   if(key2)     points.push(key2);
@@ -710,11 +627,73 @@ function buildCtx(msg,aud,prog){
   return{
     msg:msg, prog:prog, sujet:msg.length>65?msg.substring(0,65)+'…':msg,
     intro,corps,accroche_fin,hook,video_corps,video_close,court,accroche,
-    cta:'Learn more and get involved',hashtags,
-    points,conclusion:'For any questions, contact the programme team. Thank you for your engagement.',
-    citation:key.replace(/\.$/,''),formal:formel,
-    audAngle:angle,audRegister:regist
+    cta:'Learn more and get involved', hashtags,
+    points, conclusion:'For any questions, contact the programme team. Thank you for your engagement.',
+    citation:key.replace(/\.$/,''), formal:formel,
+    audAngle:angle, audRegister:regist,
+    audName:aud.name, audWhat:aud.what||'', key1:key, key2:key2,
+    tones:tones, audKey:getAudKey(aud.name)||''
   };
+}
+
+/* ================================================================
+   CONTEXT-AWARE "WHY THIS FORMAT" — generated from user context
+   ================================================================ */
+function buildWhy(fid, ctx){
+  var prog  = ctx.prog;
+  var aud   = ctx.audName;
+  var what  = ctx.audWhat;
+  var msg   = ctx.sujet;
+  var tones = ctx.tones;
+  var reg   = ctx.audRegister;
+
+  var toneLabel = tones.length
+    ? tones.map(function(t){return t.charAt(0).toUpperCase()+t.slice(1);}).join(', ')
+    : 'Default';
+
+  switch(fid){
+    case 'email':
+      return 'For '+aud+(what?' focused on '+what:'')+', email ensures the message about '+prog+' reaches them directly, in a format they can archive and reference. '
+        +'The '+reg+' register set for this audience calls for a well-structured body with a clear subject line — exactly what this format delivers.';
+
+    case 'linkedin':
+      return 'Sharing this '+prog+' milestone with '+aud+' via LinkedIn extends reach beyond the usual channels. '
+        +(what?'The "'+what+'" angle maps naturally to a punchy hook and benefit-first framing that performs well in a public feed.':'A concise, engagement-driven post suits the public nature of this audience.')
+        +' The '+toneLabel+' tone adapts here as a short, readable narrative.';
+
+    case 'video':
+      return 'A video script lets you deliver "'+msg+'" with presence and sincerity to '+aud+'. '
+        +(what?'Addressing '+what+' face-to-camera creates a level of credibility that written formats cannot match.':'For this audience, direct eye contact and a clear spoken message reinforce trust.')
+        +' The shot-by-shot structure keeps the message tight and the '+toneLabel+' tone anchored throughout.';
+
+    case 'intranet':
+      return 'An intranet article gives '+aud+' the full context they need on '+prog+'. '
+        +(what?'Their interest in '+what+' justifies the longer format — headings and bullet lists let them scan to what matters most.':'This audience benefits from a structured article they can return to as the programme evolves.')
+        +' The '+reg+' register suits a reference document that may be re-read multiple times.';
+
+    case 'slack':
+      return 'For a quick, actionable update to '+aud+' about '+msg+', Slack/Teams cuts through. '
+        +(what?'Their day-to-day focus on '+what+' means they need the signal fast — one sentence, a link, nothing more.':'This audience values speed over formality; a scannable message drives faster reaction.')
+        +' The '+toneLabel+' tone translates here as brevity and directness.';
+
+    case 'presentation':
+      return 'When briefing '+aud+' on '+prog+', a structured slide deck gives them the visual synthesis they expect. '
+        +(what?'Each slide maps to a decision or data point relevant to '+what+' — no wasted space.':'Decision-makers in this audience need to absorb, evaluate and act; slides make that flow natural.')
+        +' The '+reg+' register means clean titles and synthetic bullets, not dense paragraphs.';
+
+    case 'communique':
+      return 'A press release positions "'+msg+'" as a newsworthy event for '+aud+'. '
+        +(what?'The "'+what+'" angle becomes the lead hook — factual, sourced, and ready to use as-is.':'This format respects journalism codes: factual lead, key figures, official quote, press contact.')
+        +' The journalistic register required by this audience is built into every structural choice here.';
+
+    case 'discours':
+      return 'Delivering "'+msg+'" as a speech to '+aud+' transforms information into a shared moment. '
+        +(what?'Opening with the stakes around '+what+' and closing with a collective call ties the programme to something they care about personally.':'A solemn, inspiring register marks this as a milestone — not just an update.')
+        +' The '+toneLabel+' tone shapes the rhetorical arc: stakes → conviction → mobilisation.';
+
+    default:
+      return 'This format was selected because it best fits the '+reg+' register expected by '+aud+' and the context of '+prog+'.';
+  }
 }
 
 /* ================================================================
@@ -726,7 +705,7 @@ var TPL = {
     return 'Subject: '+c.sujet+'\n\n'+sal+'\n\n'+c.intro+'\n\n'+c.corps+'\n\n'+c.accroche_fin+'\n\nBest regards,\nThe Communications Team';
   },
   linkedin: function(c){
-    return c.accroche+'\n\n'+c.corps.split('\n')[0]+'\n\n'+c.points.map(function(p){return '▸ '+p;}).join('\n')+'\n\n👉 '+c.cta+'\n\n'+c.hashtags;
+    return c.accroche+'\n\n'+c.corps.split('\n')[0]+'\n\n'+c.points.map(function(p){return '▸ '+p;}).join('\n')+'\n\n→ '+c.cta+'\n\n'+c.hashtags;
   },
   video: function(c){
     return '[OPENING — wide shot, 5s]\n"'+c.hook+'"\n\n[MID SHOT — facing camera]\n"'+c.video_corps+'"\n\n[CLOSE-UP — direct gaze]\n"'+c.points.map(function(p){return p;}).join('. ')+'"\n\n[CALL TO ACTION]\n"'+c.video_close+'"\n\n[OUTRO — logo + signature]';
@@ -735,7 +714,7 @@ var TPL = {
     return '# '+c.sujet+'\n\n'+c.intro+'\n\n## What this means for you\n'+c.points.map(function(p){return '- '+p;}).join('\n')+'\n\n## Context\n'+c.corps+'\n\n'+c.conclusion;
   },
   slack: function(c){
-    return ':loudspeaker: *'+c.sujet+'*\n\n'+c.court+'\n\n'+c.points.slice(0,2).map(function(p){return ':small_blue_diamond: '+p;}).join('\n')+'\n\n:arrow_right: '+c.cta;
+    return '[announcement] *'+c.sujet+'*\n\n'+c.court+'\n\n'+c.points.slice(0,2).map(function(p){return '→ '+p;}).join('\n')+'\n\n'+c.cta;
   },
   presentation: function(c){
     return 'SLIDE 1 — TITLE\n'+c.sujet+'\n\nSLIDE 2 — CONTEXT\n'+c.intro+'\n\nSLIDE 3 — STAKES & BENEFITS\n'+c.points.map(function(p,i){return (i+1)+'. '+p;}).join('\n')+'\n\nSLIDE 4 — KEY MESSAGE\n« '+c.citation+' »\n\nSLIDE 5 — NEXT STEPS\n'+c.cta;
@@ -749,46 +728,116 @@ var TPL = {
 };
 
 /* ================================================================
-   RENDER CARD
+   GENERATION — skeleton → build all, render tabs
    ================================================================ */
-function renderCard(fid,ctx){
-  var f=FORMATS[fid];if(!f)return;
-  var fn=TPL[fid]||TPL.email;
-  var content=fn(ctx);
-  lastResults.push({fid:fid,label:f.label,content:content});
+function generate(){
+  if(!selAud||!selFormats.length)return;
+  var message=document.getElementById('inputMessage').value.trim()||'Programme update';
 
-  var card=document.createElement('div');
-  card.className='rcard';
-  card.innerHTML=
-    '<div class="rcard-head">'
-      +'<div class="rcard-left">'
-        +'<span class="rcard-icon" aria-hidden="true">'+f.icon+'</span>'
-        +'<span class="rcard-name">'+esc(f.label)+'</span>'
-      +'</div>'
-      +'<div class="rcard-actions">'
-        +'<button class="btn-copy" type="button" onclick="copyCard(this)">Copy</button>'
-      +'</div>'
-    +'</div>'
-    +'<div class="rcard-content">'
-      +'<div class="rcard-text">'+esc(content)+'</div>'
-    +'</div>'
-    +'<div class="rcard-why">'
-      +'<div class="why-text">'+esc(f.why)+'</div>'
-    +'</div>';
+  document.getElementById('emptyState').style.display='none';
+  document.getElementById('resultsTitle').textContent='';
+  document.getElementById('resultsSubtitle').textContent='';
+  document.getElementById('btnExport').classList.remove('visible');
+  lastResults=[]; activeTab=null;
 
-  card.style.opacity='0';card.style.transform='translateY(18px)';
-  document.getElementById('resultCards').appendChild(card);
-  requestAnimationFrame(function(){
-    card.style.transition='opacity .5s ease, transform .5s ease';
-    card.style.opacity='1';card.style.transform='translateY(0)';
+  var tabBar=document.getElementById('rtabBar');
+  var panel =document.getElementById('rtabPanel');
+  tabBar.style.display='none'; tabBar.innerHTML='';
+  panel.style.display='none'; panel.innerHTML='';
+
+  /* skeleton placeholder */
+  panel.style.display='block';
+  panel.innerHTML='<div class="skel-card"><div class="skel sh sw40"></div><div class="skel sh sw90"></div><div class="skel sh sw75"></div><div class="skel sh sw55"></div></div>';
+
+  var delay=600+selFormats.length*80;
+  setTimeout(function(){
+    var prog=(setup&&setup.programme)||'our programme';
+    var ctx=buildCtx(message,selAud,prog);
+
+    /* build all results */
+    selFormats.forEach(function(fid){
+      var f=FORMATS[fid];if(!f)return;
+      var fn=TPL[fid]||TPL.email;
+      var content=fn(ctx);
+      var why=buildWhy(fid,ctx);
+      lastResults.push({fid:fid,label:f.label,content:content,why:why});
+    });
+
+    /* header counts */
+    document.getElementById('resultsTitle').textContent=
+      lastResults.length+' variation'+(lastResults.length>1?'s':'')+' — "'+selAud.name+'"';
+    document.getElementById('resultsSubtitle').textContent=
+      'Same message, '+lastResults.length+' different format'+(lastResults.length>1?'s':'');
+    document.getElementById('btnExport').classList.add('visible');
+
+    /* build tab bar */
+    tabBar.innerHTML='';
+    lastResults.forEach(function(r,i){
+      var btn=document.createElement('button');
+      btn.type='button';btn.className='rtab-btn'+(i===0?' active':'');
+      btn.setAttribute('role','tab');btn.setAttribute('aria-selected',i===0?'true':'false');
+      btn.dataset.idx=i;
+      btn.innerHTML=(ICONS[r.fid]||'')+esc(r.label);
+      btn.addEventListener('click',function(){switchTab(i);});
+      tabBar.appendChild(btn);
+    });
+    tabBar.style.display='flex';
+
+    /* show first tab */
+    activeTab=0;
+    renderPanel(0);
+
+  },delay);
+}
+
+function switchTab(i){
+  if(i===activeTab)return;
+  activeTab=i;
+  document.querySelectorAll('.rtab-btn').forEach(function(b,j){
+    b.classList.toggle('active',j===i);
+    b.setAttribute('aria-selected',j===i?'true':'false');
   });
+  renderPanel(i);
+}
+
+function renderPanel(i){
+  var r=lastResults[i];if(!r)return;
+  var panel=document.getElementById('rtabPanel');
+
+  panel.style.opacity='0';
+  setTimeout(function(){
+    panel.innerHTML=
+      '<div class="rcard-head">'
+        +'<div class="rcard-left">'
+          +'<span class="rcard-icon">'+( ICONS[r.fid]||'')+'</span>'
+          +'<span class="rcard-name">'+esc(r.label)+'</span>'
+        +'</div>'
+        +'<div class="rcard-actions">'
+          +'<button class="btn-copy" type="button" id="btnCopyActive">Copy</button>'
+        +'</div>'
+      +'</div>'
+      +'<div class="rcard-content">'
+        +'<div class="rcard-text" id="activeCardText">'+esc(r.content)+'</div>'
+      +'</div>'
+      +'<div class="rcard-why">'
+        +'<div class="why-label">Why this format for this context</div>'
+        +'<div class="why-text">'+esc(r.why)+'</div>'
+      +'</div>';
+
+    document.getElementById('btnCopyActive').addEventListener('click',function(){
+      copyText(r.content, this);
+    });
+
+    panel.style.display='block';
+    panel.style.transition='opacity .28s ease';
+    panel.style.opacity='1';
+  },60);
 }
 
 /* ================================================================
    COPY / EXPORT
    ================================================================ */
-function copyCard(btn){
-  var text=btn.closest('.rcard').querySelector('.rcard-text').textContent;
+function copyText(text, btn){
   function done(){btn.textContent='Copied ✓';btn.classList.add('ok');setTimeout(function(){btn.textContent='Copy';btn.classList.remove('ok');},2000);}
   if(navigator.clipboard&&navigator.clipboard.writeText){
     navigator.clipboard.writeText(text).then(done).catch(function(){fbCopy(text);done();});
