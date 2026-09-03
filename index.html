@@ -244,6 +244,15 @@ img,svg{display:block;max-width:100%;}
 .btn-export:hover{background:rgba(209,169,84,0.18);color:var(--gold);}
 .results-empty{text-align:center;padding:64px 20px;font-family:var(--mono);font-size:13px;color:#54677e;letter-spacing:.06em;}
 .results-empty .ico{display:block;margin:0 auto 14px;opacity:.25;width:32px;height:32px;}
+/* level 1 — audience pills */
+.raud-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+.raud-btn{font-family:var(--mono);font-size:12px;letter-spacing:.05em;font-weight:600;
+  padding:8px 20px;border-radius:999px;cursor:pointer;user-select:none;
+  border:1.5px solid rgba(159,184,221,0.3);color:#9fb8dd;background:transparent;
+  transition:all .18s;}
+.raud-btn:hover{border-color:rgba(209,169,84,0.5);color:#f0d9a2;}
+.raud-btn.active{border-color:var(--gold);color:var(--ink);background:var(--gold);font-weight:700;}
+/* level 2 — format tabs */
 .rtab-bar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:0;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:0;}
 .rtab-btn{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;
   padding:9px 14px 10px;border-radius:2px 2px 0 0;cursor:pointer;user-select:none;
@@ -425,7 +434,8 @@ img,svg{display:block;max-width:100%;}
       <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
       Fill in context, configure your audiences, then generate
     </div>
-    <div id="rtabBar" class="rtab-bar" style="display:none;" role="tablist"></div>
+    <div id="raudBar" class="raud-bar" style="display:none;" role="tablist" aria-label="Audience"></div>
+    <div id="rtabBar" class="rtab-bar" style="display:none;" role="tablist" aria-label="Format"></div>
     <div id="rtabPanel" class="rtab-panel" style="display:none;" role="tabpanel"></div>
   </div>
 
@@ -516,6 +526,7 @@ var selAuds      = [];   /* ordered array of audience objects */
 var audConfigs   = {};   /* map: audName -> { tones:[], formats:[] } */
 var lastResults  = [];
 var activeTab    = null;
+var activeAud    = null;
 var customAuds   = [];
 var customFormats= [];
 var addFmtTarget = null; /* which audName is the add-format form targeting */
@@ -1067,7 +1078,7 @@ var TPL={
 };
 
 /* ================================================================
-   GENERATION — per audience × its own formats
+   GENERATION — grouped by audience, format tabs per audience
    ================================================================ */
 function generate(){
   if(!selAuds.length)return;
@@ -1078,10 +1089,12 @@ function generate(){
   document.getElementById('resultsTitle').textContent='';
   document.getElementById('resultsSubtitle').textContent='';
   document.getElementById('btnExport').classList.remove('visible');
-  lastResults=[];activeTab=null;
+  lastResults=[];activeAud=null;activeTab=null;
 
+  var audBar=document.getElementById('raudBar');
   var tabBar=document.getElementById('rtabBar');
   var panel=document.getElementById('rtabPanel');
+  audBar.style.display='none';audBar.innerHTML='';
   tabBar.style.display='none';tabBar.innerHTML='';
   panel.style.display='block';
   panel.innerHTML='<div class="skel-card"><div class="skel sh sw40"></div><div class="skel sh sw90"></div><div class="skel sh sw75"></div><div class="skel sh sw55"></div></div>';
@@ -1089,62 +1102,94 @@ function generate(){
   setTimeout(function(){document.getElementById('resultsSection').scrollIntoView({behavior:'smooth',block:'start'});},100);
 
   setTimeout(function(){
-    /* Each audience uses its own tones + formats */
+    /* Build lastResults grouped by audience */
     selAuds.forEach(function(aud){
       var cfg=audConfigs[aud.name];if(!cfg||!cfg.formats.length)return;
       var ctx=buildCtx(aud);
       cfg.formats.forEach(function(fid){
         var f=FORMATS[fid];if(!f)return;
         var content=TPL[fid]?TPL[fid](ctx):TPL.email(ctx);
-        var label=(selAuds.length>1?aud.name+' — ':'')+f.label;
-        lastResults.push({fid:fid,label:label,originalContent:content,content:content,why:buildWhy(fid,ctx),audName:aud.name});
+        lastResults.push({fid:fid,label:f.label,originalContent:content,content:content,why:buildWhy(fid,ctx),audName:aud.name});
       });
     });
 
     var audNames=selAuds.map(function(a){return a.name;}).join(', ');
-    document.getElementById('resultsTitle').textContent=lastResults.length+' variation'+(lastResults.length>1?'s':'')+' — '+audNames;
-    var totalFmts=selAuds.reduce(function(n,a){return n+(audConfigs[a.name]?audConfigs[a.name].formats.length:0);},0);
-    document.getElementById('resultsSubtitle').textContent=selAuds.length+' audience'+(selAuds.length>1?'s':'')+', '+totalFmts+' format'+(totalFmts>1?'s':'');
+    var totalFmts=lastResults.length;
+    document.getElementById('resultsTitle').textContent=totalFmts+' variation'+(totalFmts>1?'s':'')+' — '+audNames;
+    document.getElementById('resultsSubtitle').textContent=selAuds.length+' audience'+(selAuds.length>1?'s':', ')+' — navigate by profile below';
     document.getElementById('btnExport').classList.add('visible');
 
-    tabBar.innerHTML='';
-    lastResults.forEach(function(r,i){
-      var btn=document.createElement('button');
-      btn.type='button';btn.className='rtab-btn'+(i===0?' active':'');
-      btn.setAttribute('role','tab');btn.setAttribute('aria-selected',i===0?'true':'false');
-      btn.dataset.idx=i;
-      var tabLabel=selAuds.length>1
-        ?'<span style="opacity:.6;font-size:10px;margin-right:3px;">'+esc(r.audName)+'</span>'+(ICONS[r.fid]||'')+esc(FORMATS[r.fid]?FORMATS[r.fid].label:r.fid)
-        :(ICONS[r.fid]||'')+esc(FORMATS[r.fid]?FORMATS[r.fid].label:r.fid);
-      btn.innerHTML=tabLabel;
-      btn.addEventListener('click',function(){switchTab(i);});
-      tabBar.appendChild(btn);
-    });
-    tabBar.style.display='flex';
-    activeTab=0;renderPanel(0);
+    /* Level 1 — audience pills (hidden if only 1 audience) */
+    var multiAud=selAuds.length>1;
+    if(multiAud){
+      var activeAudsWithResults=selAuds.filter(function(a){return lastResults.some(function(r){return r.audName===a.name;});});
+      activeAudsWithResults.forEach(function(aud,ai){
+        var btn=document.createElement('button');
+        btn.type='button';btn.className='raud-btn'+(ai===0?' active':'');
+        btn.setAttribute('role','tab');btn.setAttribute('aria-selected',ai===0?'true':'false');
+        btn.textContent=aud.name;
+        btn.addEventListener('click',function(){switchAud(aud.name);});
+        audBar.appendChild(btn);
+      });
+      audBar.style.display='flex';
+      activeAud=activeAudsWithResults[0].name;
+    } else {
+      activeAud=selAuds[0].name;
+    }
+
+    /* Level 2 — format tabs for the active audience */
+    renderAudTabs(activeAud);
   },700);
 }
 
-function switchTab(i){
-  if(i===activeTab)return;
-  activeTab=i;
+/* switch active audience pill → rebuild format tabs */
+function switchAud(audName){
+  if(audName===activeAud)return;
+  activeAud=audName;
+  document.querySelectorAll('.raud-btn').forEach(function(b){
+    var match=b.textContent===audName;
+    b.classList.toggle('active',match);b.setAttribute('aria-selected',match?'true':'false');
+  });
+  renderAudTabs(audName);
+}
+
+/* rebuild format tab bar for a given audience, show first tab */
+function renderAudTabs(audName){
+  var tabBar=document.getElementById('rtabBar');
+  tabBar.innerHTML='';
+  var audResults=lastResults.filter(function(r){return r.audName===audName;});
+  audResults.forEach(function(r,i){
+    var btn=document.createElement('button');
+    btn.type='button';btn.className='rtab-btn'+(i===0?' active':'');
+    btn.setAttribute('role','tab');btn.setAttribute('aria-selected',i===0?'true':'false');
+    btn.innerHTML=(ICONS[r.fid]||'')+esc(r.label);
+    btn.addEventListener('click',function(){switchTab(audName,i);});
+    tabBar.appendChild(btn);
+  });
+  tabBar.style.display='flex';
+  activeTab=0;
+  renderPanel(audName,0);
+}
+
+function switchTab(audName,i){
+  if(audName===activeAud&&i===activeTab)return;
+  activeAud=audName;activeTab=i;
   document.querySelectorAll('.rtab-btn').forEach(function(b,j){
     b.classList.toggle('active',j===i);b.setAttribute('aria-selected',j===i?'true':'false');
   });
-  renderPanel(i);
+  renderPanel(audName,i);
 }
 
-function renderPanel(i){
-  var r=lastResults[i];if(!r)return;
+function renderPanel(audName,i){
+  var audResults=lastResults.filter(function(r){return r.audName===audName;});
+  var r=audResults[i];if(!r)return;
   var panel=document.getElementById('rtabPanel');
   panel.style.opacity='0';
   setTimeout(function(){
-    var fmtLabel=FORMATS[r.fid]?FORMATS[r.fid].label:r.fid;
-    var headLabel=(selAuds.length>1?'<span style="color:#7d97bd;font-weight:400;font-size:12px;">'+esc(r.audName)+' — </span>':'')+esc(fmtLabel);
     var isEdited=r.content!==r.originalContent;
     panel.innerHTML=
       '<div class="rcard-head">'
-        +'<div class="rcard-left"><span class="rcard-icon">'+(ICONS[r.fid]||'')+'</span><span class="rcard-name">'+headLabel+'</span></div>'
+        +'<div class="rcard-left"><span class="rcard-icon">'+(ICONS[r.fid]||'')+'</span><span class="rcard-name">'+esc(r.label)+'</span></div>'
         +'<div class="rcard-actions">'
           +(isEdited?'<span style="font-family:var(--mono);font-size:10px;color:var(--teal);letter-spacing:.05em;">Edited</span>':'')
           +'<button class="btn-copy" type="button" id="btnCopyActive">Copy</button>'
@@ -1161,12 +1206,11 @@ function renderPanel(i){
     var ta=document.getElementById('rcardTextarea');
     ta.addEventListener('input',function(){r.content=ta.value;});
     document.getElementById('btnValidate').addEventListener('click',function(){
-      r.content=ta.value;
-      this.textContent='✓ Validated';this.classList.add('saved');
-      renderPanel(i);
+      r.content=ta.value;this.textContent='✓ Validated';this.classList.add('saved');
+      renderPanel(audName,i);
     });
     var resetBtn=document.getElementById('btnReset');
-    if(resetBtn){resetBtn.addEventListener('click',function(){r.content=r.originalContent;renderPanel(i);});}
+    if(resetBtn){resetBtn.addEventListener('click',function(){r.content=r.originalContent;renderPanel(audName,i);});}
     document.getElementById('btnCopyActive').addEventListener('click',function(){copyText(r.content,this);});
     panel.style.display='block';panel.style.transition='opacity .28s ease';panel.style.opacity='1';
   },60);
