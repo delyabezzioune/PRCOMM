@@ -527,7 +527,14 @@ var RECO = {
   'presse'       :['pressrelease','linkedin'],
   'client'       :['linkedin','email','video'],
   'equipe'       :['slack','newsletter','video'],
-  'rh'           :['newsletter','email','slack']
+  'rh'           :['newsletter','email','slack'],
+  /* new audiences */
+  'capability'   :['email','presentation','newsletter'],
+  'proximity'    :['newsletter','slack','video'],
+  'service'      :['email','newsletter','slack'],
+  'stakeholder'  :['email','presentation','newsletter'],
+  'owner'        :['slack','email','newsletter'],
+  'product'      :['email','presentation','slack']
 };
 
 var ANGLES = {
@@ -541,7 +548,14 @@ var ANGLES = {
   'presse'       :'Facts, figures, innovation & sourced quotes',
   'client'       :'Added value & improved experience',
   'equipe'       :'Mobilisation & operational cohesion',
-  'rh'           :'HR impact, employee journey, social policy'
+  'rh'           :'HR impact, employee journey, social policy',
+  /* new audiences */
+  'capability'   :'Capability roadmap, team organisation & strategic direction',
+  'proximity'    :'Field impact, deployment realities & local support',
+  'service'      :'Service continuity, process governance & operational quality',
+  'stakeholder'  :'Business value, adoption levers & transformation outcomes',
+  'owner'        :'Backlog priorities, delivery pace & sprint-level alignment',
+  'product'      :'Product strategy, market positioning & roadmap decisions'
 };
 
 var REGISTERS = {
@@ -555,7 +569,14 @@ var REGISTERS = {
   'presse'       :'Journalistic & factual',
   'client'       :'Clear & benefit-focused',
   'equipe'       :'Informal & mobilising',
-  'rh'           :'Neutral & educational'
+  'rh'           :'Neutral & educational',
+  /* new audiences */
+  'capability'   :'Formal & strategic',
+  'proximity'    :'Direct & operational',
+  'service'      :'Structured & process-oriented',
+  'stakeholder'  :'Professional & value-focused',
+  'owner'        :'Concise & action-oriented',
+  'product'      :'Professional & strategic'
 };
 
 var ALL_TONES = [
@@ -578,11 +599,13 @@ var customFormats= [];
 var addFmtTarget = null; /* which audName is the add-format form targeting */
 
 var DEFAULT_AUDS = [
-  {name:'Executive committee', role:'', what:'ROI, strategic vision'},
-  {name:'Middle managers',     role:'', what:'Team impact, operational'},
-  {name:'Employees',           role:'', what:'Meaning, concrete benefits'},
-  {name:'Partners',            role:'', what:'Reliability, innovation'},
-  {name:'Press',               role:'', what:'Facts, figures, quotes'}
+  {name:'Executive Committee',    role:'', what:'ROI, strategic vision'},
+  {name:'Capability Directors',   role:'', what:'Capability roadmap, team impact'},
+  {name:'Proximity IT',           role:'', what:'Operational deployment, field impact'},
+  {name:'Service Management',     role:'', what:'Service continuity, processes'},
+  {name:'Business Stakeholders',  role:'', what:'Business value, adoption'},
+  {name:'Product Owners',         role:'', what:'Backlog, delivery, priorities'},
+  {name:'Product Managers',       role:'', what:'Product strategy, market fit'}
 ];
 
 /* ================================================================
@@ -763,8 +786,14 @@ function getAudKey(name){
     .replace(/[éèêë]/g,'e').replace(/[àâä]/g,'a').replace(/[îï]/g,'i').replace(/[ôö]/g,'o').replace(/[ùûü]/g,'u')
     .replace(/[^a-z]/g,'');
   for(var k in RECO){if(n.indexOf(k)!==-1)return k;}
+  /* explicit fallbacks */
   if(n.indexOf('executive')!==-1||n.indexOf('committee')!==-1)return'comite';
-  if(n.indexOf('manager')!==-1)return'manager';
+  if(n.indexOf('director')!==-1)return'capability';
+  if(n.indexOf('proximity')!==-1)return'proximity';
+  if(n.indexOf('service')!==-1)return'service';
+  if(n.indexOf('stakeholder')!==-1)return'stakeholder';
+  if(n.indexOf('owner')!==-1)return'owner';
+  if(n.indexOf('manager')!==-1||n.indexOf('product')!==-1)return'product';
   if(n.indexOf('employee')!==-1||n.indexOf('staff')!==-1)return'collaborateur';
   if(n.indexOf('partner')!==-1)return'partner';
   if(n.indexOf('press')!==-1||n.indexOf('media')!==-1)return'presse';
