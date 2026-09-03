@@ -77,29 +77,27 @@ a{color:inherit;text-decoration:none;}
 @media(prefers-reduced-motion:reduce){.page-title-block h1{animation:none;color:#fff;-webkit-text-fill-color:#fff;background-image:none;}}
 
 /* setup context banner */
-.ctx-banner{display:none;background:linear-gradient(120deg,rgba(52,224,240,0.07),rgba(209,169,84,0.05));
-  border:1px solid rgba(52,224,240,0.18);border-radius:2px;padding:14px 20px;margin-bottom:28px;
-  display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;}
-.ctx-banner-dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);
-  box-shadow:0 0 0 3px rgba(52,224,240,0.2);flex:none;margin-top:3px;}
+.ctx-banner{background:linear-gradient(120deg,rgba(52,224,240,0.06),rgba(209,169,84,0.04));
+  border:1px solid rgba(52,224,240,0.16);border-radius:2px;padding:12px 18px;margin-bottom:24px;
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.ctx-banner-dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);flex:none;}
 .ctx-banner-text{flex:1;min-width:0;}
-.ctx-banner-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan);margin-bottom:4px;}
-.ctx-banner-prog{font-size:14px;color:#eaf3ff;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.ctx-banner-keys{font-family:var(--mono);font-size:11px;color:#7d97bd;margin-top:3px;}
+.ctx-banner-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan);margin-bottom:2px;}
+.ctx-banner-prog{font-size:13px;color:#eaf3ff;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ctx-banner-keys{font-family:var(--mono);font-size:11px;color:#7d97bd;margin-top:2px;}
 .ctx-banner-keys b{color:#9fb8dd;}
 
 /* blocks */
 .block{background:linear-gradient(155deg,rgba(9,16,30,0.75),rgba(9,16,30,0.5));
   border:1px solid rgba(255,255,255,0.09);
   clip-path:polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,0 100%);
-  padding:32px 36px;margin-bottom:20px;transition:border-color .3s;}
+  padding:28px 32px;margin-bottom:18px;transition:border-color .3s;}
 .block:focus-within{border-color:rgba(52,224,240,0.3);}
 .block-label{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--cyan);display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+  color:var(--cyan);display:flex;align-items:center;gap:10px;margin-bottom:14px;}
 .block-label::before{content:"";width:6px;height:6px;border-radius:50%;
   background:var(--cyan);box-shadow:0 0 0 3px rgba(52,224,240,0.18);flex:none;}
-.block-sublabel{font-size:13px;color:#7d97bd;margin-bottom:16px;line-height:1.5;}
-@media(max-width:640px){.block{padding:22px 18px;}}
+@media(max-width:640px){.block{padding:20px 16px;}}
 
 /* textarea */
 .field-textarea{width:100%;background:rgba(5,9,18,0.75);border:1px solid rgba(255,255,255,0.12);
@@ -116,55 +114,24 @@ a{color:inherit;text-decoration:none;}
 .aud-btn:hover{border-color:rgba(52,224,240,0.5);color:#eaf3ff;background:rgba(52,224,240,0.08);}
 .aud-btn.active{border-color:var(--cyan);color:var(--ink);background:var(--cyan);font-weight:700;}
 
-/* audience insight zone (appears after selecting audience) */
-.aud-insight{margin-top:18px;overflow:hidden;max-height:0;opacity:0;transition:max-height .4s ease,opacity .3s;}
-.aud-insight.open{max-height:200px;opacity:1;}
-.aud-insight-inner{background:rgba(5,9,18,0.6);border:1px solid rgba(255,255,255,0.08);
-  border-left:3px solid rgba(52,224,240,0.5);padding:14px 18px;display:flex;gap:20px;flex-wrap:wrap;}
-.aud-insight-item{flex:1;min-width:160px;}
-.aud-insight-lbl{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--cyan);margin-bottom:4px;}
-.aud-insight-val{font-size:13px;color:#dbe8fb;line-height:1.5;}
-
 /* formats section */
-.formats-section{margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.07);}
-.formats-section-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
-  color:#7d97bd;display:flex;align-items:center;gap:8px;margin-bottom:14px;}
-.formats-section-label::after{content:"";flex:1;height:1px;background:rgba(255,255,255,0.08);}
+.formats-section{margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,0.07);}
+.formats-section-label{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;
+  color:#7d97bd;margin-bottom:12px;}
+.formats-section-label b{color:var(--gold);}
 
-/* format cards grid */
-.fmt-grid{display:flex;flex-direction:column;gap:10px;}
-.fmt-card{background:rgba(6,14,28,0.55);border:1px solid rgba(255,255,255,0.08);
-  border-radius:2px;overflow:hidden;cursor:pointer;transition:border-color .25s,background .25s;
-  user-select:none;}
-.fmt-card:hover{border-color:rgba(52,224,240,0.3);background:rgba(6,14,28,0.7);}
-.fmt-card.selected{border-color:var(--cyan);background:rgba(52,224,240,0.06);}
-.fmt-card.recommended{border-color:rgba(209,169,84,0.45);}
-.fmt-card.recommended.selected{border-color:var(--gold);background:rgba(209,169,84,0.07);}
-.fmt-card-header{display:flex;align-items:center;gap:12px;padding:13px 18px;}
-.fmt-card-check{width:20px;height:20px;border-radius:50%;border:2px solid rgba(159,184,221,0.4);
-  flex:none;display:flex;align-items:center;justify-content:center;font-size:11px;
-  transition:background .2s,border-color .2s;color:transparent;}
-.fmt-card.selected .fmt-card-check{background:var(--cyan);border-color:var(--cyan);color:var(--ink);}
-.fmt-card.recommended .fmt-card-check{border-color:rgba(209,169,84,0.6);}
-.fmt-card.recommended.selected .fmt-card-check{background:var(--gold);border-color:var(--gold);color:var(--ink);}
-.fmt-icon{font-size:18px;flex:none;}
-.fmt-info{flex:1;min-width:0;}
-.fmt-name{font-weight:700;color:#fff;font-size:14px;}
-.fmt-desc{font-size:12px;color:#7d97bd;margin-top:1px;}
-.fmt-badges{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto;}
-.fmt-badge{font-family:var(--mono);font-size:10px;padding:2px 9px;border-radius:999px;letter-spacing:.04em;white-space:nowrap;}
-.fmt-badge.reco{border:1px solid rgba(209,169,84,0.5);color:#f0d9a2;background:rgba(209,169,84,0.1);}
-.fmt-badge.len-s{border:1px solid rgba(52,224,240,0.35);color:#a4f0f8;background:rgba(52,224,240,0.08);}
-.fmt-badge.len-m{border:1px solid rgba(159,184,221,0.35);color:#9fb8dd;background:rgba(159,184,221,0.06);}
-.fmt-badge.len-l{border:1px solid rgba(15,98,254,0.35);color:#a9c4ff;background:rgba(15,98,254,0.08);}
-.fmt-why{max-height:0;overflow:hidden;transition:max-height .3s ease;padding:0 18px 0 50px;}
-.fmt-card.open .fmt-why{max-height:80px;}
-.fmt-why-text{font-family:var(--serif);font-style:italic;color:#9fb8dd;font-size:13px;line-height:1.6;
-  padding-bottom:13px;border-top:1px solid rgba(255,255,255,0.06);padding-top:10px;}
-.fmt-toggle-why{font-family:var(--mono);font-size:10px;color:#54677e;letter-spacing:.05em;
-  background:none;border:none;cursor:pointer;padding:0;margin-left:auto;text-decoration:underline;
-  text-underline-offset:2px;transition:color .15s;}
-.fmt-toggle-why:hover{color:#9fb8dd;}
+/* format chips — simple toggleable */
+.fmt-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.fmt-chip{display:inline-flex;align-items:center;gap:7px;
+  font-family:var(--mono);font-size:12px;letter-spacing:.03em;
+  padding:7px 14px;border-radius:999px;cursor:pointer;user-select:none;
+  border:1.5px solid rgba(159,184,221,0.3);color:#9fb8dd;background:rgba(159,184,221,0.05);
+  transition:all .18s;}
+.fmt-chip:hover{border-color:rgba(52,224,240,0.45);color:#eaf3ff;}
+.fmt-chip.selected{border-color:var(--cyan);color:var(--ink);background:var(--cyan);font-weight:700;}
+.fmt-chip.recommended{border-color:rgba(209,169,84,0.5);color:#f0d9a2;background:rgba(209,169,84,0.08);}
+.fmt-chip.recommended.selected{border-color:var(--gold);color:var(--ink);background:var(--gold);font-weight:700;}
+.fmt-chip-icon{font-size:13px;}
 
 /* generate button */
 .btn-gen{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;
@@ -185,8 +152,8 @@ a{color:inherit;text-decoration:none;}
 /* results */
 .results{margin-top:36px;}
 .results-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;}
-.results-title{font-family:var(--serif);font-size:18px;color:#fff;font-weight:600;}
-.results-subtitle{font-family:var(--mono);font-size:11px;color:#7d97bd;margin-top:2px;}
+.results-title{font-size:15px;color:#fff;font-weight:600;}
+.results-subtitle{font-family:var(--mono);font-size:11px;color:#7d97bd;margin-top:1px;}
 .btn-export{font-family:var(--mono);font-size:11px;padding:6px 16px;border-radius:2px;
   border:1px solid rgba(209,169,84,0.4);background:rgba(209,169,84,0.08);color:#f0d9a2;
   cursor:pointer;letter-spacing:.05em;transition:background .18s,color .18s;display:none;}
@@ -200,60 +167,22 @@ a{color:inherit;text-decoration:none;}
 .rcard{background:rgba(6,14,28,0.7);border:1px solid rgba(255,255,255,0.1);
   clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,0 100%);overflow:hidden;transition:border-color .3s;}
 .rcard:hover{border-color:rgba(52,224,240,0.22);}
-
-/* card header */
 .rcard-head{display:flex;align-items:center;justify-content:space-between;
-  padding:14px 22px;border-bottom:1px solid rgba(255,255,255,0.07);background:rgba(5,9,18,0.5);}
-.rcard-left{display:flex;align-items:center;gap:10px;}
-.rcard-icon{font-size:18px;}
-.rcard-name{font-weight:700;color:#fff;font-size:15px;}
-.rcard-badge{font-family:var(--mono);font-size:10px;padding:3px 10px;border-radius:999px;letter-spacing:.05em;text-transform:uppercase;}
-.rcard-badge.cyan {border:1px solid rgba(52,224,240,0.4); color:#a4f0f8;background:rgba(52,224,240,0.1);}
-.rcard-badge.blue {border:1px solid rgba(15,98,254,0.5);  color:#a9c4ff;background:rgba(15,98,254,0.12);}
-.rcard-badge.gold {border:1px solid rgba(209,169,84,0.5); color:#f0d9a2;background:rgba(209,169,84,0.1);}
-.rcard-badge.teal {border:1px solid rgba(0,183,172,0.5);  color:#7fe6dd;background:rgba(0,183,172,0.1);}
-.rcard-badge.muted{border:1px solid rgba(159,184,221,0.4);color:#9fb8dd;background:rgba(159,184,221,0.07);}
+  padding:13px 20px;border-bottom:1px solid rgba(255,255,255,0.07);background:rgba(5,9,18,0.5);}
+.rcard-left{display:flex;align-items:center;gap:9px;}
+.rcard-icon{font-size:17px;}
+.rcard-name{font-weight:700;color:#fff;font-size:14px;}
 .rcard-actions{display:flex;gap:8px;align-items:center;}
 .btn-copy{font-family:var(--mono);font-size:11px;padding:5px 14px;border-radius:2px;
   border:1px solid rgba(255,255,255,0.18);background:rgba(255,255,255,0.05);
   color:#9fb8dd;cursor:pointer;transition:background .18s,color .18s;}
 .btn-copy:hover{background:rgba(255,255,255,0.1);color:#fff;}
 .btn-copy.ok{border-color:rgba(0,183,172,0.5);color:var(--teal);}
-
-/* card body */
-.rcard-body{padding:0;}
-
-/* format specifics strip */
-.rcard-specs{display:flex;gap:0;border-bottom:1px solid rgba(255,255,255,0.06);}
-.rcard-spec{flex:1;padding:10px 18px;border-right:1px solid rgba(255,255,255,0.06);min-width:0;}
-.rcard-spec:last-child{border-right:none;}
-.spec-lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:#54677e;margin-bottom:2px;}
-.spec-val{font-size:12px;color:#9fb8dd;}
-
-/* message content */
-.rcard-content{padding:22px 24px;}
+.rcard-content{padding:20px 22px;}
 .rcard-text{color:#dbe8fb;font-size:15px;line-height:1.78;white-space:pre-wrap;font-family:var(--sans);}
-
-/* why block */
-.rcard-why{margin-top:0;padding:14px 24px;
-  border-top:1px solid rgba(209,169,84,0.15);
-  background:linear-gradient(120deg,rgba(209,169,84,0.06),rgba(255,255,255,0.01));}
-.why-row{display:flex;gap:12px;align-items:flex-start;}
-.why-icon{font-size:14px;flex:none;margin-top:1px;}
-.why-inner{flex:1;}
-.why-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;}
-.why-text{font-family:var(--serif);font-style:italic;color:#c9a95a;font-size:13.5px;line-height:1.6;}
-
-/* diff block — ce qui change vs message de base */
-.rcard-diff{margin-top:0;padding:12px 24px;
-  border-top:1px solid rgba(52,224,240,0.1);
-  background:rgba(5,9,18,0.3);}
-.diff-label{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;
-  color:#54677e;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
-.diff-label::before{content:"";width:4px;height:4px;border-radius:50%;background:var(--cyan);flex:none;}
-.diff-items{display:flex;flex-wrap:wrap;gap:6px;}
-.diff-item{font-family:var(--mono);font-size:11px;padding:3px 10px;border-radius:2px;
-  border:1px solid rgba(52,224,240,0.2);color:#a4f0f8;background:rgba(52,224,240,0.05);}
+.rcard-why{padding:10px 22px;border-top:1px solid rgba(209,169,84,0.12);
+  background:rgba(209,169,84,0.04);}
+.why-text{font-family:var(--serif);font-style:italic;color:#b89040;font-size:12.5px;line-height:1.5;}
 
 /* skeleton */
 .skel-card{background:rgba(6,14,28,0.6);border:1px solid rgba(255,255,255,0.07);
@@ -290,12 +219,11 @@ a{color:inherit;text-decoration:none;}
 
 <div class="page-wrap">
 
-  <!-- HEADER -->
   <div class="page-title-block" id="stop0">
     <div class="hero-glow" aria-hidden="true"></div>
     <p class="eyebrow">Agent de communication</p>
     <h1>Décliner le Message</h1>
-    <p>Un message, une audience — l'agent génère toutes les déclinaisons prêtes à diffuser&nbsp;: email, LinkedIn, script vidéo, intranet, discours… chaque format respecte ses propres codes.</p>
+    <p>Un message, une audience — l'agent génère toutes les déclinaisons prêtes à diffuser.</p>
   </div>
 
   <!-- CONTEXT BANNER — filled from localStorage -->
@@ -309,42 +237,19 @@ a{color:inherit;text-decoration:none;}
     <a href="index.html" style="font-family:var(--mono);font-size:10px;color:#54677e;letter-spacing:.06em;text-decoration:underline;text-underline-offset:2px;white-space:nowrap;align-self:center;">Modifier le setup</a>
   </div>
 
-  <!-- BLOCK 01 — Message to communicate -->
   <div class="block" id="stop1">
     <div class="block-label">01 — Message à communiquer</div>
-    <div class="block-sublabel">L'idée centrale que tu veux faire passer — en une ou deux phrases. L'agent adaptera le ton, la structure et le vocabulaire selon l'audience et le format.</div>
     <textarea class="field-textarea" id="inputMessage"
       placeholder="Ex : Le programme SHIFT entre en phase de déploiement. Toutes les équipes vont être formées aux nouveaux outils d'ici fin T2."
       aria-label="Le message central à communiquer"></textarea>
   </div>
 
-  <!-- BLOCK 02 — Audience + formats recommandés -->
   <div class="block" id="stop2">
     <div class="block-label">02 — Audience cible</div>
-    <div class="block-sublabel">Sélectionne l'audience — l'agent adapte le message à ce qui compte pour elle et recommande les formats les plus efficaces.</div>
     <div class="aud-btns" id="audBtns" role="group" aria-label="Sélectionner une audience"></div>
 
-    <!-- audience insight -->
-    <div class="aud-insight" id="audInsight" aria-live="polite">
-      <div class="aud-insight-inner">
-        <div class="aud-insight-item">
-          <div class="aud-insight-lbl">Ce qui compte pour eux</div>
-          <div class="aud-insight-val" id="audWhat">—</div>
-        </div>
-        <div class="aud-insight-item">
-          <div class="aud-insight-lbl">Angle de communication</div>
-          <div class="aud-insight-val" id="audAngle">—</div>
-        </div>
-        <div class="aud-insight-item">
-          <div class="aud-insight-lbl">Registre recommandé</div>
-          <div class="aud-insight-val" id="audRegister">—</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- formats -->
     <div class="formats-section" id="formatsSection" style="display:none;">
-      <div class="formats-section-label">Formats disponibles — sélectionne ceux à générer</div>
+      <div class="formats-section-label">Formats — <span id="recoHint"></span></div>
       <div class="fmt-grid" id="fmtGrid"></div>
     </div>
   </div>
@@ -628,16 +533,7 @@ function selectAud(btn,aud){
   document.querySelectorAll('.aud-btn').forEach(function(b){b.classList.remove('active');});
   btn.classList.add('active');
   selAud=aud; selFormats=[]; lastResults=[];
-
-  /* insight panel */
-  var key=getAudKey(aud.name);
-  document.getElementById('audWhat').textContent=aud.what||'—';
-  document.getElementById('audAngle').textContent=(key&&ANGLES[key])||'Message adapté à l\'audience';
-  document.getElementById('audRegister').textContent=(key&&REGISTERS[key])||'Neutre & professionnel';
-  var ins=document.getElementById('audInsight');ins.offsetHeight;ins.classList.add('open');
-
-  /* formats */
-  renderFormats(aud,key);
+  renderFormats(aud,getAudKey(aud.name));
   checkReady();
 }
 
@@ -653,47 +549,28 @@ function renderFormats(aud,key){
     var isR=reco.indexOf(fid)!==-1;
     if(isR)selFormats.push(fid);
 
-    var card=document.createElement('div');
-    card.className='fmt-card'+(isR?' recommended selected':'');
-    card.dataset.fid=fid;
+    var chip=document.createElement('span');
+    chip.className='fmt-chip'+(isR?' recommended selected':'');
+    chip.dataset.fid=fid;
+    chip.setAttribute('role','button');
+    chip.setAttribute('aria-pressed',isR?'true':'false');
+    chip.innerHTML='<span class="fmt-chip-icon" aria-hidden="true">'+f.icon+'</span>'+esc(f.label);
 
-    var lenClass='len-'+f.length.toLowerCase();
-    var lenLabel={S:'Court',M:'Moyen',L:'Long'}[f.length]||f.length;
-
-    card.innerHTML=
-      '<div class="fmt-card-header">'
-        +'<div class="fmt-card-check">&#10003;</div>'
-        +'<span class="fmt-icon" aria-hidden="true">'+f.icon+'</span>'
-        +'<div class="fmt-info">'
-          +'<div class="fmt-name">'+esc(f.label)+'</div>'
-          +'<div class="fmt-desc">'+esc(f.desc)+'</div>'
-        +'</div>'
-        +'<div class="fmt-badges">'
-          +(isR?'<span class="fmt-badge reco">Recommandé</span>':'')
-          +'<span class="fmt-badge '+lenClass+'">'+lenLabel+'</span>'
-        +'</div>'
-        +'<button class="fmt-toggle-why" type="button" title="Voir pourquoi ce format" onclick="toggleFmtWhy(this,event)">Pourquoi ?</button>'
-      +'</div>'
-      +'<div class="fmt-why"><div class="fmt-why-text">'+esc(f.why)+'</div></div>';
-
-    card.addEventListener('click',function(e){
-      if(e.target.classList.contains('fmt-toggle-why'))return;
-      card.classList.toggle('selected');
-      selFormats=Array.from(document.querySelectorAll('.fmt-card.selected')).map(function(c){return c.dataset.fid;});
+    chip.addEventListener('click',function(){
+      chip.classList.toggle('selected');
+      chip.setAttribute('aria-pressed',chip.classList.contains('selected')?'true':'false');
+      selFormats=Array.from(document.querySelectorAll('.fmt-chip.selected')).map(function(c){return c.dataset.fid;});
       checkReady();
     });
-    grid.appendChild(card);
+    grid.appendChild(chip);
   });
+
+  var recoLabels=reco.filter(function(id){return FORMATS[id];}).map(function(id){return FORMATS[id].label;});
+  var hint=document.getElementById('recoHint');
+  if(hint)hint.innerHTML='<b>Suggérés&nbsp;:</b> '+recoLabels.join(', ');
 
   document.getElementById('formatsSection').style.display='block';
   checkReady();
-}
-
-function toggleFmtWhy(btn,e){
-  e.stopPropagation();
-  var card=btn.closest('.fmt-card');
-  card.classList.toggle('open');
-  btn.textContent=card.classList.contains('open')?'Masquer':'Pourquoi ?';
 }
 
 function checkReady(){
@@ -863,50 +740,31 @@ var TPL = {
 };
 
 /* ================================================================
-   RENDU CARTE — avec specs, why et diffs
+   RENDU CARTE
    ================================================================ */
 function renderCard(fid,ctx){
   var f=FORMATS[fid];if(!f)return;
   var fn=TPL[fid]||TPL.email;
   var content=fn(ctx);
-  lastResults.push({fid,label:f.label,content});
+  lastResults.push({fid:fid,label:f.label,content:content});
 
   var card=document.createElement('div');
   card.className='rcard';
-
-  var lenLabel={S:'Court',M:'Moyen',L:'Long'}[f.length]||f.length;
-
   card.innerHTML=
     '<div class="rcard-head">'
       +'<div class="rcard-left">'
         +'<span class="rcard-icon" aria-hidden="true">'+f.icon+'</span>'
         +'<span class="rcard-name">'+esc(f.label)+'</span>'
-        +'<span class="rcard-badge '+f.badge+'">'+esc(lenLabel)+'</span>'
       +'</div>'
       +'<div class="rcard-actions">'
         +'<button class="btn-copy" type="button" onclick="copyCard(this)">Copier</button>'
       +'</div>'
     +'</div>'
-    +'<div class="rcard-specs">'
-      +'<div class="rcard-spec"><div class="spec-lbl">Longueur</div><div class="spec-val">'+esc(f.specs.longueur)+'</div></div>'
-      +'<div class="rcard-spec"><div class="spec-lbl">Registre</div><div class="spec-val">'+esc(f.specs.registre)+'</div></div>'
-      +'<div class="rcard-spec"><div class="spec-lbl">Diffusion</div><div class="spec-val">'+esc(f.specs.diffusion)+'</div></div>'
-    +'</div>'
     +'<div class="rcard-content">'
       +'<div class="rcard-text">'+esc(content)+'</div>'
     +'</div>'
     +'<div class="rcard-why">'
-      +'<div class="why-row">'
-        +'<span class="why-icon" aria-hidden="true">💡</span>'
-        +'<div class="why-inner">'
-          +'<div class="why-label">Pourquoi ce format pour cette audience ?</div>'
-          +'<div class="why-text">'+esc(f.why)+'</div>'
-        +'</div>'
-      +'</div>'
-    +'</div>'
-    +'<div class="rcard-diff">'
-      +'<div class="diff-label">Ce qui le distingue des autres formats</div>'
-      +'<div class="diff-items">'+f.diffs.map(function(d){return '<span class="diff-item">'+esc(d)+'</span>';}).join('')+'</div>'
+      +'<div class="why-text">'+esc(f.why)+'</div>'
     +'</div>';
 
   card.style.opacity='0';card.style.transform='translateY(18px)';
