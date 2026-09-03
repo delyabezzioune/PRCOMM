@@ -637,62 +637,93 @@ function buildCtx(msg,aud,prog){
 }
 
 /* ================================================================
-   CONTEXT-AWARE "WHY THIS FORMAT" — generated from user context
+   CONTEXT-AWARE FORMAT RATIONALE — driven by message + audience + tone + programme
    ================================================================ */
 function buildWhy(fid, ctx){
-  var prog  = ctx.prog;
-  var aud   = ctx.audName;
-  var what  = ctx.audWhat;
-  var msg   = ctx.sujet;
-  var tones = ctx.tones;
-  var reg   = ctx.audRegister;
+  var prog   = ctx.prog;
+  var aud    = ctx.audName;
+  var what   = ctx.audWhat;
+  var msg    = ctx.sujet;
+  var key1   = ctx.key1;
+  var key2   = ctx.key2;
+  var tones  = ctx.tones;
+  var reg    = ctx.audRegister;
 
+  /* human-readable tone label */
+  var toneMap={formel:'formal',mobilisateur:'mobilising',narratif:'narrative',direct:'direct',inspirant:'inspiring',pedagogique:'educational'};
   var toneLabel = tones.length
-    ? tones.map(function(t){return t.charAt(0).toUpperCase()+t.slice(1);}).join(', ')
-    : 'Default';
+    ? tones.map(function(t){return toneMap[t]||t;}).join(' + ')
+    : 'default';
+
+  /* Does the message carry urgency / strategic / human signal? */
+  var msgLow  = msg.toLowerCase();
+  var hasUrgency   = /deploy|launch|deadline|phase|go.live|rollout/i.test(msgLow);
+  var hasStrategy  = /strateg|vision|transform|roadmap|growth|impact/i.test(msgLow);
+  var hasPeople    = /team|people|employee|collaborat|everyone|all staff/i.test(msgLow);
 
   switch(fid){
     case 'email':
-      return 'For '+aud+(what?' focused on '+what:'')+', email ensures the message about '+prog+' reaches them directly, in a format they can archive and reference. '
-        +'The '+reg+' register set for this audience calls for a well-structured body with a clear subject line — exactly what this format delivers.';
+      return 'The message "'+msg+'" needs to land with '+aud
+        +(what?' — an audience focused on '+what:'')
+        +'. Email secures delivery in a channel they actively monitor, keeps a traceable record'
+        +(hasUrgency?' — especially useful here given the deployment timeline mentioned':'' )
+        +', and lets the '+toneLabel+' register shape a structured argument'
+        +(key1?' anchored on your key message: "'+key1+'"':'')
+        +'.';
 
     case 'linkedin':
-      return 'Sharing this '+prog+' milestone with '+aud+' via LinkedIn extends reach beyond the usual channels. '
-        +(what?'The "'+what+'" angle maps naturally to a punchy hook and benefit-first framing that performs well in a public feed.':'A concise, engagement-driven post suits the public nature of this audience.')
-        +' The '+toneLabel+' tone adapts here as a short, readable narrative.';
+      return 'Publishing "'+msg+'" on LinkedIn converts an internal '+prog+' milestone into an external signal'
+        +(what?', surfacing the "'+what+'" angle to a broader professional audience':'')
+        +'. The '+toneLabel+' tone, compressed into a punchy hook and short paragraphs, drives the engagement this channel rewards'
+        +(hasStrategy?' — a strategic message like this one gains credibility when made visible publicly':'')
+        +'.';
 
     case 'video':
-      return 'A video script lets you deliver "'+msg+'" with presence and sincerity to '+aud+'. '
-        +(what?'Addressing '+what+' face-to-camera creates a level of credibility that written formats cannot match.':'For this audience, direct eye contact and a clear spoken message reinforce trust.')
-        +' The shot-by-shot structure keeps the message tight and the '+toneLabel+' tone anchored throughout.';
+      return 'Saying "'+msg+'" on camera to '+aud+' adds a layer of conviction no written format can replicate'
+        +(what?'. Their sensitivity to '+what+' is better addressed through tone of voice and presence than through text':'')
+        +'. The '+toneLabel+' register, structured shot by shot, keeps the delivery focused'
+        +(hasPeople?' — and the human dimension of this message calls for a human face':'')
+        +(key1?'. The core message "'+key1+'" becomes the emotional anchor of the script':'')
+        +'.';
 
     case 'intranet':
-      return 'An intranet article gives '+aud+' the full context they need on '+prog+'. '
-        +(what?'Their interest in '+what+' justifies the longer format — headings and bullet lists let them scan to what matters most.':'This audience benefits from a structured article they can return to as the programme evolves.')
-        +' The '+reg+' register suits a reference document that may be re-read multiple times.';
+      return 'An intranet article gives '+aud+' the depth "'+msg+'" deserves'
+        +(what?', with room to unpack the implications for '+what:'')
+        +'. Unlike a quick notification, it stays searchable and referenceable as '+prog+' progresses'
+        +(key2?'. The secondary key message "'+key2+'" fits naturally in a dedicated section here':'')
+        +'. The '+toneLabel+' register, structured with headings and bullets, reduces friction for a busy readership.';
 
     case 'slack':
-      return 'For a quick, actionable update to '+aud+' about '+msg+', Slack/Teams cuts through. '
-        +(what?'Their day-to-day focus on '+what+' means they need the signal fast — one sentence, a link, nothing more.':'This audience values speed over formality; a scannable message drives faster reaction.')
-        +' The '+toneLabel+' tone translates here as brevity and directness.';
+      return '"'+msg+'" needs to reach '+aud+' fast, without friction'
+        +(what?'. Their day-to-day focus on '+what+' means a single sharp sentence outperforms a long email':'')
+        +'. Slack/Teams delivers the signal in seconds — the '+toneLabel+' tone becomes brevity here'
+        +(hasUrgency?', which matches the time-sensitive nature of this update':'')
+        +'. The message itself is the call to action.';
 
     case 'presentation':
-      return 'When briefing '+aud+' on '+prog+', a structured slide deck gives them the visual synthesis they expect. '
-        +(what?'Each slide maps to a decision or data point relevant to '+what+' — no wasted space.':'Decision-makers in this audience need to absorb, evaluate and act; slides make that flow natural.')
-        +' The '+reg+' register means clean titles and synthetic bullets, not dense paragraphs.';
+      return 'Briefing '+aud+' on "'+msg+'" calls for a format that structures a decision, not just delivers information'
+        +(what?'. Translating '+what+' into one idea per slide keeps the argument visual and actionable':'')
+        +'. The '+toneLabel+' register maps cleanly onto action titles and synthetic bullets'
+        +(hasStrategy?' — a strategic message like this one gains traction when it flows from context to consequences to next steps':'')
+        +(key1?'. "'+key1+'" becomes the central slide in the deck':'')
+        +'.';
 
     case 'communique':
-      return 'A press release positions "'+msg+'" as a newsworthy event for '+aud+'. '
-        +(what?'The "'+what+'" angle becomes the lead hook — factual, sourced, and ready to use as-is.':'This format respects journalism codes: factual lead, key figures, official quote, press contact.')
-        +' The journalistic register required by this audience is built into every structural choice here.';
+      return 'Framing "'+msg+'" as a press release turns a '+prog+' milestone into publishable news for '+aud
+        +(what?', with "'+what+'" as the factual lead that earns credibility':'')
+        +'. The journalistic structure — lead, body, official quote, contact — is what this audience expects before they cover anything'
+        +(key1?'. "'+key1+'" becomes the quoted voice of the programme':'')
+        +'.';
 
     case 'discours':
-      return 'Delivering "'+msg+'" as a speech to '+aud+' transforms information into a shared moment. '
-        +(what?'Opening with the stakes around '+what+' and closing with a collective call ties the programme to something they care about personally.':'A solemn, inspiring register marks this as a milestone — not just an update.')
-        +' The '+toneLabel+' tone shapes the rhetorical arc: stakes → conviction → mobilisation.';
+      return 'Delivering "'+msg+'" as a speech to '+aud+' elevates the moment beyond a simple update'
+        +(what?'. The "'+what+'" stakes, named in the opening, give the audience a reason to listen — not just hear':'')
+        +'. The '+toneLabel+' arc — framing the stakes, building conviction, closing on a collective call — is what makes this message memorable'
+        +(hasPeople?' — and this message, which speaks directly to people, deserves exactly that register':'')
+        +'.';
 
     default:
-      return 'This format was selected because it best fits the '+reg+' register expected by '+aud+' and the context of '+prog+'.';
+      return 'Given the '+toneLabel+' tone, the '+reg+' register expected by '+aud+', and the nature of "'+msg+'", this format gives the message the right shape for '+prog+'.';
   }
 }
 
@@ -820,7 +851,7 @@ function renderPanel(i){
         +'<div class="rcard-text" id="activeCardText">'+esc(r.content)+'</div>'
       +'</div>'
       +'<div class="rcard-why">'
-        +'<div class="why-label">Why this format for this context</div>'
+        +'<div class="why-label">What makes this the right call</div>'
         +'<div class="why-text">'+esc(r.why)+'</div>'
       +'</div>';
 
