@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PRCOMM — Communication Agent</title>
+<title>PRCOMM — Internal Communication Agent</title>
 <style>
 :root {
   --ink:      #050912;
@@ -125,17 +125,22 @@ img,svg{display:block;max-width:100%;}
 .aud-btn.active{border-color:var(--cyan);color:var(--ink);background:var(--cyan);font-weight:700;}
 
 /* add audience inline form */
-.add-aud-form{display:none;margin-top:12px;padding:14px 16px;background:rgba(5,9,18,0.6);
-  border:1px solid rgba(52,224,240,0.18);border-radius:2px;gap:8px;flex-wrap:wrap;align-items:center;}
+.add-aud-form{display:none;margin-top:14px;padding:16px 18px;background:rgba(5,9,18,0.6);
+  border:1px solid rgba(52,224,240,0.18);border-radius:2px;flex-direction:column;gap:10px;}
 .add-aud-form.open{display:flex;}
-.add-aud-form .field-input{height:40px;font-size:13px;flex:1;min-width:140px;}
-.add-aud-form .btn-confirm{height:40px;padding:0 18px;border-radius:2px;border:1px solid rgba(52,224,240,0.5);
+.add-aud-form .field-input{height:40px;font-size:13px;width:100%;}
+.add-aud-form .field-input.optional::placeholder{font-style:italic;color:#47596e;}
+.add-aud-form-row{display:flex;gap:8px;align-items:center;}
+.add-aud-form-row .field-input{flex:1;}
+.add-aud-form .btn-confirm{height:38px;padding:0 18px;border-radius:2px;border:1px solid rgba(52,224,240,0.5);
   background:rgba(52,224,240,0.12);color:var(--cyan);font-family:var(--mono);font-size:12px;
-  letter-spacing:.05em;cursor:pointer;white-space:nowrap;transition:background .18s;}
+  letter-spacing:.05em;cursor:pointer;white-space:nowrap;transition:background .18s;flex:none;}
 .add-aud-form .btn-confirm:hover{background:rgba(52,224,240,0.22);}
-.add-aud-form .btn-cancel{height:40px;padding:0 12px;border-radius:2px;border:1px solid rgba(255,255,255,0.12);
-  background:transparent;color:#7d97bd;font-family:var(--mono);font-size:12px;cursor:pointer;transition:color .18s;}
+.add-aud-form .btn-cancel{height:38px;padding:0 12px;border-radius:2px;border:1px solid rgba(255,255,255,0.12);
+  background:transparent;color:#7d97bd;font-family:var(--mono);font-size:12px;cursor:pointer;transition:color .18s;flex:none;}
 .add-aud-form .btn-cancel:hover{color:#eaf3ff;}
+.add-aud-field-label{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:#54677e;margin-bottom:2px;}
 
 /* ---- chips (tone / channels) ---- */
 .chip-grid{display:flex;flex-wrap:wrap;gap:8px;}
@@ -258,7 +263,7 @@ img,svg{display:block;max-width:100%;}
     <div class="hero-glow" aria-hidden="true"></div>
     <p class="eyebrow">Communication agent</p>
     <h1>PRCOMM</h1>
-    <p>Set your context, define your audiences, pick your tone — the agent generates every format, ready to send.</p>
+    <p>Internal communication agent — set your context, define your audiences, pick your tone, and get every format ready to share with your teams.</p>
   </div>
 
   <!-- 01 CONTEXT -->
@@ -274,9 +279,49 @@ img,svg{display:block;max-width:100%;}
     <div class="file-list" id="fileList"></div>
   </div>
 
-  <!-- 02 KEY MESSAGES -->
+  <!-- 02 AUDIENCE -->
   <div class="setup-card">
-    <div class="card-label">02 &mdash; Key messages</div>
+    <div class="card-label">02 &mdash; Target audience</div>
+    <div class="aud-btns" id="audBtns" role="group" aria-label="Select an audience"></div>
+    <button class="btn-add" id="btnShowAddAud" onclick="toggleAddAudForm()">&#xFF0B;&nbsp;Add an audience</button>
+    <div class="add-aud-form" id="addAudForm">
+      <div>
+        <div class="add-aud-field-label">Audience name *</div>
+        <input class="field-input" type="text" id="newAudName" placeholder="e.g. IT Steering Committee" />
+      </div>
+      <div>
+        <div class="add-aud-field-label">Role in the communication <span style="color:#374a5e;font-style:italic;">(optional)</span></div>
+        <input class="field-input optional" type="text" id="newAudRole" placeholder="e.g. Decision-maker, validator, relay, end recipient…" />
+      </div>
+      <div>
+        <div class="add-aud-field-label">Expectations &amp; priorities</div>
+        <input class="field-input" type="text" id="newAudWhat" placeholder="e.g. ROI, strategic vision, risk management" />
+      </div>
+      <div class="add-aud-form-row">
+        <button class="btn-confirm" onclick="confirmAddAud()">Add audience</button>
+        <button class="btn-cancel" onclick="toggleAddAudForm()">Cancel</button>
+      </div>
+    </div>
+    <div class="formats-section" id="formatsSection" style="display:none;">
+      <div class="formats-section-label">Recommended formats &mdash; <span id="recoHint"></span></div>
+      <div class="fmt-grid" id="fmtGrid"></div>
+      <button class="btn-add" id="btnShowAddFmt" onclick="toggleAddFmtForm()" style="margin-top:12px;">&#xFF0B;&nbsp;Add a format</button>
+      <div class="add-aud-form" id="addFmtForm" style="flex-direction:column;gap:10px;">
+        <div>
+          <div class="add-aud-field-label">Format name *</div>
+          <input class="field-input" type="text" id="newFmtName" placeholder="e.g. Internal podcast, Q&amp;A sheet…" />
+        </div>
+        <div class="add-aud-form-row">
+          <button class="btn-confirm" onclick="confirmAddFmt()">Add format</button>
+          <button class="btn-cancel" onclick="toggleAddFmtForm()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 KEY MESSAGES -->
+  <div class="setup-card">
+    <div class="card-label">03 &mdash; Key messages</div>
     <div class="msg-list" id="msgList">
       <div class="msg-row">
         <input class="field-input" type="text" placeholder="e.g. This programme puts technology at the heart of our growth strategy." />
@@ -290,33 +335,26 @@ img,svg{display:block;max-width:100%;}
     <button class="btn-add" onclick="addMessage()">&#xFF0B;&nbsp;Add a key message</button>
   </div>
 
-  <!-- 03 AUDIENCE -->
-  <div class="setup-card">
-    <div class="card-label">03 &mdash; Target audience</div>
-    <div class="aud-btns" id="audBtns" role="group" aria-label="Select an audience"></div>
-    <button class="btn-add" id="btnShowAddAud" onclick="toggleAddAudForm()">&#xFF0B;&nbsp;Add an audience</button>
-    <div class="add-aud-form" id="addAudForm">
-      <input class="field-input" type="text" id="newAudName" placeholder="Audience name" />
-      <input class="field-input" type="text" id="newAudWhat" placeholder="What matters to them" />
-      <button class="btn-confirm" onclick="confirmAddAud()">Add</button>
-      <button class="btn-cancel" onclick="toggleAddAudForm()">Cancel</button>
-    </div>
-    <div class="formats-section" id="formatsSection" style="display:none;">
-      <div class="formats-section-label">Recommended formats &mdash; <span id="recoHint"></span></div>
-      <div class="fmt-grid" id="fmtGrid"></div>
-    </div>
-  </div>
-
   <!-- 04 TONE -->
   <div class="setup-card">
     <div class="card-label">04 &mdash; Communication tone</div>
     <div class="chip-grid" id="toneGrid">
-      <span class="chip selected" data-tone="inspirant">Inspiring</span>
-      <span class="chip" data-tone="formel">Formal</span>
-      <span class="chip" data-tone="direct">Direct &amp; Factual</span>
-      <span class="chip" data-tone="narratif">Narrative &amp; Storytelling</span>
-      <span class="chip" data-tone="mobilisateur">Mobilising</span>
-      <span class="chip" data-tone="pedagogique">Educational</span>
+      <span class="chip" data-tone="formal">Formal</span>
+      <span class="chip" data-tone="professional">Professional</span>
+      <span class="chip selected" data-tone="neutral">Neutral</span>
+      <span class="chip" data-tone="friendly">Friendly</span>
+      <span class="chip" data-tone="collaborative">Collaborative</span>
+      <span class="chip" data-tone="assertive">Assertive</span>
+      <span class="chip" data-tone="persuasive">Persuasive</span>
+      <span class="chip" data-tone="inspirational">Inspirational</span>
+      <span class="chip" data-tone="empathetic">Empathetic</span>
+      <span class="chip" data-tone="diplomatic">Diplomatic</span>
+      <span class="chip" data-tone="authoritative">Authoritative</span>
+      <span class="chip" data-tone="concise">Concise</span>
+      <span class="chip" data-tone="executive">Executive</span>
+      <span class="chip" data-tone="educational">Educational</span>
+      <span class="chip" data-tone="urgent">Urgent</span>
+      <span class="chip" data-tone="reassuring">Reassuring</span>
     </div>
   </div>
 
@@ -354,39 +392,39 @@ var ICONS = {
   email:        '<svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>',
   linkedin:     '<svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H6.5v-7H9v7zM7.7 8.7c-.8 0-1.4-.6-1.4-1.4s.6-1.4 1.4-1.4 1.4.6 1.4 1.4-.6 1.4-1.4 1.4zM18 17h-2.4v-3.6c0-.9-.7-1.6-1.6-1.6s-1.6.7-1.6 1.6V17H10v-7h2.3v1c.5-.8 1.4-1.3 2.4-1.3 1.8 0 3.3 1.5 3.3 3.3V17z"/></svg>',
   video:        '<svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>',
-  intranet:     '<svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>',
+  newsletter:   '<svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>',
   slack:        '<svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>',
-  presentation: '<svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>',
-  communique:   '<svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-1 14H5c-.55 0-1-.45-1-1V7l8 5 8-5v10c0 .55-.45 1-1 1z"/></svg>',
-  discours:     '<svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 3.19-9 7.12 0 2.4 1.42 4.54 3.64 5.9L6 19l3.44-1.72C10.27 17.43 11.12 17.5 12 17.5c4.97 0 9-3.19 9-7.12C21 6.19 16.97 3 12 3zm1 10H8V11h5v2zm3-3H8V8h8v2z"/></svg>'
+  presentation: '<svg viewBox="0 0 24 24"><path d="M2 3h20v14H2V3zm2 2v10h16V5H4zm8 12l-3 3h6l-3-3z"/></svg>',
+  pressrelease: '<svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-1 14H5c-.55 0-1-.45-1-1V7l8 5 8-5v10c0 .55-.45 1-1 1z"/></svg>',
+  speech:       '<svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 3.19-9 7.12 0 2.4 1.42 4.54 3.64 5.9L6 19l3.44-1.72C10.27 17.43 11.12 17.5 12 17.5c4.97 0 9-3.19 9-7.12C21 6.19 16.97 3 12 3zm1 10H8V11h5v2zm3-3H8V8h8v2z"/></svg>'
 };
 
 /* ================================================================
    FORMAT METADATA
    ================================================================ */
 var FORMATS = {
-  email:        { label:'Email',                desc:'Structured, archivable' },
-  linkedin:     { label:'LinkedIn',             desc:'Public post, network reach' },
-  video:        { label:'Video script',         desc:'On-camera, personal delivery' },
-  intranet:     { label:'Intranet / Newsletter', desc:'Article, broad distribution' },
-  slack:        { label:'Slack / Teams',        desc:'Instant, short & direct' },
-  presentation: { label:'Presentation',         desc:'Slides for meetings' },
-  communique:   { label:'Press release',        desc:'Journalistic, external' },
-  discours:     { label:'Speech / Address',     desc:'Oral, high-impact moment' }
+  email:        { label:'Email',          desc:'Structured, archivable' },
+  linkedin:     { label:'LinkedIn',       desc:'Internal employer brand post' },
+  video:        { label:'Video Script',   desc:'On-camera, personal delivery' },
+  newsletter:   { label:'Newsletter',     desc:'Recurring internal publication' },
+  slack:        { label:'Slack / Teams',  desc:'Instant, short & direct' },
+  presentation: { label:'Presentation',  desc:'Slides for meetings' },
+  pressrelease: { label:'Press Release',  desc:'Structured for media / comms' },
+  speech:       { label:'Speech',         desc:'Oral, high-impact moment' }
 };
 
 var RECO = {
-  'direction'    :['email','presentation','discours'],
-  'codir'        :['email','presentation','discours'],
-  'comite'       :['email','presentation','discours'],
-  'manager'      :['email','intranet','slack'],
-  'collaborateur':['intranet','video','slack'],
-  'partner'      :['email','linkedin','communique'],
-  'partenaire'   :['email','linkedin','communique'],
-  'presse'       :['communique','linkedin'],
+  'direction'    :['email','presentation','speech'],
+  'codir'        :['email','presentation','speech'],
+  'comite'       :['email','presentation','speech'],
+  'manager'      :['email','newsletter','slack'],
+  'collaborateur':['newsletter','video','slack'],
+  'partner'      :['email','linkedin','pressrelease'],
+  'partenaire'   :['email','linkedin','pressrelease'],
+  'presse'       :['pressrelease','linkedin'],
   'client'       :['linkedin','email','video'],
-  'equipe'       :['slack','intranet','video'],
-  'rh'           :['intranet','email','slack']
+  'equipe'       :['slack','newsletter','video'],
+  'rh'           :['newsletter','email','slack']
 };
 
 var ANGLES = {
@@ -428,11 +466,11 @@ var customAuds  = [];
 
 /* default audiences */
 var DEFAULT_AUDS = [
-  {name:'Executive committee', what:'ROI, strategic vision'},
-  {name:'Middle managers',     what:'Team impact, operational'},
-  {name:'Employees',           what:'Meaning, concrete benefits'},
-  {name:'Partners',            what:'Reliability, innovation'},
-  {name:'Press',               what:'Facts, figures, quotes'}
+  {name:'Executive committee', role:'', what:'ROI, strategic vision'},
+  {name:'Middle managers',     role:'', what:'Team impact, operational'},
+  {name:'Employees',           role:'', what:'Meaning, concrete benefits'},
+  {name:'Partners',            role:'', what:'Reliability, innovation'},
+  {name:'Press',               role:'', what:'Facts, figures, quotes'}
 ];
 
 /* ================================================================
@@ -539,10 +577,12 @@ function toggleAddAudForm(){
 
 function confirmAddAud(){
   var name=document.getElementById('newAudName').value.trim();
+  var role=document.getElementById('newAudRole').value.trim();
   var what=document.getElementById('newAudWhat').value.trim();
   if(!name)return;
-  customAuds.push({name:name,what:what});
+  customAuds.push({name:name,role:role,what:what});
   document.getElementById('newAudName').value='';
+  document.getElementById('newAudRole').value='';
   document.getElementById('newAudWhat').value='';
   document.getElementById('addAudForm').classList.remove('open');
   buildAudButtons();
@@ -551,6 +591,40 @@ function confirmAddAud(){
   var newAud=allAuds[allAuds.length-1];
   var btns=document.querySelectorAll('.aud-btn');
   selectAud(btns[btns.length-1],newAud);
+}
+
+/* ================================================================
+   ADD FORMAT FORM
+   ================================================================ */
+var customFormats = [];
+
+function toggleAddFmtForm(){
+  var form=document.getElementById('addFmtForm');
+  form.classList.toggle('open');
+  if(form.classList.contains('open')) document.getElementById('newFmtName').focus();
+}
+
+function confirmAddFmt(){
+  var name=document.getElementById('newFmtName').value.trim();
+  if(!name)return;
+  var id='custom_'+name.toLowerCase().replace(/[^a-z0-9]/g,'_');
+  if(!FORMATS[id]){
+    FORMATS[id]=({label:name, desc:'Custom format'});
+    /* generic icon: document */
+    ICONS[id]='<svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>';
+    /* generic template */
+    TPL[id]=function(c){return c.intro+'\n\n'+c.corps+'\n\n'+c.accroche_fin;};
+    customFormats.push(id);
+  }
+  document.getElementById('newFmtName').value='';
+  document.getElementById('addFmtForm').classList.remove('open');
+  /* re-render formats if audience is already selected */
+  if(selAud) renderFormats(selAud, getAudKey(selAud.name));
+  /* auto-select the new custom format */
+  setTimeout(function(){
+    var chip=document.querySelector('.fmt-chip[data-fid="'+id+'"]');
+    if(chip&&!chip.classList.contains('selected')){chip.classList.add('selected');chip.setAttribute('aria-pressed','true');selFormats=Array.from(document.querySelectorAll('.fmt-chip.selected')).map(function(c){return c.dataset.fid;});checkReady();}
+  },50);
 }
 
 /* ================================================================
@@ -581,7 +655,7 @@ function selectAud(btn,aud){
 }
 
 function renderFormats(aud,key){
-  var reco=RECO[key]||['email','linkedin','intranet'];
+  var reco=RECO[key]||['email','newsletter','slack'];
   var avail=Object.keys(FORMATS);
 
   var grid=document.getElementById('fmtGrid');grid.innerHTML='';
@@ -646,11 +720,11 @@ function buildCtx(){
   var key1 = msgs.length?msgs[0]:'This programme is a real opportunity for transformation.';
   var key2 = msgs.length>1?msgs[1]:'';
 
-  var formel      =tones.indexOf('formel')!==-1;
-  var mobilisateur=tones.indexOf('mobilisateur')!==-1;
-  var narratif    =tones.indexOf('narratif')!==-1;
-  var direct      =tones.indexOf('direct')!==-1;
-  var inspirant   =tones.indexOf('inspirant')!==-1;
+  var formel        =tones.indexOf('formal')!==-1||tones.indexOf('executive')!==-1||tones.indexOf('authoritative')!==-1;
+  var mobilisateur  =tones.indexOf('inspirational')!==-1||tones.indexOf('persuasive')!==-1||tones.indexOf('assertive')!==-1||tones.indexOf('collaborative')!==-1;
+  var narratif      =tones.indexOf('empathetic')!==-1||tones.indexOf('friendly')!==-1||tones.indexOf('reassuring')!==-1||tones.indexOf('diplomatic')!==-1;
+  var direct        =tones.indexOf('concise')!==-1||tones.indexOf('urgent')!==-1||tones.indexOf('professional')!==-1;
+  var inspirant     =tones.indexOf('inspirational')!==-1;
 
   var audKey=getAudKey(aud.name)||'';
   var angle =ANGLES[audKey]||'';
@@ -662,10 +736,11 @@ function buildCtx(){
   var sujet=msg.length>65?msg.substring(0,65)+'…':msg;
 
   var intro,corps,accroche_fin,hook,video_corps,video_close,court,accroche;
+  var role = aud.role||'';
 
   if(mobilisateur){
     intro=prog+' is reaching a new milestone: '+sujet+'. Now is the time to mobilise.';
-    corps=key1+(key2?'\n\n'+key2:'')+'\n\n'+(aud.what?'Your role is pivotal on '+aud.what+'.':'Every team member counts.');
+    corps=key1+(key2?'\n\n'+key2:'')+'\n\n'+(role?'As '+role+', your mobilisation is key.':aud.what?'Your role is pivotal on '+aud.what+'.':'Every team member counts.');
     accroche_fin='Join the movement. Together, we will make this programme a success.';
     hook='A new chapter opens. '+sujet;
     video_corps='What we are building with '+prog+' is a unique opportunity. '+key1;
@@ -673,7 +748,7 @@ function buildCtx(){
     accroche=sujet; court=sujet+' — '+prog+' moves forward.';
   } else if(formel){
     intro='As part of '+prog+', we would like to inform you of an important development: '+sujet+'.';
-    corps=key1+(key2?'\n\n'+key2:'')+'\n\n'+(aud.what?'This initiative directly addresses your priorities around '+aud.what+'.':'We remain available for any questions.');
+    corps=key1+(key2?'\n\n'+key2:'')+'\n\n'+(role?'In your capacity as '+role+', this initiative is directly relevant to your scope.':(aud.what?'This initiative directly addresses your priorities around '+aud.what+'.':'We remain available for any questions.'));
     accroche_fin='We thank you for your attention and your continued engagement.';
     hook=sujet;
     video_corps='As part of '+prog+', an important milestone has been reached. '+key1;
@@ -681,7 +756,7 @@ function buildCtx(){
     accroche=sujet; court=sujet+' — '+prog+'.';
   } else if(narratif){
     intro='Some time ago, we set an ambition: to make '+prog+' a reality. Today, we reach a key milestone — '+sujet+'.';
-    corps=key1+(key2?'\n\n'+key2:'')+'\n\n'+(aud.what?'At every stage, your expectations around '+aud.what+' guide our decisions.':'This story belongs to you too.');
+    corps=key1+(key2?'\n\n'+key2:'')+'\n\n'+(role?'Your role as '+role+' gives this moment particular weight.':aud.what?'At every stage, your expectations around '+aud.what+' guide our decisions.':'This story belongs to you too.');
     accroche_fin='This story is yours too. We count on you to help write it with us.';
     hook='This milestone — we built it together. '+sujet;
     video_corps='This programme is a collective story. And today, we write a new chapter. '+key1;
@@ -689,18 +764,18 @@ function buildCtx(){
     accroche=sujet; court=sujet+' — a key milestone for '+prog+'.';
   } else if(direct){
     intro=sujet;
-    corps=key1+(key2?'\n\n'+key2:'')+(aud.what?'\n\nDirect impact on: '+aud.what+'.':'');
+    corps=key1+(key2?'\n\n'+key2:'')+(role?'\n\nRelevant to your role as '+role+'.':(aud.what?'\n\nDirect impact on: '+aud.what+'.':''));
     accroche_fin='Questions? Reach out to the programme team.';
     hook=sujet; video_corps=key1+(key2?' '+key2:'');
     video_close='Thank you. For any questions, your programme team is available.';
     accroche=sujet; court=sujet;
   } else {
     intro='As part of '+prog+', an important milestone has been reached\u00a0: '+sujet+'.';
-    corps=key1+(key2?'\n\n'+key2:'')+'\n\n'+(aud.what?'This initiative directly addresses your priorities around '+aud.what+'.':'This initiative concerns all of our teams.');
+    corps=key1+(key2?'\n\n'+key2:'')+'\n\n'+(role?'As '+role+', this initiative is directly relevant to your scope.':(aud.what?'This initiative directly addresses your priorities around '+aud.what+'.':'This initiative concerns all of our teams.'));
     accroche_fin='We count on your commitment to make this milestone a genuine collective success.';
     hook=sujet; video_corps='What we are experiencing with '+prog+' is a unique opportunity. '+key1;
     video_close='Join us. Together, let\'s make this programme a success we can all be proud of.';
-    accroche=(inspirant?'':'')+sujet; court=sujet+'\u00a0— a key moment for '+prog+'.';
+    accroche=sujet; court=sujet+'\u00a0— a key moment for '+prog+'.';
   }
 
   var progWords=prog.split(' ').filter(function(w){return w.length>2;}).slice(0,2);
@@ -719,7 +794,7 @@ function buildCtx(){
     points, conclusion:'For any questions, contact the programme team. Thank you for your engagement.',
     citation:key1.replace(/\.$/,''), formal:formel,
     audAngle:angle, audRegister:regist,
-    audName:aud.name, audWhat:aud.what||'', key1:key1, key2:key2,
+    audName:aud.name, audWhat:aud.what||'', audRole:aud.role||'', key1:key1, key2:key2,
     tones:tones, audKey:audKey
   };
 }
@@ -728,42 +803,48 @@ function buildCtx(){
    CONTEXT-AWARE FORMAT RATIONALE
    ================================================================ */
 function buildWhy(fid,ctx){
-  var prog=ctx.prog,aud=ctx.audName,what=ctx.audWhat,msg=ctx.sujet,key1=ctx.key1,key2=ctx.key2,tones=ctx.tones,reg=ctx.audRegister;
-  var toneMap={formel:'formal',mobilisateur:'mobilising',narratif:'narrative',direct:'direct',inspirant:'inspiring',pedagogique:'educational'};
-  var toneLabel=tones.length?tones.map(function(t){return toneMap[t]||t;}).join(' + '):'default';
+  var prog=ctx.prog,aud=ctx.audName,what=ctx.audWhat,role=ctx.audRole||'',msg=ctx.sujet,key1=ctx.key1,key2=ctx.key2,tones=ctx.tones,reg=ctx.audRegister;
+  var toneLabel=tones.length?tones.map(function(t){return t.charAt(0).toUpperCase()+t.slice(1);}).join(' + '):'Neutral';
   var msgLow=msg.toLowerCase();
   var hasUrgency=/deploy|launch|deadline|phase|go.live|rollout/i.test(msgLow);
   var hasStrategy=/strateg|vision|transform|roadmap|growth|impact/i.test(msgLow);
   var hasPeople=/team|people|employee|collaborat|everyone|all staff/i.test(msgLow);
+  var audDesc = aud+(role?' ('+role+')':'')+(what?' focused on '+what:'');
   switch(fid){
     case 'email':
-      return 'The message "'+msg+'" needs to land with '+aud+(what?' — an audience focused on '+what:'')
-        +'. Email secures delivery in a channel they actively monitor, keeps a traceable record'+(hasUrgency?' — especially useful here given the deployment timeline mentioned':'')
+      return 'The message "'+msg+'" needs to land with '+audDesc
+        +'. Email secures delivery in a channel they actively monitor, keeps a traceable record'+(hasUrgency?' — especially important here given the time-sensitive nature of this update':'')
         +', and lets the '+toneLabel+' register shape a structured argument'+(key1?' anchored on: "'+key1+'"':'')+'.';
     case 'linkedin':
-      return 'Publishing this '+prog+' milestone on LinkedIn converts an internal update into an external signal'+(what?', surfacing the "'+what+'" angle to a broader professional audience':'')
-        +'. The '+toneLabel+' tone, compressed into a punchy hook and short paragraphs, drives the engagement this channel rewards'+(hasStrategy?' — a strategic message like this one gains credibility when made visible publicly':'')+'.';
+      return 'A LinkedIn post turns this '+prog+' update into an internal employer brand signal'+(what?', highlighting the "'+what+'" angle to colleagues and the broader professional network':'')
+        +'. The '+toneLabel+' tone — compressed into a hook and short paragraphs — drives the engagement this channel rewards'+(hasStrategy?' — a strategic message like this gains credibility when made visible':'')+'.';
     case 'video':
-      return 'Saying "'+msg+'" on camera to '+aud+' adds a layer of conviction no written format can replicate'+(what?'. Their sensitivity to '+what+' is better addressed through tone of voice and presence than through text':'')
-        +'. The '+toneLabel+' register, structured shot by shot, keeps the delivery focused'+(hasPeople?' — and the human dimension of this message calls for a human face':'')+(key1?'. The core message "'+key1+'" becomes the emotional anchor of the script':'')+'.';
-    case 'intranet':
-      return 'An intranet article gives '+aud+' the depth "'+msg+'" deserves'+(what?', with room to unpack the implications for '+what:'')
-        +'. Unlike a quick notification, it stays searchable and referenceable as '+prog+' progresses'+(key2?'. The secondary message "'+key2+'" fits naturally in a dedicated section here':'')
-        +'. The '+toneLabel+' register, structured with headings and bullets, reduces friction for a busy readership.';
+      return 'Delivering "'+msg+'" on camera to '+audDesc+' adds a layer of conviction no written format can replicate'
+        +(role?'. As '+role+', they need to feel personally addressed — tone of voice and presence achieve that where text cannot':'')
+        +'. The '+toneLabel+' register, structured shot by shot, keeps the delivery focused'+(key1?'. The core message "'+key1+'" becomes the emotional anchor of the script':'')+'.';
+    case 'newsletter':
+      return 'A newsletter gives '+audDesc+' the depth "'+msg+'" deserves'+(what?', with room to unpack the implications for '+what:'')
+        +'. As a recurring publication, it stays searchable and builds the narrative of '+prog+' over time'+(key2?'. The secondary message "'+key2+'" fits naturally in a dedicated section':'')
+        +'. The '+toneLabel+' register, structured with clear sections, reduces friction for a busy internal readership.';
     case 'slack':
-      return '"'+msg+'" needs to reach '+aud+' fast, without friction'+(what?'. Their day-to-day focus on '+what+' means a single sharp sentence outperforms a long email':'')
-        +'. Slack/Teams delivers the signal in seconds — the '+toneLabel+' tone becomes brevity here'+(hasUrgency?', which matches the time-sensitive nature of this update':'')+'. The message itself is the call to action.';
+      return '"'+msg+'" needs to reach '+audDesc+' fast, without friction'+(what?'. Their day-to-day focus on '+what+' means a single sharp sentence outperforms a long email':'')
+        +(role?'. As '+role+', they act on signals — not essays':'')+'. Slack/Teams delivers in seconds; the '+toneLabel+' tone becomes pure brevity here'+(hasUrgency?', which matches the time-sensitive nature of this update':'')+'.';
     case 'presentation':
-      return 'Briefing '+aud+' on "'+msg+'" calls for a format that structures a decision, not just delivers information'+(what?'. Translating '+what+' into one idea per slide keeps the argument visual and actionable':'')
-        +'. The '+toneLabel+' register maps cleanly onto action titles and synthetic bullets'+(hasStrategy?' — a strategic message like this one gains traction when it flows from context to consequences to next steps':'')+(key1?'. "'+key1+'" becomes the central slide in the deck':'')+'.';
-    case 'communique':
-      return 'Framing "'+msg+'" as a press release turns a '+prog+' milestone into publishable news for '+aud+(what?', with "'+what+'" as the factual lead that earns credibility':'')
-        +'. The journalistic structure — lead, body, official quote, contact — is what this audience expects before they cover anything'+(key1?'. "'+key1+'" becomes the quoted voice of the programme':'')+'.';
-    case 'discours':
-      return 'Delivering "'+msg+'" as a speech to '+aud+' elevates the moment beyond a simple update'+(what?'. The "'+what+'" stakes, named in the opening, give the audience a reason to listen — not just hear':'')
-        +'. The '+toneLabel+' arc — framing the stakes, building conviction, closing on a collective call — is what makes this message memorable'+(hasPeople?' — and this message, which speaks directly to people, deserves exactly that register':'')+'.';
+      return 'Briefing '+audDesc+' on "'+msg+'" calls for a format that structures a decision, not just delivers information'
+        +(role?'. As '+role+', they need the argument visual, slide by slide, with no wasted space':'')
+        +(what&&!role?'. Translating '+what+' into one idea per slide keeps the argument actionable':'')
+        +'. The '+toneLabel+' register maps cleanly onto action titles and synthetic bullets'+(key1?'. "'+key1+'" becomes the central slide in the deck':'')+'.';
+    case 'pressrelease':
+      return 'Framing "'+msg+'" as a press release turns a '+prog+' milestone into structured publishable news'+(what?', with "'+what+'" as the factual lead that earns credibility':'')
+        +(role?'. '+aud+' as '+role+' need a format they can relay as-is — factual lead, key figures, official quote, contact details':'. The journalistic structure is what communications contacts expect before they distribute anything')
+        +(key1?'. "'+key1+'" becomes the quoted voice of the programme':'')+'.';
+    case 'speech':
+      return 'Delivering "'+msg+'" as a speech to '+audDesc+' elevates the moment beyond a simple update'
+        +(role?'. '+aud+' acting as '+role+' will carry this message further — a speech gives them something to relay with conviction':'')
+        +(what&&!role?'. The "'+what+'" stakes, named in the opening, give the audience a reason to listen':'')
+        +'. The '+toneLabel+' arc — framing the stakes, building conviction, closing on a collective call — is what makes this message memorable.';
     default:
-      return 'Given the '+toneLabel+' tone, the '+reg+' register expected by '+aud+', and the nature of "'+msg+'", this format gives the message the right shape for '+prog+'.';
+      return 'Given the '+toneLabel+' tone, the '+reg+' register expected by '+audDesc+', and the nature of "'+msg+'", this format gives the message the right shape for '+prog+'.';
   }
 }
 
@@ -781,8 +862,8 @@ var TPL = {
   video: function(c){
     return '[OPENING — wide shot, 5s]\n"'+c.hook+'"\n\n[MID SHOT — facing camera]\n"'+c.video_corps+'"\n\n[CLOSE-UP — direct gaze]\n"'+c.points.join('. ')+'"\n\n[CALL TO ACTION]\n"'+c.video_close+'"\n\n[OUTRO — logo + signature]';
   },
-  intranet: function(c){
-    return '# '+c.sujet+'\n\n'+c.intro+'\n\n## What this means for you\n'+c.points.map(function(p){return '- '+p;}).join('\n')+'\n\n## Context\n'+c.corps+'\n\n'+c.conclusion;
+  newsletter: function(c){
+    return '# '+c.sujet+'\n\n'+c.intro+'\n\n## What this means for you\n'+c.points.map(function(p){return '- '+p;}).join('\n')+'\n\n## Programme update\n'+c.corps+'\n\n'+c.conclusion;
   },
   slack: function(c){
     return '[announcement] *'+c.sujet+'*\n\n'+c.court+'\n\n'+c.points.slice(0,2).map(function(p){return '→ '+p;}).join('\n')+'\n\n'+c.cta;
@@ -790,10 +871,10 @@ var TPL = {
   presentation: function(c){
     return 'SLIDE 1 — TITLE\n'+c.sujet+'\n\nSLIDE 2 — CONTEXT\n'+c.intro+'\n\nSLIDE 3 — STAKES & BENEFITS\n'+c.points.map(function(p,i){return (i+1)+'. '+p;}).join('\n')+'\n\nSLIDE 4 — KEY MESSAGE\n« '+c.citation+' »\n\nSLIDE 5 — NEXT STEPS\n'+c.cta;
   },
-  communique: function(c){
+  pressrelease: function(c){
     return 'PRESS RELEASE\n\n'+c.sujet.toUpperCase()+'\n\n'+c.intro+'\n\n'+c.corps+'\n\n« '+c.citation+' »\n\n'+c.points.map(function(p){return '• '+p;}).join('\n')+'\n\nPress contact: communications@programme.com';
   },
-  discours: function(c){
+  speech: function(c){
     return '[OPENING]\nLadies and gentlemen, dear colleagues,\n\n'+c.intro+'\n\n[BODY]\n'+c.corps+'\n\n[KEY POINTS]\n'+c.points.map(function(p,i){return (i+1)+'. '+p;}).join('\n')+'\n\n[CALL TO ACTION]\n'+c.video_close+'\n\n[CLOSING]\nThank you for being here and for your commitment.';
   }
 };
