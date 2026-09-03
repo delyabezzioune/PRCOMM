@@ -567,9 +567,7 @@ var REGISTERS = {
 };
 
 var ALL_TONES = [
-  'formal','professional','neutral','friendly','collaborative',
-  'assertive','persuasive','inspirational','empathetic','diplomatic',
-  'authoritative','concise','executive','educational','urgent','reassuring'
+  'formal','neutral','inspiring','direct','empathetic'
 ];
 
 /* ================================================================
@@ -819,11 +817,11 @@ function smartRecoForAud(aud){
   if(/team meeting|townhall|all.hands|event/i.test(combined)){recoSet['speech']=true;recoSet['presentation']=true;}
   if(/update|inform|announcement|news/i.test(combined)){recoSet['email']=true;recoSet['newsletter']=true;}
 
-  if(tones.indexOf('urgent')!==-1){recoSet['slack']=true;recoSet['email']=true;}
-  if(tones.indexOf('inspirational')!==-1||tones.indexOf('authoritative')!==-1){recoSet['speech']=true;recoSet['video']=true;}
-  if(tones.indexOf('formal')!==-1||tones.indexOf('executive')!==-1){recoSet['email']=true;recoSet['presentation']=true;}
-  if(tones.indexOf('educational')!==-1){recoSet['newsletter']=true;recoSet['presentation']=true;}
-  if(tones.indexOf('friendly')!==-1||tones.indexOf('collaborative')!==-1){recoSet['slack']=true;recoSet['video']=true;}
+  if(tones.indexOf('direct')!==-1){recoSet['slack']=true;recoSet['email']=true;}
+  if(tones.indexOf('inspiring')!==-1){recoSet['speech']=true;recoSet['video']=true;}
+  if(tones.indexOf('formal')!==-1){recoSet['email']=true;recoSet['presentation']=true;}
+  if(tones.indexOf('neutral')!==-1){recoSet['newsletter']=true;recoSet['email']=true;}
+  if(tones.indexOf('empathetic')!==-1){recoSet['video']=true;recoSet['newsletter']=true;}
 
   return Object.keys(recoSet);
 }
@@ -1068,10 +1066,10 @@ function buildCtx(aud){
   var key1=msgs.length?msgs[0]:'This programme is a real opportunity for transformation.';
   var key2=msgs.length>1?msgs[1]:'';
 
-  var formel      =tones.indexOf('formal')!==-1||tones.indexOf('executive')!==-1||tones.indexOf('authoritative')!==-1;
-  var mobilisateur=tones.indexOf('inspirational')!==-1||tones.indexOf('persuasive')!==-1||tones.indexOf('assertive')!==-1||tones.indexOf('collaborative')!==-1;
-  var narratif    =tones.indexOf('empathetic')!==-1||tones.indexOf('friendly')!==-1||tones.indexOf('reassuring')!==-1||tones.indexOf('diplomatic')!==-1;
-  var direct      =tones.indexOf('concise')!==-1||tones.indexOf('urgent')!==-1||tones.indexOf('professional')!==-1;
+  var formel      =tones.indexOf('formal')!==-1;
+  var mobilisateur=tones.indexOf('inspiring')!==-1;
+  var narratif    =tones.indexOf('empathetic')!==-1;
+  var direct      =tones.indexOf('direct')!==-1;
 
   var audKey=getAudKey(aud.name)||'';
   var angle=ANGLES[audKey]||'';
